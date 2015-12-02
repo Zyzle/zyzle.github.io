@@ -1,0 +1,78 @@
+---
+layout: default
+---
+
+<div class="blog blog--blogpost mdl-layout mdl-js-layout has-drawer is-upgraded">
+      <main class="mdl-layout__content">
+        <div class="back">
+          <a id="back" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+            href="/index.html" title="go back" role="button">
+            <i class="material-icons" role="presentation">arrow_back</i>
+          </a>
+          <div class="mdl-tooltip" for="back">Go Back</div>
+        </div>
+        <div class="blog__posts mdl-grid">
+          <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+            <div class="mdl-card__media mdl-color-text--grey-50"
+              style="background-image: url({{ site.baseurl }}/images/{{ page.img }});">
+              <h3>{{ page.title }}</h3>
+              <div class="section-spacer"></div>
+              <div id="header-image" class="img-license">
+                {% if page.img_link %}
+                <a href="{{ page.img_link }}">
+                  <img src="{{ site.baseurl }}/images/cc-icons-svg/cc.svg" alt="cc" />
+                  {% for lic in page.img_license %}
+                  <img src="{{ site.baseurl }}/images/cc-icons-svg/{{ lic }}.svg" alt="{{ lic }}" />
+                  {% endfor %}
+                </a>
+                {% endif %}
+              </div>
+              <div class="mdl-tooltip" for="header-image">View Original</div>
+            </div>
+            <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+              <div class="minilogo"></div>
+              <div>
+                <strong>{% if page.author %}{{ page.author }}{% endif %}</strong>
+                <span>{{ page.date | date: "%b %-d, %Y" }}{% if page.meta %} • {{ page.meta }}{% endif %}</span>
+              </div>
+
+              <div class="section-spacer"></div>
+
+              <div>
+                <a id="permalink" href="{{ post.url | prepend: site.baseurl }}">
+                  <i class="material-icons" role="presentation">bookmark</i>
+                  <span class="visuallyhidden">bookmark</span>
+                </a>
+                <div class="mdl-tooltip" for="permalink">Permalink</div>
+              </div>
+
+            </div>
+            <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
+              {{ content }}
+            </div>
+          </div>
+
+          <nav class="nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+            {% if page.next %}
+            <a href="{{ page.next.url }}" class="nav__button">
+              <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+              </button>
+              Newer
+            </a>
+            {% endif %}
+            <div class="section-spacer"></div>
+            {% if page.previous %}
+            <a href="{{ page.previous.url }}" class="nav__button">
+              Older
+              <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+              </button>
+            </a>
+            {% endif %}
+          </nav>
+        </div>
+
+      </main>
+      <div class="mdl-layout__obfuscator"></div>
+    </div>
