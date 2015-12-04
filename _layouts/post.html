@@ -50,6 +50,16 @@ layout: default
             <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
               {{ content }}
             </div>
+            <div class="mdl-card__supporting-text categories">
+              <h6>Tags:</h6>
+              {% if page.tags.size > 0 %}
+                {% for tag in page.tags %}
+                <span class="cat">{{ tag }}</span>
+                {% endfor %}
+              {% else %}
+                <i>untagged</i>
+              {% endif %}
+            </div>
           </div>
 
           <nav class="nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
@@ -72,7 +82,7 @@ layout: default
             {% endif %}
           </nav>
         </div>
-
+        {% include footer.html %}
       </main>
       <div class="mdl-layout__obfuscator"></div>
     </div>

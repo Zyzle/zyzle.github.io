@@ -15,7 +15,11 @@ layout: default
           <div class="minilogo"></div>
           <div>
             <strong>{% if latest.author %}{{ latest.author }}{% endif %}</strong>
-            <span>{{ latest.date | date: "%b %-d, %Y" }}{% if latest.meta %} • {{ latest.meta }}{% endif %}</span>
+            <span class="post-info">{{ latest.date | date: "%b %-d, %Y" }}
+              {% if latest.tags %}
+               • {% for tag in latest.tags %}<span>{{ tag }}, </span>{% endfor %}
+              {% endif %}
+            </span>
           </div>
         </div>
       </div>
@@ -52,7 +56,13 @@ layout: default
           <div class="minilogo"></div>
           <div>
             <strong>{{ post.author }}</strong>
-            <span>{{ post.date | date: "%b %-d, %Y" }}{% if post.meta %} • {{ post.meta }}{% endif %}</span>
+            <span>{{ post.date | date: "%b %-d, %Y" }}
+              {% if post.tags.size > 0 %}
+               • {% for tag in post.tags %}{{ tag }}, {% endfor %}
+              {% else %}
+               • <i>untagged</i>
+              {% endif %}
+            </span>
           </div>
         </div>
       </div>
@@ -67,8 +77,8 @@ layout: default
           </button>
         </a-->
       </nav>
-
     </div>
+    {% include footer.html %}
   </main>
   <div class="mdl-layout__obfuscator"></div>
 </div>
