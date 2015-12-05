@@ -89,7 +89,7 @@ figure {
   min-height: 76px;
 }
 .blog .mdl-card__supporting-text strong {
-  font-weight: 400;
+  font-weight: 600;
 }
 .blog .mdl-card__media ~ .mdl-card__supporting-text {
   min-height: 64px;
@@ -226,6 +226,39 @@ figure {
   line-height: 28px;
 }
 
+.mdl-card__supporting-text ul {
+  max-width: 512px;
+  margin: 16px auto;
+  font-size: 16px;
+  line-height: 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.mdl-card__supporting-text li {
+  padding-left: 1.5em;
+}
+
+.mdl-card__supporting-text li::before {
+  width: 1.5em;
+  margin-left: -1.5em;
+  content: "done";
+  line-height: 28px;
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 16px;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+
 .blog--blogpost .back {
   position: absolute;
   top: 16px;
@@ -294,4 +327,8 @@ figure {
   padding: .2em .6em;
   border-radius: 1em;
   margin: 0 .25em;
+}
+
+.menu-link {
+  text-decoration: none;
 }

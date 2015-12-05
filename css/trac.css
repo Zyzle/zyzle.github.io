@@ -4,14 +4,11 @@
   overflow-x: scroll;
 }
 
-.linenos pre {
+.lineno {
     color: #999988;
-    margin-right: 10px;
+    padding-right: .5em;
 }
 
-pre {
-  color: #000;
-}
 
 .highlight pre, pre, .highlight .hll, .highlight-material { background-color: #fafafa; }
 
