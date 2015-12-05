@@ -31,4 +31,11 @@ Having never really used Ruby before my system (Ubuntu 15.04) seemed to contain 
 
 In Python I'd use *virtualenv* and *nvm* for node so I hoped there was a similar tool available for Ruby. As it turns out there is [RVM](https://rvm.io/), this works similar to nvm in that it lets you have side by side versions of ruby installed, each with their own self contained gem sets.
 
- 
+Speaking of gem sets Github handily provides it's own set which contains all the supported plugins Github Jekyll pages have access to.
+
+{% highlight bash %}
+rvm use 2.2.3 # use Ruby version 2.2.3 for this console session
+gem install github-pages
+{% endhighlight %}
+
+So what does this give us? Well the list for the github-pages gem is [here](https://pages.github.com/versions/).  Lets be honest thats a pretty short list
