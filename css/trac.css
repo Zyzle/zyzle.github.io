@@ -9,11 +9,17 @@
     padding-right: .5em;
 }
 
+.highlighter-rouge {
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  padding: .2em .5em;
+}
 
-.highlight pre, pre, .highlight .hll, .highlight-material { background-color: #fafafa; }
+.highlight {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
 
-.highlight .hll { background-color: #fafafa }
-.highlight  { background: #fafafa; }
 .highlight .c { color: #b0bec5; font-style: italic } /* Comment */
 .highlight .err { border: 1px solid #f44336 } /* Error */
 .highlight .k { color: #7e57c2; font-weight: bold } /* Keyword */
