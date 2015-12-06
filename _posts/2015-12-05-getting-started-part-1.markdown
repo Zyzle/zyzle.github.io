@@ -111,7 +111,7 @@ touch _drafts/2015-12-06-my-second-post.md
 
 Now open this newly created file in the editor of your choice and add the following front matter and contents
 
-{% highlight markdown %}
+{% highlight text %}
 ---
 layout: post
 title:  "My Second Post!"
@@ -122,6 +122,8 @@ date:   2015-12-06 12:29:56 +0000
 
 Some awesome post content.
 {% endhighlight %}
+
+**Note on the above:** Turns out that Github's highlight parser can't handle `markdown` highlighting one more reason I might choose to pre-publish posts before pushing to Github.
 
 Once you've done that start the Jekyll server with the `--watch` and `--drafts` options. These tell Jekyll to include the content of the `_drafts` folder as if they were published posts and to watch the files for changes and republish each time.
 
@@ -143,7 +145,7 @@ You can go ahead and add some real content to the markdown file, save it and ref
 
 Once you're happy with the changes made the final step is to publish the content onto Github. As mentioned already Github publishes Jekyll content in the `master` branch. First make sure you're `.gitignore` file is setup to exclude the Jekyll build and temporary directories. By default you only need to worry about two:
 
-{% highlight git %}
+{% highlight text %}
 _site/
 .sass-cache/
 {% endhighlight %}
