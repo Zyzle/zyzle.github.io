@@ -337,3 +337,7 @@ figure, .highlight {
 .menu-link {
   text-decoration: none;
 }
+
+.disqus {
+  margin: 0 4em 1em 4em;
+}

@@ -60,6 +60,11 @@ layout: default
             <i>untagged</i>
           {% endif %}
         </div>
+
+        {% if page.comments %}
+          {% include disqus.html %}
+        {% endif %}
+
       </div>
 
       <nav class="nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
