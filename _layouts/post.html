@@ -4,18 +4,19 @@ layout: default
 
 <div class="blog blog--blogpost mdl-layout mdl-js-layout has-drawer is-upgraded">
   <main class="mdl-layout__content">
-    <div class="back">
+    <nav class="back">
       <a id="back" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
         href="/index.html" title="go back" role="button">
         <i class="material-icons" role="presentation">arrow_back</i>
       </a>
       <div class="mdl-tooltip" for="back">Go Back</div>
-    </div>
+    </nav>
     <div class="blog__posts mdl-grid">
-      <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
-        <div class="mdl-card__media mdl-color-text--grey-50"
+      <article class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col"
+        itemscope itemtype="http://schema.org/BlogPosting">
+        <header class="mdl-card__media mdl-color-text--grey-50"
           style="background-image: url({{ site.baseurl }}/images/{{ page.img }});">
-          <h3>{{ page.title }}</h3>
+          <h3 itemprop="name headline">{{ page.title }}</h3>
           <div class="section-spacer"></div>
           <div id="header-image" class="img-license">
             {% if page.img_link %}
@@ -27,13 +28,24 @@ layout: default
             </a>
             {% endif %}
           </div>
-          <div class="mdl-tooltip" for="header-image">View Original</div>
-        </div>
+          {% if page.img_author %}
+            <div class="mdl-tooltip" for="header-image">Original by<br />{{ page.img_author }}</div>
+          {% else %}
+            <div class="mdl-tooltip" for="header-image">View Original</div>
+          {% endif %}
+        </header>
         <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
           <div class="minilogo"></div>
           <div>
-            <strong>{% if page.author %}{{ page.author }}{% endif %}</strong>
-            <span>{{ page.date | date: "%b %-d, %Y" }}{% if page.meta %} • {{ page.meta }}{% endif %}</span>
+            <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+              <strong itemprop="name">{% if page.author %}{{ page.author }}{% endif %}</strong>
+            </span>
+            <span>
+              <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+                {{ page.date | date: "%b %-d, %Y" }}
+              </time>
+              {% if page.meta %} • {{ page.meta }}{% endif %}
+            </span>
           </div>
 
           <div class="section-spacer"></div>
@@ -47,14 +59,14 @@ layout: default
           </div>
 
         </div>
-        <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
+        <div itemprop="articleBody" class="mdl-color-text--grey-700 mdl-card__supporting-text">
           {{ content }}
         </div>
         <div class="mdl-card__supporting-text categories">
           <h6>Tags:</h6>
           {% if page.tags.size > 0 %}
             {% for tag in page.tags %}
-            <span class="cat">{{ tag }}</span>
+            <span class="cat" itemprop="keywords">{{ tag }}</span>
             {% endfor %}
           {% else %}
             <i>untagged</i>
@@ -65,7 +77,7 @@ layout: default
           {% include disqus.html %}
         {% endif %}
 
-      </div>
+      </article>
 
       <nav class="nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
         {% if page.next %}

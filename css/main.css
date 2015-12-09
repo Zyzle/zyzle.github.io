@@ -38,9 +38,19 @@ body .blog {
   font-family: 'Roboto', 'Helvetica', sans-serif;
 }
 
+blockquote {
+  max-width: 512px;
+}
+
+blockquote p {
+  display: inline;
+}
+
 figure, .highlight {
   padding: 0 1.5em;
   max-width: calc(512px - 3em);
+  overflow-x: auto;
+  overflow-y: visible;
 }
 
 .blog .blog__posts {
@@ -316,6 +326,10 @@ figure, .highlight {
 .img-license img {
   width: 20px;
   height: 20px;
+}
+
+.img-license a {
+  text-decoration: none;
 }
 
 .categories {

@@ -124,7 +124,7 @@ date:   2015-12-06 12:29:56 +0000
 Some awesome post content.
 {% endhighlight %}
 
-**Note on the above:** Turns out that Github's highlight parser can't handle `markdown` highlighting one more reason I might choose to pre-publish posts before pushing to Github.
+**Note on the above:** I found while writing this post that Github's syntax highlighter can't handle `markdown` highlighting for the above code block one more reason I might choose to pre-compile Jekyll before pushing to Github.
 
 Once you've done that start the Jekyll server with the `--watch` and `--drafts` options. These tell Jekyll to include the content of the `_drafts` folder as if they were published posts and to watch the files for changes and republish each time.
 
