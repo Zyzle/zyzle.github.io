@@ -47,10 +47,14 @@ blockquote p {
 }
 
 figure, .highlight {
-  padding: 0 1.5em;
+  padding: 1.5em;
   max-width: calc(512px - 3em);
+
+}
+
+.highlight > pre {
+  margin: 0px;
   overflow-x: auto;
-  overflow-y: visible;
 }
 
 .blog .blog__posts {
@@ -314,7 +318,6 @@ figure, .highlight {
   height: 120px;
   padding: 40px;
   align-items: center;
-  background-color: white;
   box-sizing: border-box;
 }
 
@@ -354,4 +357,18 @@ figure, .highlight {
 
 .disqus {
   margin: 0 4em 1em 4em;
+}
+
+.meta-image {
+  display: none;
+}
+
+.reading-progress {
+  position: fixed;
+  width: 100%;
+  z-index: 5;
+}
+
+.reading-progress > .bar2, .reading-progress > .bar3 {
+  background: rgba(0, 0, 0, 0);
 }

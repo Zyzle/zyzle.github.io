@@ -1,9 +1,10 @@
 ---
 layout: default
 ---
+<div id="readingProgress" class="reading-progress mdl-progress mdl-js-progress"></div>
 
 <div class="blog blog--blogpost mdl-layout mdl-js-layout has-drawer is-upgraded">
-  <main class="mdl-layout__content">
+  <main id="docmain" class="mdl-layout__content">
     <nav class="back">
       <a id="back" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
         href="/index.html" title="go back" role="button">
@@ -14,6 +15,7 @@ layout: default
     <div class="blog__posts mdl-grid">
       <article class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col"
         itemscope itemtype="http://schema.org/BlogPosting">
+        <img class="meta-image" src="{{ site.baseurl }}/images/{{ page.img }}" itemprop="image" />
         <header class="mdl-card__media mdl-color-text--grey-50"
           style="background-image: url({{ site.baseurl }}/images/{{ page.img }});">
           <h3 itemprop="name headline">{{ page.title }}</h3>
@@ -29,7 +31,7 @@ layout: default
             {% endif %}
           </div>
           {% if page.img_author %}
-            <div class="mdl-tooltip" for="header-image">Original by<br />{{ page.img_author }}</div>
+            <div class="mdl-tooltip" for="header-image">Original image by<br />{{ page.img_author }}</div>
           {% else %}
             <div class="mdl-tooltip" for="header-image">View Original</div>
           {% endif %}
@@ -45,6 +47,7 @@ layout: default
                 {{ page.date | date: "%b %-d, %Y" }}
               </time>
               {% if page.meta %} • {{ page.meta }}{% endif %}
+              • {{ page.content | number_of_words }} words
             </span>
           </div>
 
@@ -103,3 +106,13 @@ layout: default
   </main>
   <div class="mdl-layout__obfuscator"></div>
 </div>
+<script  type="text/javascript">
+  (function(){
+    document.getElementById('docmain').addEventListener('scroll', function(){
+      var h = document.getElementById('docmain');
+      var percent = (h.scrollTop) / ((h.scrollHeight) - h.clientHeight) * 100;
+      document.querySelector('#readingProgress').MaterialProgress.setProgress(percent);
+    });
+  })();
+
+</script>
