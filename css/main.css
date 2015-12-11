@@ -367,6 +367,7 @@ figure, .highlight {
   position: fixed;
   width: 100%;
   z-index: 5;
+  height: 8px;
 }
 
 .reading-progress > .bar2, .reading-progress > .bar3 {
