@@ -52,6 +52,12 @@ figure, .highlight {
 
 }
 
+code {
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  padding: .2em .5em;
+}
+
 .highlight > pre {
   margin: 0px;
   overflow-x: auto;
