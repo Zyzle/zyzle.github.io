@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Getting Started Part 2, Liquid & Material Design Lite"
+title:  "Getting Started Part 2, Liquid Templates"
 date:   2015-12-08 00:00:00
 author: "Zyzle"
 img: "drafts/dropplet.jpg"
@@ -78,6 +78,28 @@ Lets take a look at the Liquid markup syntax. There are two basic types of enclo
 ### Output markup
 
 At the simplest level, output markup allows us to place some dynamic content in the template. The first example from our `post.html` file is {% raw %}`{{ page.title }}`{% endraw %} inside a heading tag. The `page.title` variable being referenced here relates to the `title` defined in the front matter of any blog posts using this template as their `layout`. Try opening up one of the post markdown files from the previous post and editing this `title` variable in the front matter. Now start the Jekyll server, or if you have it running already with `--watch` enabled you should see the title for that post has changed in both the posts list and the post page.
+
+#### Variables
+
+Jekyll provides a couple of useful variables for us to use in our Liquid templates, the `page` one used above is just one example.  The others include:
+
+{: .post-list }
+
+* `site`: Provides site wide information and configuration variables from your `_config.yml` file. It has the following properties that may be accessed using `site.`:
+  * `pages`: A list of all the pages currently in the site
+  * `posts`: A list of all posts in chronological order
+  * `tags.TAG`: A list of all posts with tag `TAG`
+* `page`: Page specific information and the variables you set in the pages front matter. As well as the following properties any variable you define in the pages front matter are available though `page.`:
+  * `content`: The rendered content of the page
+  * `title`: The page title
+  * `url`: The page URL without the domain
+  * `date`: The date assigned to the page, should usually be the date published
+  * `tags`: The list of tags this page has
+  * `next`: The link to the next page in chronological order or `nil`
+  * `previous`: The link to the previous page in chronological order or `nil`
+* `content`: For layout files, this contains the rendered content of the post or page the layout file is wrapping
+
+The list above is by no means exhaustive more information on these Jekyll provided site variables can be found on the [Jekyll site](http://jekyllrb.com/docs/variables/)
 
 #### Filters
 
@@ -167,4 +189,4 @@ If you look at this second post in your browser now you should see, "my_name" an
 
 #### Loops
 
-Loops, as the name suggests, allow us to loop over a set of values and repeat content in out template.
+Loops, as the name suggests, allow us to loop over a set of values and repeat content in out template. Have a look st the `index.html` file of the Jekyll project you created.  You should see something similar to the following:

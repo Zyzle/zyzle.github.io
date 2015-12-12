@@ -245,7 +245,7 @@ figure, .highlight {
   max-width: 512px;
 }
 
-.post-list {
+.post-list, .post-list>li>ul {
   max-width: 512px;
   margin: 16px auto;
   font-size: 16px;
