@@ -55,7 +55,6 @@ figure, .highlight {
 code {
   background-color: #f0f0f0;
   border-radius: 3px;
-  padding: .2em .5em;
 }
 
 .highlight > pre {
@@ -73,7 +72,7 @@ code {
 }
 
 .blog.mdl-layout .mdl-layout__content {
-  padding-top: 230px;
+  padding-top: 100px;
   position: relative;
   -webkit-overflow-scrolling: touch;
 }
@@ -251,12 +250,20 @@ code {
   max-width: 512px;
 }
 
-.post-list, .post-list>li>ul {
+
+.post-num-list, .post-list, .post-list>li>ul {
   max-width: 512px;
   margin: 16px auto;
   font-size: 16px;
   line-height: 28px;
   padding: 0;
+}
+
+.post-num-list > li {
+  list-style-position: inside;
+}
+
+.post-list, .post-list>li>ul {
   list-style: none;
 }
 

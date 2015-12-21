@@ -8,12 +8,11 @@ twitter_username: zyzle2501
 github_username:  zyzle
 
 # Build settings
-markdown: kramdown
-
 kramdown:
-  input: GFM
-  syntax_highlighter: rouge
+ input: GFM
+ highlighter: pygments
 
+highlighter: pygments
 permalink: pretty
 
 tag_page_layout: tag_page

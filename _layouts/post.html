@@ -24,7 +24,6 @@ layout: default
           <div id="header-image" class="img-license">
             {% if page.img_link %}
             <a href="{{ page.img_link }}">
-              <img src="{{ site.baseurl }}/images/cc-icons-svg/cc.svg" alt="cc" />
               {% for lic in page.img_license %}
               <img src="{{ site.baseurl }}/images/cc-icons-svg/{{ lic }}.svg" alt="{{ lic }}" />
               {% endfor %}

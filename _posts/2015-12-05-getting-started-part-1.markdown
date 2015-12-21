@@ -5,7 +5,7 @@ date:   2015-12-05 00:00:00
 author: "Zyzle"
 img: "20151206-getting-started-1/jekyll.jpg"
 img_link: "https://en.wikipedia.org/wiki/Strange_Case_of_Dr_Jekyll_and_Mr_Hyde#/media/File:Dr_Jekyll_and_Mr_Hyde_poster_edit2.jpg"
-img_license: ["by", "sa"]
+img_license: ["cc", "by", "sa"]
 tags: ["blog", "tools", "liquid", "ruby", "meta"]
 comments: true
 ---
@@ -52,6 +52,7 @@ jekyll new . --force
 
 This will create the default Jekyll directory structure as well as the following example files:
 
+{: .highlight }
 ```
 .
 ├── _includes/

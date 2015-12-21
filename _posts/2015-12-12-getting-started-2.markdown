@@ -5,7 +5,7 @@ date:   2015-12-12 23:26:00
 author: "Zyzle"
 img: "20151212-getting-started-2/dropplet.jpg"
 img_link: "https://commons.wikimedia.org/wiki/File:Wassertropfen.jpg"
-img_license: ["by", "sa"]
+img_license: ["cc", "by", "sa"]
 img_author: "Sven Hoppe"
 tags: ["blog", "tools", "liquid", "tutorial"]
 comments: true
