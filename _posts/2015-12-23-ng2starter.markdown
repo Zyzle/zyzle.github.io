@@ -1,13 +1,13 @@
 ---
 layout: post
 title:  "Super Simple Angular 2 Starter Project"
-date:   2015-12-16 13:06:00
+date:   2015-12-23 13:46:00
 author: "Zyzle"
 img: "drafts/angular-momentum.png"
 img_link: "https://commons.wikimedia.org/wiki/File:Angular_momentum_definition.svg"
 img_license: ["pd"]
 tags: ["tools", "Angular 2", "TypeScript", "Webpack", "Gulp"]
-comments: false
+comments: true
 ---
 
 Angular 2 is the latest edition of Google's JavaScript web framework. Rather than being a simple update to the existing framework this is a _start again with lessons learned_ project that aims to solve the issues of the existing Angular 1.x and provide a whole host of new features for the modern web. Now that the first beta version of Angular 2 has been released this seems like the perfect time to look at a getting started guide.
