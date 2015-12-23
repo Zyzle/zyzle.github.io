@@ -20,25 +20,30 @@ First up the code for the project can be found in my Github repository [Zyzle/ng
 
 ### TypeScript
 
-Angular 2 is written in [TypeScript](http://www.typescriptlang.org/). TypeScript is being developed by Microsoft as their next generation web language. TypeScript is really a superset of JavaScript, incorporating ECMAScript6 features such as: fat-arrow functions, default parameters, classes, and modules, plus on top of them adds static typing which allows for compile-time type checking.
+Angular 2 is written in [TypeScript](http://www.typescriptlang.org/). TypeScript is being developed by Microsoft as their next generation web language and is a superset of JavaScript, incorporating ECMAScript6 features such as: fat-arrow functions, default parameters, classes, and modules, plus on top of them adds static typing which allows for compile-time type checking.
 
 While Github shows my project language breakdown as largely JavaScript, this is entirely due to the tool configuration files. Personally I would choose TypeScript over the other JavaScript variants for writing Angular 2 apps even though Angular 2 supports writing apps in ES6 and ES5 (the other option for developing in Angular 2 is of course the [Dart](https://www.dartlang.org/) language).
 
 ### The Project
 
-I'm lets take a look at the code then. The app itself is made up of only 4 files (everything else in the repository is configuration):
+I'm lets take a look at the code then. The app itself is made up of only 4 files, the `index.html` and those in the `app` directory, everything else in the repository is configuration):
 
 {: .highlight }
 ```
 ng2starter/
   ├── index.html
-  └── app
-      ├── bootstrap.ts
-      ├── hello.html
-      └── hello.ts
+  ├── app/
+  |   ├── bootstrap.ts
+  |   ├── hello.html
+  |   └── hello.ts
+  ├── gulpfile.js
+  ├── package.json
+  ├── tsconfig.json
+  ├── tslint.json
+  └── webpack.config.js
 ```
 
-Lets go through these one at a time. `index.html`, as you might have guessed, is the main application page. This is some simple HTML containing the Angular 2 app main tag and the `script` tags to load the required polyfills/shims and the Angular 2 app itself.
+`index.html`, as you might have guessed, is the main application page. This is some simple HTML containing the Angular 2 app main tag and the `script` tags to load the required polyfills/shims and the Angular 2 app itself.
 
 {% highlight html %}
 <!doctype html>
@@ -61,7 +66,7 @@ Lets go through these one at a time. `index.html`, as you might have guessed, is
 
 `angular2-polyfills.js` is provided by the npm package for Angular 2 and contains `reflect-metadata` and `zone.js` both are required for Angular 2 to run and must be loaded before anything else in the app. `bundle.js` is the build application bundle created by Webpack containing the Angular 2 app and it's dependencies.
 
-You may have noticed the custom `<hello-app>` tag. Angular 2 apps are built around web components, this tag is the component we will define in our application.
+You may have noticed the custom `<hello-app>` tag. Angular 2 apps are built around web components, this tag is the root component we will define as our applications top level.
 
 `es6-shim.js` is only strictly necessary if you need to support browsers that don't implement parts of the ES6 specification, however this includes IE <= 11 which still hold a relatively large share of the browser usage world wide (the numbers on this are inherently difficult to measure and the two most often quoted sources, StatCounter and Net Market Share give wildly different results), in my opinion its worth the few extra Kb.
 
@@ -92,13 +97,13 @@ import {HelloApp} from './hello';
 bootstrap(HelloApp);
 {% endhighlight %}
 
-Now the purpose behind this is to have Webpack build the polyfills for es6 and reflect-metadata as well as zone.js required by Angular 2 into your application bundle. The problem with this is these files are stand alone JavaScript modules designed to run as soon as they are imported from a `script` tag in your HTML. In particular zone.js needs to be run first before any other shims or polyfills or the resulting behaviour can be unpredictable. The `angular2-polyfills.js` file  include in the `index.html` is provided with the npm package of Angular 2 and provides both zone.js and reflect-metadata that are set up to load in the browser correctly.
+Now the idea behind this is to have Webpack build the polyfills for es6 and reflect-metadata as well as zone.js required by Angular 2 into your application bundle. The problem with this is these files are stand alone JavaScript modules designed to run as soon as they are imported from a `script` tag in your HTML. In particular zone.js needs to be run first before any other shims or polyfills or the resulting behaviour can be unpredictable. The `angular2-polyfills.js` file  include in the `index.html` is provided with the npm package of Angular 2 and provides both zone.js and reflect-metadata that are set up to load in the browser correctly.
 
 You'll notice these polyfills are loaded from a `lib` directory that doesn't actually exist in the checked out code from the repository. This `lib` directory is created by the gulp tasks set up to build/run the app.
 
 ### Gulp Tasks
 
-Again I'm assuming you have some familiarity with the [Gulp](http://gulpjs.com/) build system, personally I find this easier to work with than [Grunt](http://gruntjs.com/) and haven't tried many of the other build tools, but the same principals could probably be applied if you wanted to switch. I'm also not going to go through the whole file line by line as most of it is simple copy tasks but lets take a look at the configured paths:
+Again I'm assuming you have some familiarity with the [Gulp](http://gulpjs.com/) build system, personally I find this easier to work with than [Grunt](http://gruntjs.com/) and haven't tried many of the other build tools, but the same principals could probably be applied if you wanted to switch. I'm also not going to go through the whole file line by line as most of it is simple copy tasks, but lets take a look at the configured paths:
 
 {% highlight javascript %}
 var PATHS = {
@@ -184,21 +189,44 @@ module.exports = {
 
 This again is a really simple configuration. We tell Webpack where the entry-point for our app is, in this case our `./app/bootstrap` module, and define an output path for our bundle `./lib/bundle.js`. We also configure the `ts-loader` module telling it to look for any files matching the `/\.ts/` regex and transpile them (this loader uses the `tsconfig.json` file for its configuration). What Webpack does when we call it though the Gulp command is scan our transpiled `bootstrap.ts` file looking for any module imports, it does this recursively until a complete dependency tree is built. These dependencies are then combined into the single bundle file we defined in the `output` arguments above.
 
-The code in our `entry` module will be executed when this bundle is loaded into the browser through the `<script>` tag. We've already gone over the `bootstrap.ts` file contents so lets take a look at the only other TypeScript file in our app `hello.ts`.
+The code in our `entry` module will be executed when this bundle is loaded into the browser through the `<script>` tag. As mentioned already this configuration file is used for both our build step and for the Webpack development server. As with build we have a Gulp task setup to run this server for us:
 
-{% highlight ts %}
-import {Component} from 'angular2/core';
+{% highlight javascript %}
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var webpack = require('webpack');
+var webpackDevServer = require('webpack-dev-server');
+var webpackConfig = require('./webpack.config.js');
 
-@Component({
-    selector: 'hello-app',
-    templateUrl: 'app/hello.html'
-})
-export class HelloApp {
-    name: string = 'World';
-}
+// snip
+
+gulp.task('play', ['shims'], function(callback) {
+  var compiler = webpack(webpackConfig);
+  var open = require('open');
+
+  new webpackDevServer(compiler, {
+    publicPath: "/" + webpackConfig.output.publicPath,
+    stats: {
+      colors: true
+    }
+  }).listen(8080, "localhost", function(err) {
+    if(err){
+      throw new gutil.PluginError("webpack-dev-server", err);
+    }
+    // Server listening
+    gutil.log("[webpack-dev-server]", "http://localhost:8080/index.html");
+    open('http://localhost:8080/index.html');
+  });
+});
 {% endhighlight %}
 
-Here (finally) we have the definition for the `<hello-app>` component. You'll notice our Angular 2 component is simply a TypeScript class with the `@Component` decorator applied to it.
+Webpack Development Server is based on the node.js [Express](http://expressjs.com/en/index.html) framework and allows us to serve our content in a simple test server what also watches files for changes and recompiles the bundles when necessary. The compilation process happens exactly as it does when we perform a full build, the only difference is that our `bundle.js` is compiled and served from in memory rather than being written to disk. All other static assets from our project are served using the directory structure of our project, this is why we keep that structure when Gulp copies our HTML, CSS, and shims to the `dist` directory.
+
+### Other Gulp Tasks
+
+There are two more Gulp tasks it's worth taking a look at the first is `serve-dist`. As the name implies this carries out a full build of the code and then opens up a simple static server to the files in the `dist` directory.
+
+The second is the `ts-lint` task. Like other linters this tool scans our TypeScript code and reports back on any issues based on a set of rules in the `tslint.json` file. I've chosen defaults similar to those of the Angular2 team but these can be tweaked to your liking. A full set of the available options for the TsLint tool can be found [here](https://github.com/palantir/tslint#supported-rules).
 
 ### Why no tests?
 
