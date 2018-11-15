@@ -1,99 +1,24 @@
----
-layout: default
----
-
-{% assign latest = site.posts.first %}
-<div class="blog mdl-layout mdl-js-layout has-drawer is-upgraded">
-  <main class="mdl-layout__content">
-    <div class="blog__posts mdl-grid">
-
-      <div class="mdl-card mdl-cell mdl-cell--8-col">
-        <div class="mdl-card__media mdl-color-text--grey-50" style="background-image: url(images/{{ latest.img }});">
-          <h3><a href="{{ latest.url | prepend: site.baseurl }}">{{ latest.title }}</a></h3>
-        </div>
-        <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
-          <div class="minilogo"></div>
-          <div>
-            <strong>{% if latest.author %}{{ latest.author }}{% endif %}</strong>
-            <span class="post-info">{{ latest.date | date: "%b %-d, %Y" }}
-              {% if latest.tags %}
-               • {% for tag in latest.tags %}<span>{{ tag }}, </span>{% endfor %}
-              {% endif %}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="mdl-card blogger-info mdl-cell mdl-cell--8-col mdl-cell--4-col-desktop">
-        <div class="mdl-card__media mdl-color--white mdl-color-text--grey-600">
-          <img src="images/zyzle.jpg">
-        </div>
-        <div class="mdl-card__supporting-text meta meta--fill mdl-color-text--grey-600">
-          <div>
-            <span><strong>Zyzle's Blog</strong></span>
-          </div>
-          <ul class="mdl-menu mdl-js-menu mdl-menu--top-right mdl-js-ripple-effect" for="menubtn">
-            <a href="{{ site.baseurl }}/about/" class="menu-link"><li class="mdl-menu__item">About</li></a>
-          </ul>
-          <button id="menubtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-            <i class="material-icons" role="presentation">more_vert</i>
-            <span class="visuallyhidden">show menu</span>
-          </button>
-        </div>
-      </div>
-
-      {% for post in site.posts offset: 1 limit: 10 %}
-      <div class="mdl-card on-the-road-again mdl-cell mdl-cell--12-col">
-        <div class="mdl-card__media mdl-color-text--grey-50"
-          style="background-image: url(images/{{ post.img }});">
-          <h3><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></h3>
-        </div>
-        <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
-          {{ post.content | strip_html | truncatewords: 30 }}
-        </div>
-        <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
-          <div class="minilogo"></div>
-          <div>
-            <strong>{{ post.author }}</strong>
-            <span>{{ post.date | date: "%b %-d, %Y" }}
-              {% if post.tags.size > 0 %}
-               • {% for tag in post.tags %}{{ tag }}, {% endfor %}
-              {% else %}
-               • <i>untagged</i>
-              {% endif %}
-            </span>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-
-      <nav class="nav mdl-cell mdl-cell--12-col">
-        <!--div class="section-spacer"></div>
-        <a href="entry.html" class="nav__button" title="show more">
-          More
-          <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-            <i class="material-icons" role="presentation">arrow_forward</i>
-          </button>
-        </a-->
-      </nav>
-    </div>
-    {% include footer.html %}
-  </main>
-  <div class="mdl-layout__obfuscator"></div>
-</div>
-
-<script>
-  Array.prototype.forEach.call(document.querySelectorAll('.mdl-card__media'), function(el) {
-    var link = el.querySelector('a');
-    if(!link) {
-      return;
-    }
-    var target = link.getAttribute('href');
-    if(!target) {
-      return;
-    }
-    el.addEventListener('click', function() {
-      location.href = target;
-    });
-  });
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Ongoing Renovation</title>
+  <link rel="stylesheet" href="/stylesheet.css">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="content">
+    <header>
+      <h1 class="header">Ongoing Renovation Work</h1>
+      <h2 class="sub-header">Check back soon for updates.</h2>
+    </header>
+    <span class="bumper"></span>
+    <footer class="page-footer">
+      <p class="photocredit">Photo Credit Dietmar Rabich, <a href="https://creativecommons.org/licenses/by-sa/4.0" title="Creative Commons Attribution-Share Alike 4.0">CC
+          BY-SA 4.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=59042563">Link</a></p>
+    </footer>
+  </div>
+</body>
+</html>
