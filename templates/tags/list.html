@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Tags | {{ super() }}{% endblock title %}
+
+{% block main %}
+<article>
+    <header>
+        <h1>Tags</h1>
+    </header>
+    <ul>
+        {% for term in terms %}
+        <li><a href="{{ term.permalink }}">#{{ term.name }}</a></li>
+        {% endfor %}
+    </ul>
+</article>
+{% endblock main%}

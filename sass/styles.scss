@@ -1,0 +1,264 @@
+@import 'reset';
+@import 'fonts';
+
+$light-yellow: #f6eeaf;
+$light-orange: #fdb14c;
+$dark-orange: #ec7c45;
+$dark-red: #b4473b;
+$dark: #1c281b;
+$mint: #a8e6be;
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: $dark;
+  font-family: "Nunito", sans-serif;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-content: stretch;
+  align-items: stretch;
+}
+
+.sidebar {
+  flex: 1 1 30%;
+  height: 100vh;
+  background-color: #1c281b;
+}
+
+.content {
+  flex: 1 1 70%;
+  align-self: auto;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.site-title {
+  order: 0;
+  flex: 0 0 auto;
+  align-self: auto;
+}
+
+article {
+  background-color: $light-yellow;
+  margin: 20px;
+  padding: 30px;
+  border-radius: 20px;
+
+  header {
+    h1 {
+      color: $dark-red;
+      font-size: 2.75rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 1rem;
+      font-weight: normal;
+      color: $dark;
+      
+      address {
+        display: inline;
+      }
+    }
+  }
+
+  h2 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: $dark-red;
+      margin-top: 1rem;
+    }
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: $dark-red;
+    margin-top: 1rem;
+  }
+
+    p {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+    }
+
+    a {
+      &:hover {
+        text-decoration: underline;
+      }
+      &:visited {
+        color: $dark-red;
+      }
+
+      font-size: 1rem;
+      font-style: italic;
+      font-weight: bold;
+      color: $dark-orange;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    ul {
+      margin-top: 1rem;
+      margin-left: 1rem;
+
+      li {
+        list-style-type: "❃ ";
+        list-style-position: inside;
+        font-size: 1.2rem;
+      }
+
+      li:not(:last-child) {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+  section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  figure {
+    margin: 2rem;
+    align-self: center;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background-color: $mint;
+
+    img {
+      max-width: 100%;
+    }
+
+    figcaption {
+      font-style: italic;
+    }
+  }
+}
+
+.continue {
+  padding-top: .5rem;
+}
+
+.taglist {
+  padding: 0.75rem 0;
+  margin: 0 !important;
+  li {
+    display: inline;
+    background-color: $light-orange;
+    border-radius: 1rem;
+    padding: 0.2rem 0.5rem;
+    margin-right: .2rem;
+    a {
+      font-weight: bold;
+      color: $dark;
+    }
+  }
+}
+
+.post-title {
+  color: $dark-red;
+}
+
+.bordered {
+  border-style: solid;
+  border-color: #1c281b;
+  border-width: 20px 20px 0 0;
+  border-radius: 0 60px 0 0;
+  box-sizing: border-box;
+}
+
+.one {
+  width: 30%;
+  height: 100%;
+  background-color: #b4473b;
+  position: absolute;
+}
+
+.two {
+  width: 27%;
+  height: 100%;
+  background-color: #ec7c45;
+  position: absolute;
+}
+
+.three {
+  width: 24%;
+  height: 100%;
+  background-color: #fdb14c;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.site-sidebar {
+  padding: 1rem;
+
+  h1 {
+    font-size: 3.5rem;
+    font-family: "Pacifico", cursive;
+    margin-bottom: 1rem;
+    text-align: right;
+  }
+
+  a {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: $dark;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  ul {
+    text-align: right;
+  }
+
+  li:not(:last-child) {
+    margin-bottom: 1.5rem;
+  }
+}
+
+code {
+  font-family: "Fira Code", monospace;
+}
+
+pre {
+  padding: 1rem;
+  overflow: auto;
+  margin: 1rem 2rem;
+  border-radius: 1rem;
+  font-family: "Fira Code", monospace;
+}
+// The line numbers already provide some kind of left/right padding
+pre[data-linenos] {
+  padding: 1rem 0;
+}
+pre table td {
+  padding: 0;
+}
+// The line number cells
+pre table td:nth-of-type(1) {
+  text-align: center;
+  user-select: none;
+}
+pre mark {
+  // If you want your highlights to take the full width.
+  display: block;
+  // The default background colour of a mark is bright yellow
+  background-color: rgba(254, 252, 232, 0.9);
+}
+pre table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+
