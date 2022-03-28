@@ -215,11 +215,22 @@ a:hover {
 
 	figure {
 		border-radius: 1rem;
-		background-color: #282c34;
+		background-color: $block;
 		overflow: hidden;
 		margin-bottom: 1rem;
 		figcaption {
 			margin: .25rem 1rem .5rem;
+		}
+	}
+
+	blockquote {
+		margin: 1rem 2rem;
+		border-radius: 1rem;
+		background-color: $block;
+		border: 1px dashed;
+
+		p {
+			margin: 1rem;
 		}
 	}
 }
