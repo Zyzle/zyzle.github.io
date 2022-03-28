@@ -1,6 +1,7 @@
 +++
 title = "Lets Write a Blog - Part 3: Jekyll"
 date = 2021-12-03
+draft = true
 
 [taxonomies]
 tags = ["blog", "jekyll"]

@@ -1,264 +1,273 @@
-@import 'reset';
-@import 'fonts';
-
-$light-yellow: #f6eeaf;
-$light-orange: #fdb14c;
-$dark-orange: #ec7c45;
-$dark-red: #b4473b;
-$dark: #1c281b;
-$mint: #a8e6be;
+@import "reset";
+@import "fonts";
+@import "colors";
 
 body {
-  margin: 0;
-  padding: 0;
-  background-color: $dark;
-  font-family: "Nunito", sans-serif;
+	background-color: $background;
+	color: $default;
+	font-family: "Nunito", sans-serif;
 }
 
-.flex-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-content: stretch;
-  align-items: stretch;
+.page-header {
+	position: fixed;
+	width: 100%;
+	height: 52px;
+	top: 0;
+	backdrop-filter: blur(10px);
+
+	.hwrapper {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+
+		h1 {
+			font-family: "Pacifico", cursive;
+			font-size: 2rem;
+			padding: .5rem;
+			color: $pink;
+			max-width: 750px;
+			flex: 1;
+		}
+	}
+
+
+	#progress-bar {
+		height: 2px;
+		width: 0%;
+		background-color: $cyan;
+	}
 }
 
-.sidebar {
-  flex: 1 1 30%;
-  height: 100vh;
-  background-color: #1c281b;
+.wrapper {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
 }
 
 .content {
-  flex: 1 1 70%;
-  align-self: auto;
-  overflow-y: auto;
-  height: 100vh;
+	margin-top: 52px;
+	margin-bottom: 50px;
+	padding: 0 15px;
+	max-width: 750px;
+
+	p {
+		margin-bottom: 1rem;
+		text-align: start;
+		line-height: normal;
+	}
+
+	.subheading {
+		color: $blue;
+		font-size: 1.2rem;
+		margin-bottom: .75rem;
+	}
 }
 
-.site-title {
-  order: 0;
-  flex: 0 0 auto;
-  align-self: auto;
+.post-info {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+
+	time {
+		color: $cyan;
+		flex: 1;
+	}
+
+	.tags {
+		flex: 1;
+		display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+		a {
+			font-family: "Fira Code", monospace;
+			font-weight: bold;
+			color: $gold;
+			text-decoration: none;
+			margin: 0 5px;
+		}
+
+		a:hover {
+			font-weight: normal;
+		}
+
+		a::before {
+			content: '#';
+			padding-right: 2px;
+		}
+
+		a::after {
+			content: ' ';
+		}
+	}
 }
 
-article {
-  background-color: $light-yellow;
-  margin: 20px;
-  padding: 30px;
-  border-radius: 20px;
+.post, .post-mini {
 
-  header {
-    h1 {
-      color: $dark-red;
-      font-size: 2.75rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-    }
+	.post-header {
+		margin-bottom: 2rem;
+		padding-top: 1rem;
 
-    h2 {
-      font-size: 1rem;
-      font-weight: normal;
-      color: $dark;
-      
-      address {
-        display: inline;
-      }
-    }
-  }
+		a {
+			text-decoration: none;
+		}
 
-  h2 {
-      font-size: 2rem;
-      font-weight: bold;
-      color: $dark-red;
-      margin-top: 1rem;
-    }
+		h1 {
+			font-size: 1.75rem;
+			font-weight: bold;
+			padding-bottom: .75rem;
+			color: $lime;
 
-  h3 {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: $dark-red;
-    margin-top: 1rem;
-  }
+		}
 
-    p {
-      margin-top: 1rem;
-      font-size: 1.2rem;
-    }
+		h1:hover {
+			text-decoration: underline;
+		}
+	}
 
-    a {
-      &:hover {
-        text-decoration: underline;
-      }
-      &:visited {
-        color: $dark-red;
-      }
-
-      font-size: 1rem;
-      font-style: italic;
-      font-weight: bold;
-      color: $dark-orange;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    ul {
-      margin-top: 1rem;
-      margin-left: 1rem;
-
-      li {
-        list-style-type: "❃ ";
-        list-style-position: inside;
-        font-size: 1.2rem;
-      }
-
-      li:not(:last-child) {
-        margin-bottom: 0.5rem;
-      }
-    }
-
-  section {
-    display: flex;
-    flex-direction: column;
-  }
-
-  figure {
-    margin: 2rem;
-    align-self: center;
-    padding: 1.5rem;
-    border-radius: 1rem;
-    background-color: $mint;
-
-    img {
-      max-width: 100%;
-    }
-
-    figcaption {
-      font-style: italic;
-    }
-  }
 }
 
-.continue {
-  padding-top: .5rem;
+a {
+	text-decoration: none;
+	color: $purple;
 }
 
-.taglist {
-  padding: 0.75rem 0;
-  margin: 0 !important;
-  li {
-    display: inline;
-    background-color: $light-orange;
-    border-radius: 1rem;
-    padding: 0.2rem 0.5rem;
-    margin-right: .2rem;
-    a {
-      font-weight: bold;
-      color: $dark;
-    }
-  }
+a:hover {
+	text-decoration: underline;
 }
 
-.post-title {
-  color: $dark-red;
+.post-mini {
+	margin-bottom: 1rem;
 }
 
-.bordered {
-  border-style: solid;
-  border-color: #1c281b;
-  border-width: 20px 20px 0 0;
-  border-radius: 0 60px 0 0;
-  box-sizing: border-box;
+.post {
+
+	ul, ol {
+		margin: 0 3.5rem;
+	}
+
+	ul {
+		list-style-type: disc;
+	}
+
+	ol {
+		list-style-type: upper-roman;
+	}
+
+	li {
+		padding-left: .5rem;
+	}
+
+	h1, h2, h3, h4, h5, h6, ul, ol, pre, blockquote {
+		margin-bottom: 1rem;
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		font-weight: bold;
+	}
+
+	h1, h2 {
+		color: $blue;
+	}
+
+	h3, h4 {
+		color: $cyan;
+	}
+
+	h5, h6 {
+		color: $caret;
+	}
+
+	h1 {
+		font-size: 1.6rem;
+	}
+
+	h2 {
+		font-size: 1.5rem;
+	}
+
+	h3 {
+		font-size: 1.4rem;
+	}
+
+	h4 {
+		font-size: 1.3rem;
+	}
+
+	h5 {
+		font-size: 1.2rem;
+	}
+
+	h6 {
+		font-size: 1rem;
+	}
+
+	em {
+		font-style: italic;
+	}
+
+	strong {
+		font-weight: bold;
+	}
+
+	img {
+		max-width: 720px;
+	}
+
+	figure {
+		border-radius: 1rem;
+		background-color: #282c34;
+		overflow: hidden;
+		margin-bottom: 1rem;
+		figcaption {
+			margin: .25rem 1rem .5rem;
+		}
+	}
 }
 
-.one {
-  width: 30%;
-  height: 100%;
-  background-color: #b4473b;
-  position: absolute;
+/* mobile */
+@media only screen and (max-width: 400px) {
 }
 
-.two {
-  width: 27%;
-  height: 100%;
-  background-color: #ec7c45;
-  position: absolute;
+/* tablet */
+@media only screen and (min-width: 401px) and (max-width: 960px) {
 }
 
-.three {
-  width: 24%;
-  height: 100%;
-  background-color: #fdb14c;
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
+/* desktop */
+@media only screen and (min-width: 961px) {
 }
 
-.site-sidebar {
-  padding: 1rem;
-
-  h1 {
-    font-size: 3.5rem;
-    font-family: "Pacifico", cursive;
-    margin-bottom: 1rem;
-    text-align: right;
-  }
-
-  a {
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-decoration: none;
-    color: $dark;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  ul {
-    text-align: right;
-  }
-
-  li:not(:last-child) {
-    margin-bottom: 1.5rem;
-  }
-}
 
 code {
-  font-family: "Fira Code", monospace;
+	font-family: "Fira Code", monospace;
 }
 
 pre {
-  padding: 1rem;
-  overflow: auto;
-  margin: 1rem 2rem;
-  border-radius: 1rem;
-  font-family: "Fira Code", monospace;
+	padding: 1rem;
+	overflow: auto;
+	margin: 1rem 2rem;
+	border-radius: 1rem;
+	font-family: "Fira Code", monospace;
+	border: 1px dashed;
 }
 // The line numbers already provide some kind of left/right padding
 pre[data-linenos] {
-  padding: 1rem 0;
+	padding: 1rem 0;
 }
 pre table td {
-  padding: 0;
+	padding: 0;
 }
 // The line number cells
 pre table td:nth-of-type(1) {
-  text-align: center;
-  user-select: none;
+	text-align: center;
+	user-select: none;
 }
 pre mark {
-  // If you want your highlights to take the full width.
-  display: block;
-  // The default background colour of a mark is bright yellow
-  background-color: rgba(254, 252, 232, 0.9);
+	// If you want your highlights to take the full width.
+	display: block;
+	// The default background colour of a mark is bright yellow
+	background-color: rgba(254, 252, 232, 0.9);
 }
 pre table {
-  width: 100%;
-  border-collapse: collapse;
+	width: 100%;
+	border-collapse: collapse;
 }
-
-

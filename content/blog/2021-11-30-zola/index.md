@@ -1,6 +1,7 @@
 +++
 title = "Lets Write a Blog - Part 2: Zola"
 date = 2021-11-30
+draft = true
 
 [taxonomies]
 tags = ["blog", "zola"]

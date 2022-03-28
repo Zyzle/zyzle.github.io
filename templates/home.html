@@ -3,21 +3,19 @@
 {% block main %}
 {% set post_section = get_section(path=config.extra.homepage_section ~ "/_index.md") %}
 {% for post in post_section.pages %}
-<article class="post">
-    <header>
+<article class="post-mini">
+    <header class="post-header">
         <a href="{{ post.permalink }}"><h1>{{ post.title }}</h1></a>
-        <h2>
+        <div class="post-info">
             <time>{{ post.date }}</time>
-            |
-            <address>By <a rel="author">{{ post.extra.author }}</a></address>
-        </h2>
-        {% if post.taxonomies.tags %}
-        <ul class="taglist">
-            {% for tag in post.taxonomies.tags %}
-            <li><a href="{# get_url(path="@/_index.md") #}tags/{{tag}}">{{ tag }}</a></li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+            <div class="tags">
+                {% if post.taxonomies.tags %}
+                    {% for tag in post.taxonomies.tags %}
+                        <a href="{{ get_url(path="@/_index.md")}}tags/{{tag}}">{{ tag }}</a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
     </header>
     <section>
         {{ post.summary | safe }} <a href={{post.permalink}} class="continue">continue reading...</a>

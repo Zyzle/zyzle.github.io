@@ -3,8 +3,8 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
-        
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1">
+        <meta name="description" content="?">
 
         <title>{% block title %}{{ config.title }}{% endblock title %}</title>
 
@@ -15,20 +15,29 @@
         <link rel="stylesheet" href="{{ get_url(path="styles.css", trailing_slash=false) | safe }}">
     </head>
     <body>
-        <div class="flex-container">
-            <div class="sidebar">
-                <div class="one bordered"></div>
-                <div class="two bordered"></div>
-                <div class="three bordered">
-                    <header class="site-sidebar">
-                        <h1>{{ config.title }}</h1>
-                        {% include "_navigation.html" %}
-                    </header>
-                </div>
+        <header class="page-header">
+            <div class="hwrapper">
+                <h1>{{ config.title }}</h1>
             </div>
-            <main class="content">
-                {% block main %}{% endblock main %}
+            <div id="progress-bar"></div>
+        </header>
+        <div class="wrapper">
+            <main class="content" id="docmain">
+                {% block main %}{% endblock main%}
             </main>
         </div>
+
+        <script type="text/javascript">
+            (() => {
+                const bar = document.querySelector('#progress-bar');
+                const post = document.querySelector('#docmain');
+                const html = document.documentElement;
+                const height = post.scrollHeight;
+
+                window.addEventListener('scroll', () => {
+                    bar.style.width = (html.scrollTop / (height - html.clientHeight)) * 100 + '%';
+                });
+            })();
+        </script>
     </body>
 </html>
