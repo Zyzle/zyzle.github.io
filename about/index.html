@@ -1,0 +1,10 @@
+<!doctype html><html lang=en><head><meta content="IE=edge" http-equiv=X-UA-Compatible><meta content="text/html; charset=utf-8" http-equiv=content-type><meta content="width=device-width,initial-scale=1.0,minimum-scale=1" name=viewport><meta content=? name=description><title>About | An Awesome Title</title><link href=https://www.zyzle.dev/styles.css rel=stylesheet><body><header class=page-header><div class=hwrapper><h1>An Awesome Title</h1></div><div id=progress-bar></div></header><div class=wrapper><main class=content id=docmain><article class=post><header class=post-header><h1>About</h1></header><p>This blog is written by me, Colin "Zyzle" McCulloch and licensed under <a href=https://creativecommons.org/licenses/by-sa/4.0/>Creative Commons Attribution-ShareAlike 4.0</a><p>This website uses the following fonts:<ul><li><a href=https://github.com/tonsky/FiraCode>Fira Code</a><li><a href=https://github.com/googlefonts/nunito>Nunito</a><li><a href=https://github.com/googlefonts/Pacifico>Pacifico</a></ul><p>all of which are available under the Open Font License (OFL) details of which can be found <a href=/OFL.txt>here</a></article></main></div><script>(() => {
+                const bar = document.querySelector('#progress-bar');
+                const post = document.querySelector('#docmain');
+                const html = document.documentElement;
+                const height = post.scrollHeight;
+
+                window.addEventListener('scroll', () => {
+                    bar.style.width = (html.scrollTop / (height - html.clientHeight)) * 100 + '%';
+                });
+            })();</script><script async data-dnt=false data-host=https://microanalytics.io defer id=ZwSg9rf6GA src=https://microanalytics.io/js/script.js></script>
