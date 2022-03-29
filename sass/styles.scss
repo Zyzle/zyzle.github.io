@@ -18,15 +18,20 @@ body {
 	.hwrapper {
 		display: flex;
 		flex-direction: row;
-		justify-content: center;
+		justify-content: space-between;
+		max-width: 750px;
+		margin: auto;
 
 		h1 {
 			font-family: "Pacifico", cursive;
 			font-size: 2rem;
 			padding: .5rem;
 			color: $pink;
-			max-width: 750px;
-			flex: 1;
+			
+		}
+
+		a {
+			color: $gold;
 		}
 	}
 
@@ -48,6 +53,7 @@ body {
 	margin-top: 52px;
 	margin-bottom: 50px;
 	padding: 0 15px;
+	width: 100%;
 	max-width: 750px;
 
 	p {
@@ -103,9 +109,23 @@ body {
 
 .post, .post-mini {
 
+	
+
 	.post-header {
 		margin-bottom: 2rem;
 		padding-top: 1rem;
+
+		.term-header, .term-header-nohash {
+			margin-bottom: 2rem;
+			padding-top: 1rem;
+			font-size: 2.5rem;
+			font-weight: bold;
+			color: $gold;
+		}	
+
+		.term-header:before {
+			content: '#';
+		}
 
 		a {
 			text-decoration: none;
@@ -231,6 +251,30 @@ a:hover {
 
 		p {
 			margin: 1rem;
+		}
+	}
+
+	.taglist {
+		list-style-type: none;
+		a {
+			font-family: "Fira Code", monospace;
+			font-weight: bold;
+			color: $gold;
+			text-decoration: none;
+			margin: 0 5px;
+		}
+
+		a:hover {
+			font-weight: normal;
+		}
+
+		a::before {
+			content: '#';
+			padding-right: 2px;
+		}
+
+		a::after {
+			content: ' ';
 		}
 	}
 }

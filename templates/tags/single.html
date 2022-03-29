@@ -3,14 +3,29 @@
 {% block title %}{{ term.name }} | {{ super() }}{% endblock title %}
 
 {% block main %}
-<article>
-    <header>
-        <h1>{{ term.name }}</h1>
+<article class="post">
+    <header class="post-header">
+        <h1 class="term-header">{{ term.name }}</h1>
     </header>
-    <ul>
-        {% for page in term.pages %}
-        <li><a href="{{ page.permalink }}">{{ page.title }}</a></li>
-        {% endfor %}
-    </ul>
+    {% for page in term.pages %}
+    <article class="post-mini">
+        <header class="post-header">
+            <a href="{{ page.permalink }}"><h1>{{ page.title }}</h1></a>
+            <div class="post-info">
+                <time>{{ page.date }}</time>
+                <div class="tags">
+                    {% if page.taxonomies.tags %}
+                        {% for tag in page.taxonomies.tags %}
+                            <a href="{{ get_url(path="@/_index.md")}}tags/{{tag}}">{{ tag }}</a>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+        <section>
+            {{ page.summary | safe }} <a href="{{page.permalink}}" class="continue">continue reading...</a>
+        </section>
+    </article>
+    {% endfor %}
 </article>
 {% endblock main %}

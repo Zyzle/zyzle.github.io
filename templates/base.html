@@ -13,11 +13,16 @@
             %}"application/rss+xml"{% endif %} title="RSS" href="{{ get_url(path=config.feed_filename) | safe }}">
         {% endif %}
         <link rel="stylesheet" href="{{ get_url(path="styles.css", trailing_slash=false) | safe }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
     </head>
     <body>
         <header class="page-header">
             <div class="hwrapper">
                 <h1>{{ config.title }}</h1>
+                <h1><a href="/tags">#</a></h1>
             </div>
             <div id="progress-bar"></div>
         </header>
