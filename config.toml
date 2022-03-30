@@ -12,7 +12,8 @@ compile_sass = true
 build_search_index = true
 
 taxonomies = [
-    { name = "tags", feed = false }
+    { name = "tags", feed = false },
+    { name = "language", feed = false }
 ]
 
 
@@ -22,7 +23,3 @@ taxonomies = [
 highlight_code = true
 extra_syntaxes_and_themes = ["extra_highlight_themes"]
 highlight_theme = "OD"
-
-[extra]
-# Put all your custom variables here
-homepage_section = "blog"

@@ -1,4 +1,6 @@
 <figure>
-    <img src="{{ path }}" alt="{{ alt }}" />
-    <figcaption>{{ caption }}</figcaption> 
+    {% set image_path = page.relative_path | replace(from="index.md", to=path) %}
+    {% set image = resize_image(path=image_path, width=720, height=720, format="webp", op="fit") %}
+    <img src="{{ image.url }}" alt="{{ alt }}" />
+    <figcaption>{{ caption }}</figcaption>
 </figure>

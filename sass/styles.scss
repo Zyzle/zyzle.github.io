@@ -109,8 +109,6 @@ body {
 
 .post, .post-mini {
 
-	
-
 	.post-header {
 		margin-bottom: 2rem;
 		padding-top: 1rem;
@@ -275,6 +273,26 @@ a:hover {
 
 		a::after {
 			content: ' ';
+		}
+	}
+}
+
+.homepage {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	.homepage-list {
+		margin-top: 2rem;
+		font-size: 5rem;
+
+		li {
+			margin: 2rem 0;
+
+			a {
+				line-height: 4rem;
+			}
 		}
 	}
 }

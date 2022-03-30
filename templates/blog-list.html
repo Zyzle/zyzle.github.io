@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block main %}
+{% for post in section.pages %}
+<article class="post-mini">
+    <header class="post-header">
+        <a href="{{ post.permalink }}"><h1>{{ post.title }}</h1></a>
+        <div class="post-info">
+            <time>{{ post.date }}</time>
+            <div class="tags">
+                {% if post.taxonomies.tags %}
+                    {% for tag in post.taxonomies.tags %}
+                        <a href="{{ get_url(path="@/_index.md")}}tags/{{tag}}">{{ tag }}</a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    <section>
+        {{ post.summary | safe }} <a href="{{post.permalink}}#continue-reading" class="continue">continue reading...</a>
+    </section>
+</article>
+{% endfor %}
+{% endblock main %}

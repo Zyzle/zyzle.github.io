@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block main %}
+{% for snippet in section.pages %}
+<article class="post-mini">
+	<header class="post-header">
+		<a href="{{ snippet.permalink }}"><h1>{{ snippet.title }}</h1></a>
+		<div class="post-info">
+			<time>{{ snippet.date }}</time>
+			<div class="tags">
+				{% if snippet.taxonomies.tags %}
+					{% for tag in snippet.taxonomies.tags %}
+						<a href="{{ get_url(path="@/_index.md")}}tags/{{tag}}">{{ tag }}</a>
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	</header>
+	<section>
+		{{ snippet.description | safe }}
+	</section>
+</article>
+{% endfor %}
+{% endblock main %}
