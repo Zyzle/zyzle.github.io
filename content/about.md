@@ -5,7 +5,7 @@ title = "About"
 author = "Colin McCulloch"
 +++
 
-This blog is written by me, Colin "Zyzle" McCulloch and licensed under [Creative Commons Attribution-ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+This site is maintained by me, Colin "Zyzle" McCulloch and licensed under [Creative Commons Attribution-ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/) the Zola source for this site can be found in it's [Github repository](https://github.com/Zyzle/zyzle.github.io).
 
 This website uses the following fonts:
 

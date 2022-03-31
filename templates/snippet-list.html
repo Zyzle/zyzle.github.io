@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 
 {% block main %}
+<article class="post">
+	<header class="post-header">
+		<h1>Snippets</h1>
+	</header>
+	<p>These are small code blocks or functions that I've found useful in the past but don't warrant a full blog
+		post of explanation.
+	</p>
+</article>
 {% for snippet in section.pages %}
 <article class="post-mini">
 	<header class="post-header">
