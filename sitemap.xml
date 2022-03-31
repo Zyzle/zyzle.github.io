@@ -14,9 +14,33 @@
         <lastmod>2022-03-26</lastmod>
     </url>
     <url>
+        <loc>https://www.zyzle.dev/snippets/</loc>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/snippets/equals-hashcode/</loc>
+        <lastmod>2022-03-31</lastmod>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/snippets/find-remove/</loc>
+        <lastmod>2022-03-31</lastmod>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/snippets/fisher-yates/</loc>
+        <lastmod>2022-03-31</lastmod>
+    </url>
+    <url>
         <loc>https://www.zyzle.dev/tags/</loc>
     </url>
     <url>
+        <loc>https://www.zyzle.dev/tags/algorithm/</loc>
+    </url>
+    <url>
         <loc>https://www.zyzle.dev/tags/blog/</loc>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/tags/os/</loc>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/tags/snippet/</loc>
     </url>
 </urlset>
