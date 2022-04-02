@@ -4,7 +4,7 @@ date = 2022-03-31
 
 [taxonomies]
 tags = ["snippet"]
-# language = ["java"
+language = ["java"]
 
 [extra]
 author = "Colin"

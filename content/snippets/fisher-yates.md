@@ -4,7 +4,7 @@ date = 2022-03-31
 
 [taxonomies]
 tags = ["snippet", "algorithm"]
-# language = ["typescript"]
+language = ["typescript"]
 
 [extra]
 author = "Colin"

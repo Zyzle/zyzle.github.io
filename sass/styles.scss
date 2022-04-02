@@ -297,6 +297,40 @@ a:hover {
 	}
 }
 
+.lang-list-icon {
+	width: 6rem;
+	height: 6rem;
+}
+
+.lang-list-link:hover {
+	text-decoration: none;
+}
+
+[data-count] {
+	position: relative;
+	display: inline-block;
+}
+
+[data-count]:after {
+	content: attr(data-count);
+	position: absolute;
+	background: $lime;
+	border-radius: 25%;
+	display: inline-block;
+	color: $block;
+	font-style: bold;
+	padding: 0.3em;
+	right: -5px;
+	top: -5px;
+}
+
+.flow-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+
 /* mobile */
 @media only screen and (max-width: 400px) {
 }

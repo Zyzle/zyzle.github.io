@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Languages | {{ super() }}{% endblock title %}
+
+{% block main %}
+<article class="post">
+	<header class="post-header">
+		<h1 class="term-header-nohash">Languages</h1>
+	</header>
+	<div class="flow-container">
+		{% for lang in terms %}
+		<a href="{{ lang.permalink }}" class="lang-list-link"
+			data-count="{{ lang.pages | length }}">
+			<img 
+				class="lang-list-icon" 
+				src="/lang-icons/{{ lang.name }}.svg" 
+				alt="{{ lang.name }} icon" 
+			/>
+		</a>
+		{% endfor %}
+	</div>
+</article>
+{% endblock main %}

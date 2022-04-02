@@ -4,7 +4,7 @@ date = 2022-03-31
 
 [taxonomies]
 tags = ["snippet", "os"]
-# language = ["bash"]
+language = ["bash"]
 
 [extra]
 author = "Colin"
