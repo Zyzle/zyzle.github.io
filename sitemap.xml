@@ -14,11 +14,37 @@
         <lastmod>2022-03-26</lastmod>
     </url>
     <url>
+        <loc>https://www.zyzle.dev/language/</loc>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/language/bash/</loc>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/language/css/</loc>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/language/java/</loc>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/language/javascript/</loc>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/language/typescript/</loc>
+    </url>
+    <url>
         <loc>https://www.zyzle.dev/snippets/</loc>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/snippets/css-material-shadow/</loc>
+        <lastmod>2022-04-01</lastmod>
     </url>
     <url>
         <loc>https://www.zyzle.dev/snippets/equals-hashcode/</loc>
         <lastmod>2022-03-31</lastmod>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/snippets/file-extension-regex/</loc>
+        <lastmod>2022-04-01</lastmod>
     </url>
     <url>
         <loc>https://www.zyzle.dev/snippets/find-remove/</loc>
@@ -39,6 +65,9 @@
     </url>
     <url>
         <loc>https://www.zyzle.dev/tags/os/</loc>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/tags/regex/</loc>
     </url>
     <url>
         <loc>https://www.zyzle.dev/tags/snippet/</loc>
