@@ -1,0 +1,86 @@
++++
+title = "Lets Write a Blog - Part 4: Hugo"
+date = 2022-04-01
+draft = true
+
+[tagonomies]
+tags = ["blog", "hugo"]
+
+[extra]
+author = "Colin"
++++
+
+# Hugo
+
+## About
+
+* claims to be worlds fastest static site generator
+* one of the most popular today
+
+
+## Installation
+
+```bash
+$ brew install hugo
+```
+
+* version 0.89.4, size 54Mb
+* also available Homebrew for linux, MacPorts, Chocolatey and scoop for windows
+* requires Go runtime
+
+## Site setup
+
+```bash
+$ hugo new site hugoblog
+```
+
+No options to give here but does give a hint about next steps:
+
+```
+1. Download a theme into the same-named folder.
+   Choose a theme from https://themes.gohugo.io/ or
+   create your own with the "hugo new theme <THEMENAME>" command.
+2. Perhaps you want to add some content. You can add single files
+   with "hugo new <SECTIONNAME>/<FILENAME>.<FORMAT>".
+3. Start the built-in live server via "hugo server".
+```
+
+created site dir looks like this [fig hugo 1] again mostly empty directories with a basic `config.toml` and a `default.md` "archetype"?
+
+## Templating 101
+
+create a new barebones theme with the cli
+
+```bash
+$ hugo new theme mytheme
+```
+
+but there's a problem 
+
+```bash
+WARN 2021/11/19 01:49:10 found no layout file for "HTML" for kind "home": You should create a template file which matches Hugo Layouts Lookup Rules for this combination.
+```
+
+My bad, forgot to add the theme to my `config.toml` file
+
+```toml
+baseURL = 'http://example.org/'
+languageCode = 'en-us'
+title = 'My New Hugo Site'
+theme = "mytheme"
+```
+
+Now the compilation step is error free but nothing but a white screen is showing on the development url, lets fix that.
+
+
+
+## Our List/Entries pages
+
+Hugo comes with page builder commands in the cli.
+
+```bash
+$ hugo new blog/first.md
+```
+
+## Conclusion
+

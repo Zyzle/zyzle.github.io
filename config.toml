@@ -1,7 +1,7 @@
 # The URL the site will be built for
 base_url = "https://www.zyzle.dev"
 
-title = "An Awesome Title"
+title = "Zyzle.dev"
 default_language = "en"
 minify_html = true
 

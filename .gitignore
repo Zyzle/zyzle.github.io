@@ -2,3 +2,4 @@ public/
 terminal/
 gh-pages/
 .DS_Store
+static/processed_images/
