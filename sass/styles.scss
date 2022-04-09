@@ -8,12 +8,24 @@ body {
 	font-family: "Nunito", sans-serif;
 }
 
+@mixin header-blur {
+	@supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+		background-color: rgba(37, 37, 57, .75);
+	}
+
+	@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+	}
+}
+
 .page-header {
+	@include header-blur();
+	
 	position: fixed;
 	width: 100%;
 	height: 52px;
 	top: 0;
-	backdrop-filter: blur(10px);
 
 	.hwrapper {
 		display: flex;
@@ -33,6 +45,11 @@ body {
 		a {
 			color: $gold;
 		}
+	}
+
+	.header-buttons {
+		display: flex;
+		flex-direction: row;
 	}
 
 
@@ -233,10 +250,13 @@ a:hover {
 	}
 
 	figure {
+		display: flex;
+		flex-direction: column;
 		border-radius: 1rem;
 		background-color: $block;
 		overflow: hidden;
 		margin-bottom: 1rem;
+		border: 1px dashed;
 		figcaption {
 			margin: .25rem 1rem .5rem;
 		}

@@ -72,4 +72,4 @@ a basic image
 
 one using our `figure` custom shortcode
 
-{{ figure(path="bg2.jpg", caption="a caption for the image", alt="test image") }}
+{{ figure(path="bg2.jpg", isColocated=true, caption="a caption for the image", alt="test image") }}
