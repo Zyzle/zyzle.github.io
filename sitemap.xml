@@ -10,6 +10,10 @@
         <loc>https://www.zyzle.dev/blog/</loc>
     </url>
     <url>
+        <loc>https://www.zyzle.dev/blog/intro/</loc>
+        <lastmod>2022-04-09</lastmod>
+    </url>
+    <url>
         <loc>https://www.zyzle.dev/blog/markdown-test/</loc>
         <lastmod>2022-03-26</lastmod>
     </url>
@@ -64,6 +68,12 @@
         <loc>https://www.zyzle.dev/tags/blog/</loc>
     </url>
     <url>
+        <loc>https://www.zyzle.dev/tags/hugo/</loc>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/tags/jekyll/</loc>
+    </url>
+    <url>
         <loc>https://www.zyzle.dev/tags/os/</loc>
     </url>
     <url>
@@ -71,5 +81,8 @@
     </url>
     <url>
         <loc>https://www.zyzle.dev/tags/snippet/</loc>
+    </url>
+    <url>
+        <loc>https://www.zyzle.dev/tags/zola/</loc>
     </url>
 </urlset>
