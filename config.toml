@@ -16,6 +16,9 @@ taxonomies = [
     { name = "language", feed = false }
 ]
 
+generate_feed = true
+feed_filename = "atom.xml"
+external_links_target_blank = true
 
 [markdown]
 # Whether to do syntax highlightingß

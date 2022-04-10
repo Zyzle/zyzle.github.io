@@ -1,6 +1,6 @@
 +++
 title = "Lets Write a Blog - Part 2: Zola"
-date = 2021-11-30
+date = 2022-04-16
 draft = true
 
 [taxonomies]
@@ -24,7 +24,7 @@ $ brew install zola
 
 Zola is also available on MacPorts, Chocolatey, Scoop, and various linux package structures. With no external dependencies Zola is probably the simplest of the 3 tools we're looking at.
 
-The version we'll be using is the current stable 0.14.1 (24 Aug 2021) at the time of writing, with a total size of 19mb it also has one of the smallest install footprints. 
+The version we'll be using is the current stable 0.15.3 (23rd Jan 2022) at the time of writing, with a total size of ~19mb it also has one of the smallest install footprints. 
 
 ## Site setup
 
@@ -53,15 +53,7 @@ zolablog/
 +-- config.toml
 ```
 
-A few empty directories and a `config.toml` with the minimal configuration I selected in the site setup wizard. The full list of Zola configuration options can be found [here](https://www.getzola.org/documentation/getting-started/configuration/). In order to get display our blog entries on the homepage we're going to add some custom config to the extras section:
-
-```toml
-[extra]
-# Put all your custom variables here
-homepage_section = "blog"
-```
-
-This will be used to pick out the entries from the blog section into the homepage template. More on this later.
+A few empty directories and a `config.toml` with the minimal configuration I selected in the site setup wizard. The full list of Zola configuration options can be found [in the zola documentation](https://www.getzola.org/documentation/getting-started/configuration/).
 
 Let's start the development server with the following
 
@@ -89,19 +81,19 @@ We'll start with a `base.html` file that all our other templates will inherit fr
 ```html
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>{{ config.title }}</title>
-    </head>
-    <body>
-        <header>
-            <h1>{{ config.title }}</h1>
-            {% include "navigation.html" %}
-        </header>
-        <main>
-            {% block content %}{% endblock %}
-        </main>
-    </body>
+  <head>
+    <meta charset="utf-8">
+    <title>{{ config.title }}</title>
+  </head>
+  <body>
+    <header>
+      <h1>{{ config.title }}</h1>
+        {% include "navigation.html" %}
+    </header>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+  </body>
 </html>
 ```
 
