@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+	<title>Zyzle.dev</title>
+	<link href="https://www.zyzle.dev/atom.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://www.zyzle.dev"/>
+	<generator uri="https://www.getzola.org/">Zola</generator>
+	<updated>2022-04-09T00:00:00+00:00</updated>
+	<id>https://www.zyzle.dev/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Let&#x27;s write a blog - Part 1: Intro</title>
+		<published>2022-04-09T00:00:00+00:00</published>
+		<updated>2022-04-09T00:00:00+00:00</updated>
+		<link href="https://www.zyzle.dev/blog/intro/" type="text/html"/>
+		<id>https://www.zyzle.dev/blog/intro/</id>
+		<content type="html">&lt;p&gt;I&#x27;ve been wanting to get back into blogging for some time but have no idea what to write about to start me off, so why not write about choosing a blog tool and it&#x27;s setup. We&#x27;re going to go through some of the tools I&#x27;ve considered and the reasons behind my final choice as well as the process of creating a template and deploying the blog.&lt;&#x2F;p&gt;
+&lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;&lt;h2 id=&quot;why-static-site&quot;&gt;Why static site?&lt;&#x2F;h2&gt;
+&lt;p&gt;For a couple of reasons I&#x27;ve chosen to look at static site generators for this task. Firstly while I wan&#x27;t to create, style, and release my content as simply as possible I want to be in control of it. With the blogging platforms available today I don&#x27;t really find I get this. &lt;&#x2F;p&gt;
+&lt;p&gt;Another big plus for me with the static site generators is I can keep all of the content in git in simple text files (usually markdown). The benefit if this to me is it allows my content to be stored in a version control system, I can look back through the history of drafts to see how things have progressed or even revert to older versions if I go off in a direction I later want to revise. &lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve always been a fan of reducing page bloat as much as possible, these days even simple articles are bogged down with so much unnecessary scripts, includes, and poorly optimised assets that page sizes are out of control. I chose at random a reasonably sized Medium blog post of around 1300 words, this clocked in at 4.4Mb! The actual readable text content of the page consisting of only 8Kb of this total, so yeah &amp;lt;0.2%  of the page is actual content.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Maciej Ceglowski has a great talk about this, the text of which can be found &lt;a href=&quot;https:&#x2F;&#x2F;idlewords.com&#x2F;talks&#x2F;website_obesity.htm&quot;&gt;here&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;From what I can see all of the most common blogging platforms these days share this issue with Medium and I don&#x27;t really want to have to hand-crank every page of my blog from scratch so the obvious solution seems to be a static site generator.&lt;&#x2F;p&gt;
+&lt;p&gt;These have become popular with content creators in recent years because they allow you to keep your content blog entries, pages, sections etc. in a set of simple markdown files which can then be processed by the engine into a set of pre-defined html templates creating a more complete looking web experience for the end user. &lt;&#x2F;p&gt;
+&lt;p&gt;There are many of these tools available currently but we&#x27;ll be focusing on 3 for the purposes of this blog, basically because I don&#x27;t want to have to learn more than 3 tools and re-implementing the site more than that.&lt;&#x2F;p&gt;
+&lt;p&gt;The three tools I&#x27;ve chosen to look at are:&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;hugo&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;gohugo.io&#x2F;&quot;&gt;Hugo&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;One of the most popular static site generators, more generic site template engine than the other two we&#x27;ll be looking at. Claims to be one of the fastest static site generators around. Written in Go and uses Go&#x27;s &lt;code&gt;html&#x2F;template&lt;&#x2F;code&gt; and &lt;code&gt;text&#x2F;template&lt;&#x2F;code&gt; libraries for its templating.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;jekyll&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;jekyllrb.com&#x2F;&quot;&gt;Jekyll&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;One of the older static site generators and the first (only?) one to be integrated into github pages. Built in Ruby and does appear to require some Ruby knowledge to use.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;zola&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.getzola.org&#x2F;&quot;&gt;Zola&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The newest of the three we&#x27;ll be looking at written in Rust and using a custom template engine similar to Jinja. Has a strong opinion on how content should be structured but has good freedom in it&#x27;s templates.&lt;&#x2F;p&gt;
+&lt;p&gt;The plan is to implement the new blog, or at least a very small subset of it in each of these 3 tools  looking at things like: &lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;simplicity of setup&lt;&#x2F;li&gt;
+&lt;li&gt;ease of use&lt;&#x2F;li&gt;
+&lt;li&gt;flexibility&lt;&#x2F;li&gt;
+&lt;li&gt;build&#x2F;deploy pipeline&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;what-i-m-looking-to-achieve&quot;&gt;What I&#x27;m looking to achieve&lt;&#x2F;h2&gt;
+&lt;p&gt;Looking to build a new home for the blog I thought up a few basic feature requirements:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;requirements:
+&lt;ul&gt;
+&lt;li&gt;ease of adding blog entries&lt;&#x2F;li&gt;
+&lt;li&gt;list by date published&lt;&#x2F;li&gt;
+&lt;li&gt;permalinking&lt;&#x2F;li&gt;
+&lt;li&gt;ability to add custom template&lt;&#x2F;li&gt;
+&lt;li&gt;syntax highlighting for code blocks&lt;&#x2F;li&gt;
+&lt;li&gt;styled figures&#x2F;quotes&#x2F;callout sections&lt;&#x2F;li&gt;
+&lt;li&gt;page&#x2F;deep links&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;nice to have&#x27;s:
+&lt;ul&gt;
+&lt;li&gt;no bespoke markdown&lt;&#x2F;li&gt;
+&lt;li&gt;simple site structure&lt;&#x2F;li&gt;
+&lt;li&gt;taxonomies support&lt;&#x2F;li&gt;
+&lt;li&gt;ability to draft entries&lt;&#x2F;li&gt;
+&lt;li&gt;template that can be reused&lt;&#x2F;li&gt;
+&lt;li&gt;integration with GH-pages deploy&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;For the first part of this series I&#x27;ll create the same simple site template and basic page set in each of the three static site generators. I&#x27;m going to start with a simple homepage showing site title, a navigations section linking to homepage and an about page, a list of two blog entries showing title a summary of the page content and a link to continue reading. I&#x27;ll also need another two templates, one for the free-form About page and one for our blog posts. &lt;&#x2F;p&gt;
+&lt;p&gt;The basic sites first iteration should look something like the following:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;figure&gt;
+    
+    
+        
+    
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;www.zyzle.dev&amp;#x2F;processed_images&amp;#x2F;6199e33863e7941000.webp&quot; alt=&quot;the basic homepage layout&quot; &#x2F;&gt;
+    &lt;figcaption&gt;The homepage&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;figure&gt;
+    
+    
+        
+    
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;www.zyzle.dev&amp;#x2F;processed_images&amp;#x2F;e43d982bff8ca84600.webp&quot; alt=&quot;a simple about page&quot; &#x2F;&gt;
+    &lt;figcaption&gt;An about page&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;figure&gt;
+    
+    
+        
+    
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;www.zyzle.dev&amp;#x2F;processed_images&amp;#x2F;f350446c18931f1900.webp&quot; alt=&quot;the blog list page&quot; &#x2F;&gt;
+    &lt;figcaption&gt;The blog list page sorted by date&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;figure&gt;
+    
+    
+        
+    
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;www.zyzle.dev&amp;#x2F;processed_images&amp;#x2F;c702f2f65fd1d7d200.webp&quot; alt=&quot;a basic post page&quot; &#x2F;&gt;
+    &lt;figcaption&gt;A basic post page&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ll also try and keep parity between the HTML generated by each &lt;&#x2F;p&gt;
+&lt;p&gt;By the time you read this I&#x27;ll have a decision made on which tool to use (spoiler it&#x27;s Zola), in the coming posts I&#x27;ll go through what I&#x27;ve found evaluation the 3 of these and hopefully my decision will become clear.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>CSS material box shadow</title>
+		<published>2022-04-01T00:00:00+00:00</published>
+		<updated>2022-04-01T00:00:00+00:00</updated>
+		<link href="https://www.zyzle.dev/snippets/css-material-shadow/" type="text/html"/>
+		<id>https://www.zyzle.dev/snippets/css-material-shadow/</id>
+		<content type="html">&lt;p&gt;Box shadow similar to the one from the material design spec&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;css&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-css &quot;&gt;&lt;code class=&quot;language-css&quot; data-lang=&quot;css&quot;&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;.shadow &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;  box-shadow: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0 4&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;px &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;5&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;px &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;rgba&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;14&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0 1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;px &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;10&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;px &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;rgba&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;12&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0 2&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;px &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;px &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;-1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;px &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;rgba&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>File extension regex (js example)</title>
+		<published>2022-04-01T00:00:00+00:00</published>
+		<updated>2022-04-01T00:00:00+00:00</updated>
+		<link href="https://www.zyzle.dev/snippets/file-extension-regex/" type="text/html"/>
+		<id>https://www.zyzle.dev/snippets/file-extension-regex/</id>
+		<content type="html">&lt;p&gt;Simple regex for determining file extension&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;var &lt;&#x2F;span&gt;&lt;span&gt;re &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&#x2F;(?:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;\.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;^&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;.]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;))&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;?$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;var &lt;&#x2F;span&gt;&lt;span&gt;ext &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;re&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;exec&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;file.name.with.dots.txt&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;];   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; &amp;quot;txt&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;var &lt;&#x2F;span&gt;&lt;span&gt;ext &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;re&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;exec&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;file.txt&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;];                  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; &amp;quot;txt&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;var &lt;&#x2F;span&gt;&lt;span&gt;ext &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;re&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;exec&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;file&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;];                      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; undefined
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;var &lt;&#x2F;span&gt;&lt;span&gt;ext &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;re&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;exec&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;];                          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; undefined
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;var &lt;&#x2F;span&gt;&lt;span&gt;ext &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;re&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;exec&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;null&lt;&#x2F;span&gt;&lt;span&gt;)[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;];                        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; undefined
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;var &lt;&#x2F;span&gt;&lt;span&gt;ext &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;re&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;exec&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;undefined&lt;&#x2F;span&gt;&lt;span&gt;)[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;];                   &lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; undefined
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;**
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;(?:         # begin non-capturing group
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;  \.        #   a dot
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;  (         #   begin capturing group (captures the actual extension)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;    [^.]+   #     anything except a dot, multiple times
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;  )         #   end capturing group
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;)?          # end non-capturing group, make it optional
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;$           # anchor to the end of the string
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;*&#x2F;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Override equals and hashCode correctly</title>
+		<published>2022-03-31T00:00:00+00:00</published>
+		<updated>2022-03-31T00:00:00+00:00</updated>
+		<link href="https://www.zyzle.dev/snippets/equals-hashcode/" type="text/html"/>
+		<id>https://www.zyzle.dev/snippets/equals-hashcode/</id>
+		<content type="html">&lt;p&gt;A Java classes &lt;code&gt;equals&lt;&#x2F;code&gt; and &lt;code&gt;hashCode&lt;&#x2F;code&gt; methods should always be overridden in pairs, the following shows how to do this manually without using 3rd party libraries&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;java&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-java &quot;&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;public &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;class &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;Stock &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;private &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span&gt;tickSize;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;private &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;long &lt;&#x2F;span&gt;&lt;span&gt;lotSize;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;private &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;boolean &lt;&#x2F;span&gt;&lt;span&gt;isRestricted;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;private &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;String &lt;&#x2F;span&gt;&lt;span&gt;symbol;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;private &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;String &lt;&#x2F;span&gt;&lt;span&gt;exchange;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;private &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;Date &lt;&#x2F;span&gt;&lt;span&gt;settlementDate;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;private &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;BigDecimal &lt;&#x2F;span&gt;&lt;span&gt;price;
+&lt;&#x2F;span&gt;&lt;span&gt;        
+&lt;&#x2F;span&gt;&lt;span&gt;    @Override
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;public &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;hashCode&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;final &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span&gt; prime &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;31&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span&gt; result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;        result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; prime &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+&lt;&#x2F;span&gt;&lt;span&gt; tickSize;
+&lt;&#x2F;span&gt;&lt;span&gt;        result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; prime &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;int&lt;&#x2F;span&gt;&lt;span&gt;) (lotSize &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;^ &lt;&#x2F;span&gt;&lt;span&gt;(lotSize &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;gt;&amp;gt;&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;32&lt;&#x2F;span&gt;&lt;span&gt;));
+&lt;&#x2F;span&gt;&lt;span&gt;        result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; prime &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span&gt;(isRestricted &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;? &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1231 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1237&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;        result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; prime &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span&gt;((symbol &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;null&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;? &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span&gt; symbol.hashCode());
+&lt;&#x2F;span&gt;&lt;span&gt;        result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; prime &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span&gt;((exchange &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;null&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;? &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span&gt; exchange.hashCode());
+&lt;&#x2F;span&gt;&lt;span&gt;        result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; prime &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span&gt;((settlementDate &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;null&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;? &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span&gt; settlementDate.hashCode());
+&lt;&#x2F;span&gt;&lt;span&gt;        result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; prime &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;*&lt;&#x2F;span&gt;&lt;span&gt; result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span&gt;((price &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;null&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;? &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;:&lt;&#x2F;span&gt;&lt;span&gt; price.hashCode());
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return&lt;&#x2F;span&gt;&lt;span&gt; result;
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    @Override
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;public &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;boolean &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;equals&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;Object &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;obj&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;this ==&lt;&#x2F;span&gt;&lt;span&gt; obj) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;if &lt;&#x2F;span&gt;&lt;span&gt;(obj &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;null &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;|| this&lt;&#x2F;span&gt;&lt;span&gt;.getClass() &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;!=&lt;&#x2F;span&gt;&lt;span&gt; obj.getClass()){
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;false&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;Stock&lt;&#x2F;span&gt;&lt;span&gt; other &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;Stock&lt;&#x2F;span&gt;&lt;span&gt;) obj;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return  
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;.tickSize &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;==&lt;&#x2F;span&gt;&lt;span&gt; other.tickSize &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;amp;&amp;amp; this&lt;&#x2F;span&gt;&lt;span&gt;.lotSize &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;==&lt;&#x2F;span&gt;&lt;span&gt; other.lotSize &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;amp;&amp;amp; 
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;.isRestricted &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;==&lt;&#x2F;span&gt;&lt;span&gt; other.isRestricted &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;amp;&amp;amp;
+&lt;&#x2F;span&gt;&lt;span&gt;            (&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;.symbol &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;==&lt;&#x2F;span&gt;&lt;span&gt; other.symbol&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;|| &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;.symbol &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;null &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;amp;&amp;amp; this&lt;&#x2F;span&gt;&lt;span&gt;.symbol.equals(other.symbol))) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;amp;&amp;amp; 
+&lt;&#x2F;span&gt;&lt;span&gt;            (&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;.exchange &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;==&lt;&#x2F;span&gt;&lt;span&gt; other.exchange&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;|| &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;.exchange &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;null &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;amp;&amp;amp; this&lt;&#x2F;span&gt;&lt;span&gt;.exchange.equals(other.exchange))) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;amp;&amp;amp;
+&lt;&#x2F;span&gt;&lt;span&gt;            (&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;.settlementDate &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;==&lt;&#x2F;span&gt;&lt;span&gt; other.settlementDate&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;|| &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;.settlementDate &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;null &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;amp;&amp;amp; this&lt;&#x2F;span&gt;&lt;span&gt;.settlementDate.equals(other.settlementDate))) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;amp;&amp;amp;
+&lt;&#x2F;span&gt;&lt;span&gt;            (&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;.price &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;==&lt;&#x2F;span&gt;&lt;span&gt; other.price&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;|| &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;this&lt;&#x2F;span&gt;&lt;span&gt;.price &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;!= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;null &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;amp;&amp;amp; this&lt;&#x2F;span&gt;&lt;span&gt;.price.equals(other.price)));
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The Java &lt;code&gt;equals&lt;&#x2F;code&gt; contract defines that the method must be:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Reflexive&lt;&#x2F;strong&gt;: An object must equal itself&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Symetric&lt;&#x2F;strong&gt;: if &lt;code&gt;x.equals(y)&lt;&#x2F;code&gt; then &lt;code&gt;y.equals(x)&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Transitive&lt;&#x2F;strong&gt;: if &lt;code&gt;x.equals(y)&lt;&#x2F;code&gt; and &lt;code&gt;y.equals(z)&lt;&#x2F;code&gt; then &lt;code&gt;x.equals(z)&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Consistent&lt;&#x2F;strong&gt;: The value should only change if a member used in the calculation changes i.e. no randomness.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;code&gt;hashCode&lt;&#x2F;code&gt; calculation is related to the &lt;code&gt;equals&lt;&#x2F;code&gt; method in the following ways&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Internal Consistency&lt;&#x2F;strong&gt;: The value can only change if a member used in the &lt;code&gt;equals&lt;&#x2F;code&gt; calculation changes&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Equals Consistency&lt;&#x2F;strong&gt;: If two objects are &lt;code&gt;equal&lt;&#x2F;code&gt; then they must have the same &lt;code&gt;hashCode&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Collisions&lt;&#x2F;strong&gt;: unequal objects &lt;em&gt;may&lt;&#x2F;em&gt; have the same &lt;code&gt;hashCode&lt;&#x2F;code&gt;, nothing in the definition prohibits this&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Recursive find and remove</title>
+		<published>2022-03-31T00:00:00+00:00</published>
+		<updated>2022-03-31T00:00:00+00:00</updated>
+		<link href="https://www.zyzle.dev/snippets/find-remove/" type="text/html"/>
+		<id>https://www.zyzle.dev/snippets/find-remove/</id>
+		<content type="html">&lt;p&gt;Find all files&#x2F;directories based on a name pattern and remove them recursively from a base directory.&lt;&#x2F;p&gt;
+&lt;p&gt;For files:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;find .&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; -name &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;*.bak&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; -type&lt;&#x2F;span&gt;&lt;span&gt; f&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; -exec&lt;&#x2F;span&gt;&lt;span&gt; rm {} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;\;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;For directories:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;find .&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; -name &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;node_modules&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; -type&lt;&#x2F;span&gt;&lt;span&gt; d&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; -exec&lt;&#x2F;span&gt;&lt;span&gt; rm&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; -rf &lt;&#x2F;span&gt;&lt;span&gt;{} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;\;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Fisher-Yates Shuffle</title>
+		<published>2022-03-31T00:00:00+00:00</published>
+		<updated>2022-03-31T00:00:00+00:00</updated>
+		<link href="https://www.zyzle.dev/snippets/fisher-yates/" type="text/html"/>
+		<id>https://www.zyzle.dev/snippets/fisher-yates/</id>
+		<content type="html">&lt;p&gt;Take a finite array and shuffle items in-place:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;typescript&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-typescript &quot;&gt;&lt;code class=&quot;language-typescript&quot; data-lang=&quot;typescript&quot;&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;shuffle&lt;&#x2F;span&gt;&lt;span&gt;(cards: any[]) {
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;m &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;cards&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;length&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;t, i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;while&lt;&#x2F;span&gt;&lt;span&gt;(m) {
+&lt;&#x2F;span&gt;&lt;span&gt;    i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;Math&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;floor&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;Math&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;random&lt;&#x2F;span&gt;&lt;span&gt;() &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span&gt;m&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;--&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;    t &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;cards[m];
+&lt;&#x2F;span&gt;&lt;span&gt;    cards[m] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;cards[i];
+&lt;&#x2F;span&gt;&lt;span&gt;    cards[i] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;t;
+&lt;&#x2F;span&gt;&lt;span&gt;  }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Formal definition:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;for i from n−1 downto 1 do
+&lt;&#x2F;span&gt;&lt;span&gt;  j ← random integer such that 0 ≤ j ≤ i
+&lt;&#x2F;span&gt;&lt;span&gt;  exchange a[j] and a[i]
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Markdown Tester Page</title>
+		<published>2022-03-26T00:00:00+00:00</published>
+		<updated>2022-03-26T00:00:00+00:00</updated>
+		<link href="https://www.zyzle.dev/blog/markdown-test/" type="text/html"/>
+		<id>https://www.zyzle.dev/blog/markdown-test/</id>
+		<content type="html">&lt;p&gt;This page is going to function as a test bed for the sites new styling, it&#x27;s going to contain as many different markdown elements as possible in order to see whether or not we support them&lt;&#x2F;p&gt;
+&lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;&lt;h1 id=&quot;headings&quot;&gt;Headings&lt;&#x2F;h1&gt;
+&lt;h1 id=&quot;heading-1&quot;&gt;Heading 1&lt;&#x2F;h1&gt;
+&lt;h2 id=&quot;heading-2&quot;&gt;Heading 2&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;heading-3&quot;&gt;Heading 3&lt;&#x2F;h3&gt;
+&lt;h4 id=&quot;heading-4&quot;&gt;Heading 4&lt;&#x2F;h4&gt;
+&lt;h5 id=&quot;heading-5&quot;&gt;Heading 5&lt;&#x2F;h5&gt;
+&lt;h6 id=&quot;heading-6&quot;&gt;Heading 6&lt;&#x2F;h6&gt;
+&lt;h1 id=&quot;unordered-list&quot;&gt;Unordered List&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;one&lt;&#x2F;li&gt;
+&lt;li&gt;two&lt;&#x2F;li&gt;
+&lt;li&gt;three&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h1 id=&quot;ordered-list&quot;&gt;Ordered List&lt;&#x2F;h1&gt;
+&lt;ol&gt;
+&lt;li&gt;one&lt;&#x2F;li&gt;
+&lt;li&gt;two&lt;&#x2F;li&gt;
+&lt;li&gt;three&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h1 id=&quot;blocks&quot;&gt;Blocks&lt;&#x2F;h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;some blockquote information text&lt;&#x2F;p&gt;
+&lt;p&gt;over multiple lines in markdown&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span&gt;(() &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;bar &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;document&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;querySelector&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;#progress-bar&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;post &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;document&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;querySelector&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;#docmain&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;html &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;document&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;documentElement&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;height &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;post&lt;&#x2F;span&gt;&lt;span&gt;.scrollHeight;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;window&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;addEventListener&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;scroll&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;, () &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;bar&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;style&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;width &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= 
+&lt;&#x2F;span&gt;&lt;span&gt;            (&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;.scrollTop &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&#x2F; &lt;&#x2F;span&gt;&lt;span&gt;(height &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;.clientHeight))
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;100 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;%&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    });
+&lt;&#x2F;span&gt;&lt;span&gt;})();
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h1 id=&quot;text&quot;&gt;Text&lt;&#x2F;h1&gt;
+&lt;p&gt;Some text with &lt;em&gt;italic&lt;&#x2F;em&gt;, &lt;strong&gt;bold&lt;&#x2F;strong&gt;, &lt;em&gt;&lt;strong&gt;bold italic&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;, &lt;code&gt;monospaced&lt;&#x2F;code&gt;, &lt;a href=&quot;http:&#x2F;&#x2F;www.zyzle.dev&quot;&gt;a link&lt;&#x2F;a&gt;, &lt;del&gt;strike&lt;&#x2F;del&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;image&quot;&gt;Image&lt;&#x2F;h1&gt;
+&lt;p&gt;a basic image&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;bg2.jpg&quot; alt=&quot;a caption for image&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;one using our &lt;code&gt;figure&lt;&#x2F;code&gt; custom shortcode&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    
+    
+        
+    
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;www.zyzle.dev&amp;#x2F;processed_images&amp;#x2F;a74de0c7255ee7d700.webp&quot; alt=&quot;test image&quot; &#x2F;&gt;
+    &lt;figcaption&gt;a caption for the image&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;</content>
+	</entry>
+</feed>
