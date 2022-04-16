@@ -10,7 +10,8 @@ tags = ["blog", "jekyll"]
 author = "Colin"
 +++
 
-Jekyll is the oldest of the static site generators we'll be looking at it's 1.0 version appearing in 
+Jekyll is the oldest of the static site generators we'll be looking at it's 1.0 version appearing in 2013.
+
 
 <!-- more -->
 

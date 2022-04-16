@@ -365,6 +365,31 @@ a:hover {
 @media only screen and (min-width: 961px) {
 }
 
+@media print {
+
+	body, h1, h2, h3, h4, h5, h6, a, .post>h1, .post>h2, .post>.post-header>h1, .post-info>time,
+	.post-info>.tags>a  {
+		color: #000;
+	}
+
+	.page-header {
+		display: none;
+	}
+
+	figure {
+		page-break-inside: avoid;
+		width: 50%;
+		img {
+			width: 50%;
+		}
+	}
+
+	.post>h1, .post>h2, h1, h2, h3, h4, h5, h6 {
+		page-break-after: avoid;
+		page-break-inside: avoid;
+	}
+}
+
 
 code {
 	font-family: "Fira Code", monospace;
