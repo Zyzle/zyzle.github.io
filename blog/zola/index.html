@@ -1,0 +1,175 @@
+<!doctype html><html lang=en><head><meta content="IE=edge" http-equiv=X-UA-Compatible><meta content="text/html; charset=utf-8" http-equiv=content-type><meta content="width=device-width,initial-scale=1.0,minimum-scale=1" name=viewport><meta content=? name=description><title>Lets Write a Blog - Part 2: Zola | Zyzle.dev</title><link href=https://www.zyzle.dev/atom.xml rel=alternate title=RSS type=application/atom+xml><link href=https://www.zyzle.dev/styles.css rel=stylesheet><link href=/apple-touch-icon.png rel=apple-touch-icon sizes=180x180><link href=/favicon-32x32.png rel=icon sizes=32x32 type=image/png><link href=/favicon-16x16.png rel=icon sizes=16x16 type=image/png><link href=/site.webmanifest rel=manifest><body><header class=page-header><div class=hwrapper><h1>Zyzle.dev</h1><span class=header-buttons> <a href=https://ko-fi.com/zyzle><img alt="support me on Ko-fi" src=/ko-fi.png width=50px></a> <h1><a href=/tags>#</a></h1> </span></div><div id=progress-bar></div></header><div class=wrapper><main class=content id=docmain><article class=post><header class=post-header><h1>Lets Write a Blog - Part 2: Zola</h1><div class=post-info><time datetime=2022-04-16>2022-04-16</time><div class=tags><a href=https://www.zyzle.dev/tags/blog>blog</a><a href=https://www.zyzle.dev/tags/zola>zola</a></div></div></header><p>Zola (formally Gutenberg) is a SSG written in Rust. Zola has it's own templating engine <a href=https://tera.netlify.app/>Tera</a> created by the same author and follows a similar design in it's templating to Jinja 2. Distributed as a single binary Zola has a much smaller footprint than the other SSGs we'll be looking at, it also promises to be fast (comparable to Hugo) and runs from a simple augmented markdown including shortcodes and custom internal linking.</p><span id=continue-reading></span><h2 id=installation>Installation</h2><p>Zola comes as a single binary distributable, on MacOS the simplest way to install it is with homebrew.<pre class=language-bash data-lang=bash style=background-color:#282c34;color:#abb2bf;><code class=language-bash data-lang=bash><span>$ brew install zola
+</span></code></pre><p>Zola is also available on MacPorts, Chocolatey, Scoop, and various linux package structures. With no external dependencies Zola is probably the simplest of the 3 tools we're looking at.<p>The version we'll be using is the current stable 0.15.3 (23rd Jan 2022) at the time of writing, with a total size of ~19mb it also has one of the smallest install footprints.<h2 id=site-setup>Site setup</h2><p>Zola has a simple setup wizard that runs through some basic configuration options<pre class=language-bash data-lang=bash style=background-color:#282c34;color:#abb2bf;><code class=language-bash data-lang=bash><span>$ zola init zolablog
+</span></code></pre><p>Wizard process asks (defaults shown):<pre style=background-color:#282c34;color:#abb2bf;><code><span>* site url
+</span><span>* Sass compilation (Y/n)
+</span><span>* syntax highlighting (y/N)
+</span><span>* search index (y/N)
+</span></code></pre><p>created site has following structure:<pre style=background-color:#282c34;color:#abb2bf;><code><span>zolablog/
+</span><span>  |-- content/
+</span><span>  |-- sass/
+</span><span>  |-- static/
+</span><span>  |-- templates/
+</span><span>  |-- themes/
+</span><span>  +-- config.toml
+</span></code></pre><p>A few empty directories and a <code>config.toml</code> with the minimal configuration I selected in the site setup wizard. The full list of Zola configuration options can be found <a href=https://www.getzola.org/documentation/getting-started/configuration/>in the zola documentation</a>. The config will looks something like the following:<pre class=language-toml data-lang=toml style=background-color:#282c34;color:#abb2bf;><code class=language-toml data-lang=toml><span style=color:#676f7d;># The URL the site will be built for
+</span><span style=color:#e06c75;>base_url </span><span>= </span><span style=color:#e5c07b;>"https://example.com"
+</span><span>
+</span><span style=color:#e06c75;>title </span><span>= </span><span style=color:#e5c07b;>"My Blog"
+</span><span>
+</span><span style=color:#676f7d;># Whether to automatically compile all Sass files in the sass directory
+</span><span style=color:#e06c75;>compile_sass </span><span>= </span><span style=color:#56b6c2;>true
+</span><span>
+</span><span style=color:#676f7d;># Whether to build a search index to be used later on by a JavaScript library
+</span><span style=color:#e06c75;>build_search_index </span><span>= </span><span style=color:#56b6c2;>false
+</span><span>
+</span><span>[markdown]
+</span><span style=color:#676f7d;># Whether to do syntax highlighting
+</span><span style=color:#676f7d;># Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
+</span><span style=color:#e06c75;>highlight_code </span><span>= </span><span style=color:#56b6c2;>true
+</span><span>
+</span><span>[extra]
+</span><span style=color:#676f7d;># Put all your custom variables here
+</span></code></pre><p>Let's start the development server with the following<pre class=language-bash data-lang=bash style=background-color:#282c34;color:#abb2bf;><code class=language-bash data-lang=bash><span>$ zola serve
+</span><span>Building site...
+</span><span>Checking all internal links with anchors.
+</span><span style=color:#e06c75;>></span><span> Successfully checked 0 internal link(s) with anchors.
+</span><span>-</span><span style=color:#e06c75;>></span><span> Creating 0 pages (0 orphan), 0 sections, and processing 0 images
+</span><span>Done in 56ms.
+</span><span>
+</span><span>Web server is available at http://127.0.0.1:1111
+</span><span>
+</span><span>Listening for changes in /Users/zolablog{/Users/zolablog/config.toml, content, sass, static, templates}
+</span><span>Press Ctrl+C to stop
+</span></code></pre><p>Zola automatically runs in watch mode so any changes you make will be built and served.<h2 id=templating-101>Templating 101</h2><p>I'm not going to work off of a base template for Zola as everything can be built simply from scratch.<p>We'll start with a <code>base.html</code> file that all our other templates will inherit from:<pre class=language-html data-lang=html style=background-color:#282c34;color:#abb2bf;><code class=language-html data-lang=html><span>&LT!</span><span style=color:#e06c75;>DOCTYPE </span><span style=color:#56b6c2;>html</span><span>>
+</span><span><</span><span style=color:#e06c75;>html </span><span style=color:#98c379;>lang</span><span>=</span><span style=color:#e5c07b;>"en"</span><span>>
+</span><span>  <</span><span style=color:#e06c75;>head</span><span>>
+</span><span>    <</span><span style=color:#e06c75;>meta </span><span style=color:#98c379;>charset</span><span>=</span><span style=color:#e5c07b;>"utf-8"</span><span>>
+</span><span>    <</span><span style=color:#e06c75;>title</span><span>>{% block title %}{{ config.title }}{% endblock title %}&LT/</span><span style=color:#e06c75;>title</span><span>>
+</span><span>  &LT/</span><span style=color:#e06c75;>head</span><span>>
+</span><span>  <</span><span style=color:#e06c75;>body</span><span>>
+</span><span>    <</span><span style=color:#e06c75;>header</span><span>>
+</span><span>      <</span><span style=color:#e06c75;>h1</span><span>>{{ config.title }}&LT/</span><span style=color:#e06c75;>h1</span><span>>
+</span><span>        {% include "navigation.html" %}
+</span><span>    &LT/</span><span style=color:#e06c75;>header</span><span>>
+</span><span>    <</span><span style=color:#e06c75;>main</span><span>>
+</span><span>      {% block content %}{% endblock %}
+</span><span>    &LT/</span><span style=color:#e06c75;>main</span><span>>
+</span><span>  &LT/</span><span style=color:#e06c75;>body</span><span>>
+</span><span>&LT/</span><span style=color:#e06c75;>html</span><span>>
+</span></code></pre><p>This is a fairly standard html5 template using some semantic html tags. Tera has 3 types of expression delimiters:<ul><li><code>{{</code> and <code>}}</code> for expressions<li><code>{%</code> and <code>%}</code> for statements<li><code>{#</code> and <code>#}</code> for comments</ul><p>In the above we pick out the site title from the configuration file with <code>config.title</code> and wrap this with a <code>title</code> named block which we can override later. We also define a block called <code>content</code> inside the sites <code>&LTmain></code> tags that we'll be substituting with out page content in later templates. For now lets have a look at the <code>navigation.html</code> template that will be included in the the <code>header</code> tag.<pre class=language-html data-lang=html style=background-color:#282c34;color:#abb2bf;><code class=language-html data-lang=html><span><</span><span style=color:#e06c75;>nav</span><span>>
+</span><span>  <</span><span style=color:#e06c75;>ul</span><span>>
+</span><span>    <</span><span style=color:#e06c75;>li</span><span>><</span><span style=color:#e06c75;>a </span><span style=color:#98c379;>href</span><span>=</span><span style=color:#e5c07b;>"{{ get_url(path="</span><span style=color:#98c379;>@</span><span>/</span><span style=color:#98c379;>_index.md</span><span style=background-color:#f8f8f0;color:#c678dd;>"</span><span style=color:#98c379;>) }}</span><span style=background-color:#f8f8f0;color:#c678dd;>"</span><span>>Home&LT/</span><span style=color:#e06c75;>a</span><span>>&LT/</span><span style=color:#e06c75;>li</span><span>>
+</span><span>    <</span><span style=color:#e06c75;>li</span><span>><</span><span style=color:#e06c75;>a </span><span style=color:#98c379;>href</span><span>=</span><span style=color:#e5c07b;>"{{ get_url(path="</span><span style=color:#98c379;>@</span><span>/</span><span style=color:#98c379;>blog</span><span>/</span><span style=color:#98c379;>_index.md</span><span style=background-color:#f8f8f0;color:#c678dd;>"</span><span style=color:#98c379;>) }}</span><span style=background-color:#f8f8f0;color:#c678dd;>"</span><span>>Blog&LT/</span><span style=color:#e06c75;>a</span><span>>&LT/</span><span style=color:#e06c75;>li</span><span>>
+</span><span>    <</span><span style=color:#e06c75;>li</span><span>><</span><span style=color:#e06c75;>a </span><span style=color:#98c379;>href</span><span>=</span><span style=color:#e5c07b;>"{{ get_url(path="</span><span style=color:#98c379;>@</span><span>/</span><span style=color:#98c379;>about.md</span><span style=background-color:#f8f8f0;color:#c678dd;>"</span><span style=color:#98c379;>) }}</span><span style=background-color:#f8f8f0;color:#c678dd;>"</span><span>>About&LT/</span><span style=color:#e06c75;>a</span><span>>&LT/</span><span style=color:#e06c75;>li</span><span>>
+</span><span>  &LT/</span><span style=color:#e06c75;>ul</span><span>>
+</span><span>&LT/</span><span style=color:#e06c75;>nav</span><span>>
+</span></code></pre><p>The <code>get_url</code> function gives the permalink for a given path the <code>@/</code> will be treated as an internal link to the root of the Zola <code>content</code> directory. Lets have a look at the first entry here, the <code>_index.md</code><pre class=language-toml data-lang=toml style=background-color:#282c34;color:#abb2bf;><code class=language-toml data-lang=toml><span style=background-color:#f8f8f0;color:#c678dd;>+++</span><span>
+</span><span style=color:#e06c75;>page_template </span><span>= </span><span style=color:#e5c07b;>"page.html"
+</span><span style=background-color:#f8f8f0;color:#c678dd;>+++</span><span>
+</span></code></pre><p>This simple markdown frontmatter does is tell zola that any pages contained in this directory should be rendered with the <code>page.html</code> template, we'll come back to the contents of this later.<p>Zola will also render the <code>index.html</code> file found in the templates directory at the site root<pre class=language-j2 data-lang=j2 style=background-color:#282c34;color:#abb2bf;><code class=language-j2 data-lang=j2><span>{% </span><span style=color:#e06c75;>extends </span><span style=color:#e5c07b;>"base.html" </span><span>%}
+</span><span>
+</span><span>{% </span><span style=color:#e06c75;>block </span><span>title %}Home | {{ </span><span style=color:#e06c75;>super</span><span>() }}{% </span><span style=color:#e06c75;>endblock </span><span>title %}
+</span><span>
+</span><span>{% </span><span style=color:#e06c75;>block </span><span>content %}
+</span><span>&LTp>This is the blog homepage&LT/p>
+</span><span>{% </span><span style=color:#e06c75;>endblock </span><span>content %}
+</span></code></pre><p>Here we are again extending the sites <code>base.html</code> and overriding the named blocks, first our <code>title</code> block, this has the interesting <code>super()</code> method which places the blocks existing content defined in the base template at the calling location allowing us to keep the sites name without having to redefine it in every template.<p>We just add a simple static paragraph of text into the <code>content</code> block of the template.<h2 id=pages>Pages</h2><p>Zola considers directories inside the <code>content</code> directory as sections, we'll create a new dir and file <code>/blog/_index.md</code> and add some toml frontmatter that will tell Zola how to render this sections root page and any sub-pages:<pre class=language-toml data-lang=toml style=background-color:#282c34;color:#abb2bf;><code class=language-toml data-lang=toml><span style=background-color:#f8f8f0;color:#c678dd;>+++</span><span>
+</span><span style=color:#e06c75;>title </span><span>= </span><span style=color:#e5c07b;>"List of blog posts"
+</span><span style=color:#e06c75;>sort_by </span><span>= </span><span style=color:#e5c07b;>"date"
+</span><span style=color:#e06c75;>template </span><span>= </span><span style=color:#e5c07b;>"blog.html"
+</span><span style=color:#e06c75;>page_template </span><span>= </span><span style=color:#e5c07b;>"blog-page.html"
+</span><span style=background-color:#f8f8f0;color:#c678dd;>+++</span><span>
+</span></code></pre><p>This tells Zola, render the <code>blog/</code> index url using the <code>blog.html</code> template and apply the <code>blog-page.html</code> template to any markdown files in this section folder, the <code>sort_by</code> directive also tells Zola to sort the articles in this section by date, default newest first.<h3 id=blog-list>Blog list</h3><p>Lets look at the index page template <code>blog.html</code> first:<pre class=language-j2 data-lang=j2 style=background-color:#282c34;color:#abb2bf;><code class=language-j2 data-lang=j2><span>{% </span><span style=color:#e06c75;>extends </span><span style=color:#e5c07b;>"base.html" </span><span>%}
+</span><span>
+</span><span>{% </span><span style=color:#e06c75;>block </span><span>title %}{{ section.title }} | {{ </span><span style=color:#e06c75;>super</span><span>() }}{% </span><span style=color:#e06c75;>endblock </span><span>title %}
+</span><span>
+</span><span>{% </span><span style=color:#e06c75;>block </span><span>content %}
+</span><span>&LTh1 class="title">
+</span><span>  {{ section.title }}
+</span><span>&LT/h1>
+</span><span>&LTul>
+</span><span>  {% </span><span style=color:#e06c75;>for </span><span>page </span><span style=color:#e06c75;>in </span><span>section.pages %}
+</span><span>  &LTli>&LTa href="{{ page.permalink | safe }}">{{ page.title }}&LT/a>&LT/li>
+</span><span>  {% </span><span style=color:#e06c75;>endfor </span><span>%}
+</span><span>&LT/ul>
+</span><span>{% </span><span style=color:#e06c75;>endblock </span><span>content %}
+</span></code></pre><p>As we've seen before we start by extending the <code>base.html</code> template and override the title section using <code>super</code> again to keep our site title, then we insert into our <code>content</code> block. We use <code>section.title</code> to pull out the title we defined in the front matter in <code>_index.md</code>.<p>Now we get on to showing the blog list. Zola offers us the <code>section.pages</code> variable that gives us a sorted list of page objects representing pages in our section that we can iterate over and provide links to using their <code>permalink</code> and <code>title</code> variables.<h3 id=blog-page>Blog Page</h3><pre class=language-j2 data-lang=j2 style=background-color:#282c34;color:#abb2bf;><code class=language-j2 data-lang=j2><span>{% </span><span style=color:#e06c75;>extends </span><span style=color:#e5c07b;>"base.html" </span><span>%}
+</span><span>
+</span><span>{% </span><span style=color:#e06c75;>block </span><span>content %}
+</span><span>&LTh1 class="title">
+</span><span>	{{ page.title }}
+</span><span>&LT/h1>
+</span><span>&LTp class="subtitle">&LTstrong>{{ page.date }}&LT/strong>&LT/p>
+</span><span>{{ page.content | safe }}
+</span><span>{% </span><span style=color:#e06c75;>endblock </span><span>content %}
+</span></code></pre><p>There's not much in this template, again we're extending the <code>base.html</code> file and inserting our content into the named block. We'll also apply the Zola <code>safe</code> filter to the content because no html escaping is required for the content generated from the markdown by Zola.<h3 id=about>About</h3><p>Our final template is the top level <code>page.html</code> we use to render the <code>about.md</code> about page content.<pre class=language-j2 data-lang=j2 style=background-color:#282c34;color:#abb2bf;><code class=language-j2 data-lang=j2><span>{% </span><span style=color:#e06c75;>extends </span><span style=color:#e5c07b;>"base.html" </span><span>%}
+</span><span>
+</span><span>{% </span><span style=color:#e06c75;>block </span><span>title%}{{ page.title }} | {{ </span><span style=color:#e06c75;>super</span><span>() }}{% </span><span style=color:#e06c75;>endblock </span><span>title %}
+</span><span>
+</span><span>{% </span><span style=color:#e06c75;>block </span><span>content %}
+</span><span>&LTarticle>
+</span><span>  &LTheader>
+</span><span>    &LTh1>{{ page.title }}&LT/h1>
+</span><span>  &LT/header>
+</span><span>  {{ page.content | safe }}
+</span><span>&LT/article>
+</span><span>{% </span><span style=color:#e06c75;>endblock </span><span>content %}
+</span></code></pre><p>There's nothing here we haven't looked at already, it's just a cut down version of the blog page template.<h2 id=building-for-deployment>Building for deployment</h2><pre class=language-bash data-lang=bash style=background-color:#282c34;color:#abb2bf;><code class=language-bash data-lang=bash><span>$ zola build
+</span><span>Building site...
+</span><span>Checking all internal links with anchors.
+</span><span style=color:#e06c75;>></span><span> Successfully checked 0 internal link(s) with anchors.
+</span><span>-</span><span style=color:#e06c75;>></span><span> Creating 3 pages (0 orphan) and 1 sections
+</span><span>Done in 13ms.
+</span></code></pre><p>The build process is simple and fast, by default outputs the site to the <code>public</code> directory. The output looks like the following:<pre style=background-color:#282c34;color:#abb2bf;><code><span>public/
+</span><span>  |-- about/
+</span><span>  |    +-- index.html
+</span><span>  |-- blog/
+</span><span>  |    |-- first/
+</span><span>  |    |    +-- index.html
+</span><span>  |    |-- second/
+</span><span>  |    |    +-- index.html
+</span><span>  |    +-- index.html
+</span><span>  |-- 404.html
+</span><span>  |-- index.html
+</span><span>  |-- robots.txt
+</span><span>  +-- sitemap.xml
+</span></code></pre><p>So our pages have been placed into individual HTML files using the templates we defined in the previous steps as an example here's what the about page looks like compiled:<pre class=language-html data-lang=html style=background-color:#282c34;color:#abb2bf;><code class=language-html data-lang=html><span>&LT!</span><span style=color:#e06c75;>DOCTYPE </span><span style=color:#56b6c2;>html</span><span>>
+</span><span><</span><span style=color:#e06c75;>html </span><span style=color:#98c379;>lang</span><span>=</span><span style=color:#e5c07b;>"en"</span><span>>
+</span><span>  <</span><span style=color:#e06c75;>head</span><span>>
+</span><span>    <</span><span style=color:#e06c75;>meta </span><span style=color:#98c379;>charset</span><span>=</span><span style=color:#e5c07b;>"utf-8"</span><span>>
+</span><span>    <</span><span style=color:#e06c75;>title</span><span>>About | My Blog&LT/</span><span style=color:#e06c75;>title</span><span>>
+</span><span>  &LT/</span><span style=color:#e06c75;>head</span><span>>
+</span><span>  <</span><span style=color:#e06c75;>body</span><span>>
+</span><span>    <</span><span style=color:#e06c75;>header</span><span>>
+</span><span>      <</span><span style=color:#e06c75;>h1</span><span>>My Blog&LT/</span><span style=color:#e06c75;>h1</span><span>>
+</span><span>      <</span><span style=color:#e06c75;>nav</span><span>>
+</span><span>        <</span><span style=color:#e06c75;>ul</span><span>>
+</span><span>          <</span><span style=color:#e06c75;>li</span><span>><</span><span style=color:#e06c75;>a </span><span style=color:#98c379;>href</span><span>=</span><span style=color:#e5c07b;>"https://example.com/"</span><span>>Home&LT/</span><span style=color:#e06c75;>a</span><span>>&LT/</span><span style=color:#e06c75;>li</span><span>>
+</span><span>          <</span><span style=color:#e06c75;>li</span><span>><</span><span style=color:#e06c75;>a </span><span style=color:#98c379;>href</span><span>=</span><span style=color:#e5c07b;>"https://example.com/blog/"</span><span>>Blog&LT/</span><span style=color:#e06c75;>a</span><span>>&LT/</span><span style=color:#e06c75;>li</span><span>>
+</span><span>          <</span><span style=color:#e06c75;>li</span><span>><</span><span style=color:#e06c75;>a </span><span style=color:#98c379;>href</span><span>=</span><span style=color:#e5c07b;>"https://example.com/about/"</span><span>>About&LT/</span><span style=color:#e06c75;>a</span><span>>&LT/</span><span style=color:#e06c75;>li</span><span>>
+</span><span>        &LT/</span><span style=color:#e06c75;>ul</span><span>>
+</span><span>      &LT/</span><span style=color:#e06c75;>nav</span><span>>
+</span><span>    &LT/</span><span style=color:#e06c75;>header</span><span>>
+</span><span>    <</span><span style=color:#e06c75;>main</span><span>>
+</span><span>      <</span><span style=color:#e06c75;>article</span><span>>
+</span><span>        <</span><span style=color:#e06c75;>header</span><span>>
+</span><span>          <</span><span style=color:#e06c75;>h1</span><span>>About&LT/</span><span style=color:#e06c75;>h1</span><span>>
+</span><span>        &LT/</span><span style=color:#e06c75;>header</span><span>>
+</span><span>        <</span><span style=color:#e06c75;>p</span><span>>This is the blog about page&LT/</span><span style=color:#e06c75;>p</span><span>>
+</span><span>      &LT/</span><span style=color:#e06c75;>article</span><span>>
+</span><span>    &LT/</span><span style=color:#e06c75;>main</span><span>>
+</span><span>  &LT/</span><span style=color:#e06c75;>body</span><span>>
+</span><span>&LT/</span><span style=color:#e06c75;>html</span><span>>
+</span></code></pre><p>We haven't defined a template for a 404 page so Zola generates us a default one:<pre class=language-html data-lang=html style=background-color:#282c34;color:#abb2bf;><code class=language-html data-lang=html><span>&LT!doctype html>
+</span><span><</span><span style=color:#e06c75;>title</span><span>>404 Not Found&LT/</span><span style=color:#e06c75;>title</span><span>>
+</span><span><</span><span style=color:#e06c75;>h1</span><span>>404 Not Found&LT/</span><span style=color:#e06c75;>h1</span><span>>
+</span></code></pre><p>There's also a basic <code>robots.txt</code> which points to our auto-generated <code>sitemap.xml</code> and if we had chosen it when we did the setup wizard we would have a JS search index file as well as a copy of <a href=http://elasticlunr.com/>Elasticlunr</a> that can be hooked up to provide search functionality to our site. These are all extra features generated that I may take a deeper dive into later on but for now we're done with the basic setup.<h2 id=conclusion>Conclusion</h2><p>Zola was easy to get up and running with, the templating engine is simple and seems well documented. Zola provides a lot of good integrations for more advanced features such as search and site feeds we'll look at in later sections. The final built site for our Zola example comes in at 32Kb.</article></main></div><script>(() => {
+                const bar = document.querySelector('#progress-bar');
+                const post = document.querySelector('#docmain');
+                const html = document.documentElement;
+                const height = post.scrollHeight;
+
+                window.addEventListener('scroll', () => {
+                    bar.style.width = (html.scrollTop / (height - html.clientHeight)) * 100 + '%';
+                });
+            })();</script><script async data-dnt=false data-host=https://microanalytics.io defer id=ZwSg9rf6GA src=https://microanalytics.io/js/script.js></script>

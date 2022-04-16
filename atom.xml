@@ -4,8 +4,245 @@
 	<link href="https://www.zyzle.dev/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://www.zyzle.dev"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2022-04-09T00:00:00+00:00</updated>
+	<updated>2022-04-16T00:00:00+00:00</updated>
 	<id>https://www.zyzle.dev/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Lets Write a Blog - Part 2: Zola</title>
+		<published>2022-04-16T00:00:00+00:00</published>
+		<updated>2022-04-16T00:00:00+00:00</updated>
+		<link href="https://www.zyzle.dev/blog/zola/" type="text/html"/>
+		<id>https://www.zyzle.dev/blog/zola/</id>
+		<content type="html">&lt;p&gt;Zola (formally Gutenberg) is a SSG written in Rust. Zola has it&#x27;s own templating engine &lt;a href=&quot;https:&#x2F;&#x2F;tera.netlify.app&#x2F;&quot;&gt;Tera&lt;&#x2F;a&gt; created by the same author and follows a similar design in it&#x27;s templating to Jinja 2. Distributed as a single binary Zola has a much smaller footprint than the other SSGs we&#x27;ll be looking at, it also promises to be fast (comparable to Hugo) and runs from a simple augmented markdown including shortcodes and custom internal linking.&lt;&#x2F;p&gt;
+&lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;&#x2F;h2&gt;
+&lt;p&gt;Zola comes as a single binary distributable, on MacOS the simplest way to install it is with homebrew.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ brew install zola
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Zola is also available on MacPorts, Chocolatey, Scoop, and various linux package structures. With no external dependencies Zola is probably the simplest of the 3 tools we&#x27;re looking at.&lt;&#x2F;p&gt;
+&lt;p&gt;The version we&#x27;ll be using is the current stable 0.15.3 (23rd Jan 2022) at the time of writing, with a total size of ~19mb it also has one of the smallest install footprints. &lt;&#x2F;p&gt;
+&lt;h2 id=&quot;site-setup&quot;&gt;Site setup&lt;&#x2F;h2&gt;
+&lt;p&gt;Zola has a simple setup wizard that runs through some basic configuration options&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ zola init zolablog
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Wizard process asks (defaults shown): &lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;* site url
+&lt;&#x2F;span&gt;&lt;span&gt;* Sass compilation (Y&#x2F;n)
+&lt;&#x2F;span&gt;&lt;span&gt;* syntax highlighting (y&#x2F;N)
+&lt;&#x2F;span&gt;&lt;span&gt;* search index (y&#x2F;N)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;created site has following structure:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;zolablog&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- content&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- sass&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- static&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- templates&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- themes&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  +-- config.toml
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;A few empty directories and a &lt;code&gt;config.toml&lt;&#x2F;code&gt; with the minimal configuration I selected in the site setup wizard. The full list of Zola configuration options can be found &lt;a href=&quot;https:&#x2F;&#x2F;www.getzola.org&#x2F;documentation&#x2F;getting-started&#x2F;configuration&#x2F;&quot;&gt;in the zola documentation&lt;&#x2F;a&gt;. The config will looks something like the following:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;toml&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-toml &quot;&gt;&lt;code class=&quot;language-toml&quot; data-lang=&quot;toml&quot;&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;# The URL the site will be built for
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;base_url &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;example.com&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;My Blog&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;# Whether to automatically compile all Sass files in the sass directory
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;compile_sass &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;true
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;# Whether to build a search index to be used later on by a JavaScript library
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;build_search_index &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;false
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;[markdown]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;# Whether to do syntax highlighting
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;highlight_code &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;true
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;[extra]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;# Put all your custom variables here
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Let&#x27;s start the development server with the following&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ zola serve
+&lt;&#x2F;span&gt;&lt;span&gt;Building site...
+&lt;&#x2F;span&gt;&lt;span&gt;Checking all internal links with anchors.
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt; Successfully checked 0 internal link(s) with anchors.
+&lt;&#x2F;span&gt;&lt;span&gt;-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt; Creating 0 pages (0 orphan), 0 sections, and processing 0 images
+&lt;&#x2F;span&gt;&lt;span&gt;Done in 56ms.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;Web server is available at http:&#x2F;&#x2F;127.0.0.1:1111
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;Listening for changes in &#x2F;Users&#x2F;zolablog{&#x2F;Users&#x2F;zolablog&#x2F;config.toml, content, sass, static, templates}
+&lt;&#x2F;span&gt;&lt;span&gt;Press Ctrl+C to stop
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Zola automatically runs in watch mode so any changes you make will be built and served.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;templating-101&quot;&gt;Templating 101&lt;&#x2F;h2&gt;
+&lt;p&gt;I&#x27;m not going to work off of a base template for Zola as everything can be built simply from scratch.&lt;&#x2F;p&gt;
+&lt;p&gt;We&#x27;ll start with a &lt;code&gt;base.html&lt;&#x2F;code&gt; file that all our other templates will inherit from:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;DOCTYPE &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;html &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;lang&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;en&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;meta &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;charset&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;utf-8&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;{% block title %}{{ config.title }}{% endblock title %}&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;{{ config.title }}&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        {% include &amp;quot;navigation.html&amp;quot; %}
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      {% block content %}{% endblock %}
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This is a fairly standard html5 template using some semantic html tags. Tera has 3 types of expression delimiters:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;{{&lt;&#x2F;code&gt; and &lt;code&gt;}}&lt;&#x2F;code&gt; for expressions&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;{%&lt;&#x2F;code&gt; and &lt;code&gt;%}&lt;&#x2F;code&gt; for statements&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;{#&lt;&#x2F;code&gt; and &lt;code&gt;#}&lt;&#x2F;code&gt; for comments&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;In the above we pick out the site title from the configuration file with &lt;code&gt;config.title&lt;&#x2F;code&gt; and wrap this with a &lt;code&gt;title&lt;&#x2F;code&gt; named block which we can override later. We also define a block called &lt;code&gt;content&lt;&#x2F;code&gt; inside the sites &lt;code&gt;&amp;lt;main&amp;gt;&lt;&#x2F;code&gt; tags that we&#x27;ll be substituting with out page content in later templates. For now lets have a look at the &lt;code&gt;navigation.html&lt;&#x2F;code&gt; template that will be included in the the &lt;code&gt;header&lt;&#x2F;code&gt; tag.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;nav&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;{{ get_url(path=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;@&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;_index.md&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;) }}&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Home&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;{{ get_url(path=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;@&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;blog&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;_index.md&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;) }}&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Blog&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;{{ get_url(path=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;@&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;about.md&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;) }}&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;About&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;nav&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The &lt;code&gt;get_url&lt;&#x2F;code&gt; function gives the permalink for a given path the &lt;code&gt;@&#x2F;&lt;&#x2F;code&gt; will be treated as an internal link to the root of the Zola &lt;code&gt;content&lt;&#x2F;code&gt; directory. Lets have a look at the first entry here, the &lt;code&gt;_index.md&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;toml&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-toml &quot;&gt;&lt;code class=&quot;language-toml&quot; data-lang=&quot;toml&quot;&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;+++&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;page_template &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;page.html&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;+++&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This simple markdown frontmatter does is tell zola that any pages contained in this directory should be rendered with the &lt;code&gt;page.html&lt;&#x2F;code&gt; template, we&#x27;ll come back to the contents of this later. &lt;&#x2F;p&gt;
+&lt;p&gt;Zola will also render the &lt;code&gt;index.html&lt;&#x2F;code&gt; file found in the templates directory at the site root&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;j2&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-j2 &quot;&gt;&lt;code class=&quot;language-j2&quot; data-lang=&quot;j2&quot;&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;extends &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;base.html&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;%}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;block &lt;&#x2F;span&gt;&lt;span&gt;title %}Home | {{ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;super&lt;&#x2F;span&gt;&lt;span&gt;() }}{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;endblock &lt;&#x2F;span&gt;&lt;span&gt;title %}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;block &lt;&#x2F;span&gt;&lt;span&gt;content %}
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;p&amp;gt;This is the blog homepage&amp;lt;&#x2F;p&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;endblock &lt;&#x2F;span&gt;&lt;span&gt;content %}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here we are again extending the sites &lt;code&gt;base.html&lt;&#x2F;code&gt; and overriding the named blocks, first our &lt;code&gt;title&lt;&#x2F;code&gt; block, this has the interesting &lt;code&gt;super()&lt;&#x2F;code&gt; method which places the blocks existing content defined in the base template at the calling location allowing us to keep the sites name without having to redefine it in every template.&lt;&#x2F;p&gt;
+&lt;p&gt;We just add a simple static paragraph of text into the &lt;code&gt;content&lt;&#x2F;code&gt; block of the template.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;pages&quot;&gt;Pages&lt;&#x2F;h2&gt;
+&lt;p&gt;Zola considers directories inside the &lt;code&gt;content&lt;&#x2F;code&gt; directory as sections, we&#x27;ll create a new dir and file &lt;code&gt;&#x2F;blog&#x2F;_index.md&lt;&#x2F;code&gt; and add some toml frontmatter that will tell Zola how to render this sections root page and any sub-pages:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;toml&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-toml &quot;&gt;&lt;code class=&quot;language-toml&quot; data-lang=&quot;toml&quot;&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;+++&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;List of blog posts&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;sort_by &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;date&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;template &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;blog.html&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;page_template &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;blog-page.html&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;+++&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This tells Zola, render the &lt;code&gt;blog&#x2F;&lt;&#x2F;code&gt; index url using the &lt;code&gt;blog.html&lt;&#x2F;code&gt; template and apply the &lt;code&gt;blog-page.html&lt;&#x2F;code&gt; template to any markdown files in this section folder, the &lt;code&gt;sort_by&lt;&#x2F;code&gt; directive also tells Zola to sort the articles in this section by date, default newest first. &lt;&#x2F;p&gt;
+&lt;h3 id=&quot;blog-list&quot;&gt;Blog list&lt;&#x2F;h3&gt;
+&lt;p&gt;Lets look at the index page template &lt;code&gt;blog.html&lt;&#x2F;code&gt; first:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;j2&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-j2 &quot;&gt;&lt;code class=&quot;language-j2&quot; data-lang=&quot;j2&quot;&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;extends &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;base.html&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;%}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;block &lt;&#x2F;span&gt;&lt;span&gt;title %}{{ section.title }} | {{ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;super&lt;&#x2F;span&gt;&lt;span&gt;() }}{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;endblock &lt;&#x2F;span&gt;&lt;span&gt;title %}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;block &lt;&#x2F;span&gt;&lt;span&gt;content %}
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;h1 class=&amp;quot;title&amp;quot;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  {{ section.title }}
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;h1&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;ul&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  {% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;page &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;in &lt;&#x2F;span&gt;&lt;span&gt;section.pages %}
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;{{ page.permalink | safe }}&amp;quot;&amp;gt;{{ page.title }}&amp;lt;&#x2F;a&amp;gt;&amp;lt;&#x2F;li&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  {% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;endfor &lt;&#x2F;span&gt;&lt;span&gt;%}
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;ul&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;endblock &lt;&#x2F;span&gt;&lt;span&gt;content %}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;As we&#x27;ve seen before we start by extending the &lt;code&gt;base.html&lt;&#x2F;code&gt; template and override the title section using &lt;code&gt;super&lt;&#x2F;code&gt; again to keep our site title, then we insert into our &lt;code&gt;content&lt;&#x2F;code&gt; block. We use &lt;code&gt;section.title&lt;&#x2F;code&gt; to pull out the title we defined in the front matter in &lt;code&gt;_index.md&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Now we get on to showing the blog list. Zola offers us the &lt;code&gt;section.pages&lt;&#x2F;code&gt; variable that gives us a sorted list of page objects representing pages in our section that we can iterate over and provide links to using their &lt;code&gt;permalink&lt;&#x2F;code&gt; and &lt;code&gt;title&lt;&#x2F;code&gt; variables.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;blog-page&quot;&gt;Blog Page&lt;&#x2F;h3&gt;
+&lt;pre data-lang=&quot;j2&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-j2 &quot;&gt;&lt;code class=&quot;language-j2&quot; data-lang=&quot;j2&quot;&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;extends &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;base.html&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;%}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;block &lt;&#x2F;span&gt;&lt;span&gt;content %}
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;h1 class=&amp;quot;title&amp;quot;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	{{ page.title }}
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;h1&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;p class=&amp;quot;subtitle&amp;quot;&amp;gt;&amp;lt;strong&amp;gt;{{ page.date }}&amp;lt;&#x2F;strong&amp;gt;&amp;lt;&#x2F;p&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{{ page.content | safe }}
+&lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;endblock &lt;&#x2F;span&gt;&lt;span&gt;content %}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;There&#x27;s not much in this template, again we&#x27;re extending the &lt;code&gt;base.html&lt;&#x2F;code&gt; file and inserting our content into the named block. We&#x27;ll also apply the Zola &lt;code&gt;safe&lt;&#x2F;code&gt; filter to the content because no html escaping is required for the content generated from the markdown by Zola.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;about&quot;&gt;About&lt;&#x2F;h3&gt;
+&lt;p&gt;Our final template is the top level &lt;code&gt;page.html&lt;&#x2F;code&gt; we use to render the &lt;code&gt;about.md&lt;&#x2F;code&gt; about page content.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;j2&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-j2 &quot;&gt;&lt;code class=&quot;language-j2&quot; data-lang=&quot;j2&quot;&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;extends &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;base.html&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;%}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;block &lt;&#x2F;span&gt;&lt;span&gt;title%}{{ page.title }} | {{ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;super&lt;&#x2F;span&gt;&lt;span&gt;() }}{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;endblock &lt;&#x2F;span&gt;&lt;span&gt;title %}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;block &lt;&#x2F;span&gt;&lt;span&gt;content %}
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;article&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;header&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;h1&amp;gt;{{ page.title }}&amp;lt;&#x2F;h1&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;header&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  {{ page.content | safe }}
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;article&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;endblock &lt;&#x2F;span&gt;&lt;span&gt;content %}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;There&#x27;s nothing here we haven&#x27;t looked at already, it&#x27;s just a cut down version of the blog page template.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;building-for-deployment&quot;&gt;Building for deployment&lt;&#x2F;h2&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ zola build
+&lt;&#x2F;span&gt;&lt;span&gt;Building site...
+&lt;&#x2F;span&gt;&lt;span&gt;Checking all internal links with anchors.
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt; Successfully checked 0 internal link(s) with anchors.
+&lt;&#x2F;span&gt;&lt;span&gt;-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;span&gt; Creating 3 pages (0 orphan) and 1 sections
+&lt;&#x2F;span&gt;&lt;span&gt;Done in 13ms.
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The build process is simple and fast, by default outputs the site to the &lt;code&gt;public&lt;&#x2F;code&gt; directory. The output looks like the following:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;public&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- about&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |    +-- index.html
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- blog&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |    |-- first&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |    |    +-- index.html
+&lt;&#x2F;span&gt;&lt;span&gt;  |    |-- second&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |    |    +-- index.html
+&lt;&#x2F;span&gt;&lt;span&gt;  |    +-- index.html
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- 404.html
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- index.html
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- robots.txt
+&lt;&#x2F;span&gt;&lt;span&gt;  +-- sitemap.xml
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;So our pages have been placed into individual HTML files using the templates we defined in the previous steps as an example here&#x27;s what the about page looks like compiled:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;DOCTYPE &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;html &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;lang&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;en&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;meta &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;charset&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;utf-8&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;About | My Blog&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;My Blog&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;nav&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;          &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;example.com&#x2F;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Home&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;          &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;example.com&#x2F;blog&#x2F;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Blog&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;          &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;example.com&#x2F;about&#x2F;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;About&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;nav&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;article&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;          &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;About&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;This is the blog about page&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;article&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;We haven&#x27;t defined a template for a 404 page so Zola generates us a default one:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;!doctype html&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;404 Not Found&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;404 Not Found&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;There&#x27;s also a basic &lt;code&gt;robots.txt&lt;&#x2F;code&gt; which points to our auto-generated &lt;code&gt;sitemap.xml&lt;&#x2F;code&gt; and if we had chosen it when we did the setup wizard we would have a JS search index file as well as a copy of &lt;a href=&quot;http:&#x2F;&#x2F;elasticlunr.com&#x2F;&quot;&gt;Elasticlunr&lt;&#x2F;a&gt; that can be hooked up to provide search functionality to our site. These are all extra features generated that I may take a deeper dive into later on but for now we&#x27;re done with the basic setup.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;Zola was easy to get up and running with, the templating engine is simple and seems well documented. Zola provides a lot of good integrations for more advanced features such as search and site feeds we&#x27;ll look at in later sections. The final built site for our Zola example comes in at 32Kb.&lt;&#x2F;p&gt;
+</content>
+	</entry>
 	<entry xml:lang="en">
 		<title>Let&#x27;s write a blog - Part 1: Intro</title>
 		<published>2022-04-09T00:00:00+00:00</published>
