@@ -2,6 +2,25 @@
 
 {% block title %}{{ page.title }} | {{ super() }}{% endblock title %}
 
+{% block head_extra %}
+<script type="application/ld+json">
+{
+	"@context": "https://schema.org",
+	"@type": "BlogPosting",
+	"Headline": "{{ page.title }}",
+	"datePublished": "{{ page.date }}",
+	"author": [{
+		"@type": "Person",
+		"name": "{{ page.extra.author }}",
+		"url": "https://zyzle.dev/about"
+	}],
+    "wordcount": "{{page.word_count}}",
+    "keywords": "{% if page.taxonomies.tags %}{% for tag in page.taxonomies.tags %}{{tag}},{% endfor %}{% endif %}"
+    "license": "https://creativecommons.org/licenses/by-sa/4.0/"
+}
+</script>
+{% endblock head_extra %}
+
 {% block main %}
 <article class="post">
     <header class="post-header">
@@ -18,5 +37,15 @@
         </div>
     </header>
     {{ page.content | safe }}
+
+    <br />
+    <br />
+
+    <aside>
+        <h3>Thanks for reading</h3>
+        <p>If you enjoyed this article you can support me on Kofi using <a href="https://ko-fi.com/zyzle">my link</a>
+            or if you're using the <a href="https://brave.com/">Brave browser</a> just visiting will help or you can tip me BAT directly
+            from the rewards button in the address bar, thanks :)</p>
+    </aside>
 </article>
 {% endblock main %}
