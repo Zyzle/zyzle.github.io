@@ -1,92 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://www.zyzle.dev/</loc>
+        <loc>https://zyzle.dev/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/about/</loc>
+        <loc>https://zyzle.dev/about/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/blog/</loc>
+        <loc>https://zyzle.dev/blog/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/blog/intro/</loc>
+        <loc>https://zyzle.dev/blog/intro/</loc>
         <lastmod>2022-04-09</lastmod>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/blog/markdown-test/</loc>
+        <loc>https://zyzle.dev/blog/markdown-test/</loc>
         <lastmod>2022-03-26</lastmod>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/blog/zola/</loc>
+        <loc>https://zyzle.dev/blog/zola/</loc>
         <lastmod>2022-04-16</lastmod>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/language/</loc>
+        <loc>https://zyzle.dev/language/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/language/bash/</loc>
+        <loc>https://zyzle.dev/language/bash/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/language/css/</loc>
+        <loc>https://zyzle.dev/language/css/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/language/java/</loc>
+        <loc>https://zyzle.dev/language/java/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/language/javascript/</loc>
+        <loc>https://zyzle.dev/language/javascript/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/language/typescript/</loc>
+        <loc>https://zyzle.dev/language/typescript/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/snippets/</loc>
+        <loc>https://zyzle.dev/snippets/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/snippets/css-material-shadow/</loc>
+        <loc>https://zyzle.dev/snippets/css-material-shadow/</loc>
         <lastmod>2022-04-01</lastmod>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/snippets/equals-hashcode/</loc>
+        <loc>https://zyzle.dev/snippets/equals-hashcode/</loc>
         <lastmod>2022-03-31</lastmod>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/snippets/file-extension-regex/</loc>
+        <loc>https://zyzle.dev/snippets/file-extension-regex/</loc>
         <lastmod>2022-04-01</lastmod>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/snippets/find-remove/</loc>
+        <loc>https://zyzle.dev/snippets/find-remove/</loc>
         <lastmod>2022-03-31</lastmod>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/snippets/fisher-yates/</loc>
+        <loc>https://zyzle.dev/snippets/fisher-yates/</loc>
         <lastmod>2022-03-31</lastmod>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/tags/</loc>
+        <loc>https://zyzle.dev/tags/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/tags/algorithm/</loc>
+        <loc>https://zyzle.dev/tags/algorithm/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/tags/blog/</loc>
+        <loc>https://zyzle.dev/tags/blog/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/tags/hugo/</loc>
+        <loc>https://zyzle.dev/tags/hugo/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/tags/jekyll/</loc>
+        <loc>https://zyzle.dev/tags/jekyll/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/tags/os/</loc>
+        <loc>https://zyzle.dev/tags/os/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/tags/regex/</loc>
+        <loc>https://zyzle.dev/tags/regex/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/tags/snippet/</loc>
+        <loc>https://zyzle.dev/tags/snippet/</loc>
     </url>
     <url>
-        <loc>https://www.zyzle.dev/tags/zola/</loc>
+        <loc>https://zyzle.dev/tags/zola/</loc>
     </url>
 </urlset>
