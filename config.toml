@@ -1,5 +1,5 @@
 # The URL the site will be built for
-base_url = "https://www.zyzle.dev"
+base_url = "https://zyzle.dev"
 
 title = "Zyzle.dev"
 default_language = "en"
