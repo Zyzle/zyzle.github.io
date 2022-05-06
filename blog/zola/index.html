@@ -10,7 +10,7 @@
 		"url": "https://zyzle.dev/about"
 	}],
     "wordcount": "1483",
-    "keywords": "blog,zola,"
+    "keywords": "blog,zola,",
     "license": "https://creativecommons.org/licenses/by-sa/4.0/"
 }
 </script><body><header class=page-header><div class=hwrapper><h1><a class=header-link href=https://zyzle.dev/>Zyzle.dev</a></h1><span class=header-buttons> <a href=https://ko-fi.com/zyzle><img alt="support me on Ko-fi" src=/ko-fi.png width=50px></a> <h1><a href=/tags>#</a></h1> </span></div><div id=progress-bar></div></header><div class=wrapper><main class=content id=docmain><article class=post><header class=post-header><h1>Lets Write a Blog - Part 2: Zola</h1><div class=post-info><time datetime=2022-04-16>2022-04-16</time><div class=tags><a href=https://zyzle.dev/tags/blog>blog</a><a href=https://zyzle.dev/tags/zola>zola</a></div></div></header><p>Zola (formally Gutenberg) is a SSG written in Rust. Zola has it's own templating engine <a href=https://tera.netlify.app/>Tera</a> created by the same author and follows a similar design in it's templating to Jinja 2. Distributed as a single binary Zola has a much smaller footprint than the other SSGs we'll be looking at, it also promises to be fast (comparable to Hugo) and runs from a simple augmented markdown including shortcodes and custom internal linking.</p><span id=continue-reading></span><h2 id=installation>Installation</h2><p>Zola comes as a single binary distributable, on MacOS the simplest way to install it is with homebrew.<pre class=language-bash data-lang=bash style=background-color:#282c34;color:#abb2bf;><code class=language-bash data-lang=bash><span>$ brew install zola
