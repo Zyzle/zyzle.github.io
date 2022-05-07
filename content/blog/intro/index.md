@@ -1,6 +1,7 @@
 +++
 title = "Let's write a blog - Part 1: Intro"
 date = 2022-04-09
+description = "An Introduction to our series comparing various static site generators"
 
 [taxonomies]
 tags = ["blog", "zola", "jekyll", "hugo"]

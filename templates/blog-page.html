@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}{{ page.title }} | {{ super() }}{% endblock title %}
+{% block meta_description %}{{ page.description }}{% endblock meta_description %}
 
 {% block head_extra %}
 <script type="application/ld+json">
@@ -15,7 +16,7 @@
 		"url": "https://zyzle.dev/about"
 	}],
     "wordcount": "{{page.word_count}}",
-    "keywords": "{% if page.taxonomies.tags %}{% for tag in page.taxonomies.tags %}{{tag}},{% endfor %}{% endif %}"
+    "keywords": "{% if page.taxonomies.tags %}{% for tag in page.taxonomies.tags %}{{tag}},{% endfor %}{% endif %}",
     "license": "https://creativecommons.org/licenses/by-sa/4.0/"
 }
 </script>
