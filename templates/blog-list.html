@@ -4,6 +4,7 @@
 {% block meta_description %}{{ section.description }}{% endblock meta_description %}
 
 {% block main %}
+<nav><a href={{ get_url(path="@/_index.md") }}>&laquo; back to home</a></nav>
 {% for post in section.pages %}
 <article class="post-mini">
     <header class="post-header">
@@ -24,4 +25,6 @@
     </section>
 </article>
 {% endfor %}
+
+{% include "footer.html" %}
 {% endblock main %}

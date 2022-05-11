@@ -3,6 +3,7 @@
 {% block title %}{{ page.title }} | {{ super() }}{% endblock title %}
 
 {% block main %}
+<nav><a href={{ get_url(path="@/_index.md") }}>&laquo; back to home</a></nav>
 <article class="post">
     <header class="post-header">
         <h1>{{ page.title }}</h1>

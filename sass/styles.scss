@@ -71,7 +71,7 @@ body {
 }
 
 .content {
-	margin-top: 52px;
+	margin-top: 6rem;
 	margin-bottom: 50px;
 	padding: 0 15px;
 	width: 100%;
@@ -297,6 +297,31 @@ a:hover {
 
 		a::after {
 			content: ' ';
+		}
+	}
+}
+
+.footer-list  li {
+	margin-bottom: .5rem;
+}
+
+.hr-footer {
+	border: 0;
+	height: 1px;
+	background: $gold;
+
+}
+
+.site-footer {
+	display: flex;
+	justify-content: space-between;
+
+	.copyright {
+		max-width: 200px;
+		text-align: right;
+
+		p {
+			text-align: right;
 		}
 	}
 }

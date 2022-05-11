@@ -23,6 +23,7 @@
 {% endblock head_extra %}
 
 {% block main %}
+<nav><a href={{ get_url(path="@/blog/_index.md") }}>&laquo; back to blogs</a></nav>
 <article class="post">
     <header class="post-header">
         <h1>{{ page.title }}</h1>
@@ -44,9 +45,11 @@
 
     <aside>
         <h3>Thanks for reading</h3>
-        <p>If you enjoyed this article you can support me on Kofi using <a href="https://ko-fi.com/zyzle">my link</a>
-            or if you're using the <a href="https://brave.com/">Brave browser</a> just visiting will help or you can tip me BAT directly
+        <p>If you enjoyed this article you can <a href="https://ko-fi.com/zyzle">support me on Kofi</a>.
+            Reading this using <a href="https://brave.com/">Brave</a> will help support me as a creator while also protecting your privacy or you can tip me BAT directly
             from the rewards button in the address bar, thanks :)</p>
     </aside>
 </article>
+
+{% include "footer.html" %}
 {% endblock main %}
