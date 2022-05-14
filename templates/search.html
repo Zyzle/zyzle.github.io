@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} | {{ super() }}{% endblock title %}
+{% block meta_description %}{{ page.description }}{% endblock %}
+
+{% block main %}
+<nav><a href={{ get_url(path="@/_index.md") }}>&laquo; back to home</a></nav>
+<article class="post">
+	<div class="search-area">
+		<span class="search-boxes">
+			<img src="/search.svg" height="30px" width="30px" alt="search the site" />
+			<input id="searchBox" type="text" placeholder="Search"/>
+		</span>
+		<div class="search-results" id="searchResults">
+		</div>
+	</div>
+</article>
+<script src="/elasticlunr.min.js"></script>
+<script src="/search_index.en.js"></script>
+<script src="/searcher.js"></script>
+{% endblock main %}

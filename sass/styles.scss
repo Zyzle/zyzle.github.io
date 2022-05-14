@@ -53,8 +53,12 @@ body {
 		display: flex;
 		flex-direction: row;
 		height: 50px;
-	}
+		align-items: center;
 
+		a {
+			padding: 0 5px;
+		}
+	}
 
 	#progress-bar {
 		height: 4px;
@@ -342,6 +346,56 @@ a:hover {
 			a {
 				line-height: 4rem;
 			}
+		}
+	}
+}
+
+.search-area {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 1rem;
+	
+	.search-boxes {
+		display: flex;
+
+		input {
+			margin-left: .5rem;
+			background: none;
+			border-left: none;
+			border-right: none;
+			border-top: none;
+			border-bottom: 1px solid $comment;
+			font-size: 1.5rem;
+			color: $comment;
+		}
+		
+		input:focus-visible {
+			border-bottom: 1px solid $cyan;
+			border-left: none;
+			border-right: none;
+			border-top: none;
+			outline: none;
+		}
+	}
+}
+
+.search-results {
+	margin-top: 2rem;
+}
+
+.search-result {
+	margin-bottom: 1.5rem;
+
+	a {
+		font-size: 1.5rem;
+	}
+
+	.search-extract {
+		margin-top: .5rem;
+		em {
+			font-weight: bold;
+			color: $lime;
 		}
 	}
 }

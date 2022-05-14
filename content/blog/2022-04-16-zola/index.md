@@ -1,5 +1,5 @@
 +++
-title = "Lets Write a Blog - Part 2: Zola"
+title = "Let's write a blog - Part 2: Zola"
 date = 2022-04-16
 description = "Evaluating the Zola static site generator for use in my blog"
 
