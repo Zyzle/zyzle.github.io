@@ -4,12 +4,12 @@
 	<link href="https://zyzle.dev/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://zyzle.dev"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2022-05-15T00:00:00+00:00</updated>
+	<updated>2022-05-21T00:00:00+00:00</updated>
 	<id>https://zyzle.dev/atom.xml</id>
 	<entry xml:lang="en">
 		<title>Let&#x27;s write a blog - Part 3: Jekyll</title>
-		<published>2022-05-15T00:00:00+00:00</published>
-		<updated>2022-05-15T00:00:00+00:00</updated>
+		<published>2022-05-21T00:00:00+00:00</published>
+		<updated>2022-05-21T00:00:00+00:00</updated>
 		<link href="https://zyzle.dev/blog/jekyll/" type="text/html"/>
 		<id>https://zyzle.dev/blog/jekyll/</id>
 		<content type="html">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;jekyllrb.com&#x2F;&quot;&gt;Jekyll&lt;&#x2F;a&gt; is the oldest of the static site generators we&#x27;ll be looking at it&#x27;s 1.0 version appearing in 2013. It was originally designed to be centred around blogging but has grown into a more fully featured static site generator.&lt;&#x2F;p&gt;
