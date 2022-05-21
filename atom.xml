@@ -4,8 +4,219 @@
 	<link href="https://zyzle.dev/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://zyzle.dev"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2022-04-16T00:00:00+00:00</updated>
+	<updated>2022-05-15T00:00:00+00:00</updated>
 	<id>https://zyzle.dev/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Let&#x27;s write a blog - Part 3: Jekyll</title>
+		<published>2022-05-15T00:00:00+00:00</published>
+		<updated>2022-05-15T00:00:00+00:00</updated>
+		<link href="https://zyzle.dev/blog/jekyll/" type="text/html"/>
+		<id>https://zyzle.dev/blog/jekyll/</id>
+		<content type="html">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;jekyllrb.com&#x2F;&quot;&gt;Jekyll&lt;&#x2F;a&gt; is the oldest of the static site generators we&#x27;ll be looking at it&#x27;s 1.0 version appearing in 2013. It was originally designed to be centred around blogging but has grown into a more fully featured static site generator.&lt;&#x2F;p&gt;
+&lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;
+&lt;p&gt;The application is written in ruby and the sites and themes are build around gems. One additional benefit of Jekyll is it comes fully supported by GitHub which will be my preferred way of hosting the blog for now.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;&#x2F;h2&gt;
+&lt;p&gt;This is where the first hurdles with Jekyll come in to play. For one thing apparently you shouldn&#x27;t use the macOS system of Ruby for &lt;a href=&quot;https:&#x2F;&#x2F;www.moncefbelyamani.com&#x2F;why-you-shouldn-t-use-the-system-ruby-to-install-gems-on-a-mac&#x2F;&quot;&gt;various reasons&lt;&#x2F;a&gt; so we&#x27;re going to first have to install the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;postmodern&#x2F;chruby&quot;&gt;chruby&lt;&#x2F;a&gt; tool. I&#x27;m going to skip the exact steps I went through for this but you can follow the instructions on the &lt;a href=&quot;https:&#x2F;&#x2F;jekyllrb.com&#x2F;docs&#x2F;installation&#x2F;macos&#x2F;&quot;&gt;Jekyll site&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ gem install bundler jekyll
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;As well as requiring a Ruby install Jekyll has quite a few gem dependencies making it one of the larger install footprints we&#x27;ll be looking at.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;site-setup&quot;&gt;Site setup&lt;&#x2F;h2&gt;
+&lt;p&gt;First we make a new directory for our blog and run the command&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ bundle init
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This gives us an empty &lt;code&gt;Gemfile&lt;&#x2F;code&gt; which we&#x27;ll add our dependencies to:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rb&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-rb &quot;&gt;&lt;code class=&quot;language-rb&quot; data-lang=&quot;rb&quot;&gt;&lt;span&gt;source &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;rubygems.org&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;gem &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;jekyll&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;# this is required running ruby versions &amp;gt;3
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;gem &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;webrick&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Once these dependencies are in the gemfile we can use the bundle tool to install them with&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ bundle
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now we have our dependencies installed lets go ahead and create some basic directory structure for the site:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;jekyllblog&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- _includes&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- _layouts&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- _posts&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- assets&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- _config.yml
+&lt;&#x2F;span&gt;&lt;span&gt;  +-- Gemfile
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;These directory names are fairly self explanatory, &lt;code&gt;_includes&lt;&#x2F;code&gt; will hold our template partials that can be included in other files, &lt;code&gt;_layouts&lt;&#x2F;code&gt; will contain our main template files, &lt;code&gt;_posts&lt;&#x2F;code&gt; will be where we put our blog page markdown files, and &lt;code&gt;assets&lt;&#x2F;code&gt; contains site assets.&lt;&#x2F;p&gt;
+&lt;p&gt;The &lt;code&gt;_config.yml&lt;&#x2F;code&gt; is our Jekyll config file, we wont be adding much to this for the moment, just the sites title:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;My Blog
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now we have the basics we can run Jekyll in watch mode to serve our site for us while we develop&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ jekyll serve&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; --watch
+&lt;&#x2F;span&gt;&lt;span&gt;Configuration file: &#x2F;Users&#x2F;jekyllblog&#x2F;_config.yml
+&lt;&#x2F;span&gt;&lt;span&gt;            Source: &#x2F;Users&#x2F;jekyllblog
+&lt;&#x2F;span&gt;&lt;span&gt;       Destination: &#x2F;Users&#x2F;jekyllblog&#x2F;_site
+&lt;&#x2F;span&gt;&lt;span&gt; Incremental build: disabled. Enable with&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; --incremental
+&lt;&#x2F;span&gt;&lt;span&gt;      Generating...
+&lt;&#x2F;span&gt;&lt;span&gt;                    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;done&lt;&#x2F;span&gt;&lt;span&gt; in 0.02 seconds.
+&lt;&#x2F;span&gt;&lt;span&gt; Auto-regeneration: enabled for &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;&#x2F;Users&#x2F;jekyllblog&amp;#39;
+&lt;&#x2F;span&gt;&lt;span&gt;    Server address: http:&#x2F;&#x2F;127.0.0.1:4000
+&lt;&#x2F;span&gt;&lt;span&gt;  Server running... press ctrl-c to stop.
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;If we navigate to &lt;code&gt;http:&#x2F;&#x2F;127.0.0.1:4000&lt;&#x2F;code&gt; right now all we&#x27;ll see is the output directory listing from webrick so let&#x27;s go ahead and add some templates and content.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;templating-101&quot;&gt;Templating 101&lt;&#x2F;h2&gt;
+&lt;p&gt;Let&#x27;s go through the templates for our site. First the base template which we&#x27;ll call &lt;code&gt;default.html&lt;&#x2F;code&gt; which we&#x27;ll place in our &lt;code&gt;_layouts&lt;&#x2F;code&gt; its content will be as follows:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;DOCTYPE &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;html &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;lang&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;en&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;meta &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;charset&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;utf-8&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;{{page.title}} | {{ site.title }}&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;{{ site.title }}&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      {% include navigation.html %}
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;{{ content }}&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;If you read the &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;blog&#x2F;zola&#x2F;#templating-101&quot;&gt;previous entry&lt;&#x2F;a&gt; in our series this base template should fairly familiar, Jekyll&#x27;s templating engine &lt;a href=&quot;https:&#x2F;&#x2F;shopify.github.io&#x2F;liquid&#x2F;&quot;&gt;Liquid&lt;&#x2F;a&gt; (originally developed by &lt;a href=&quot;https:&#x2F;&#x2F;www.shopify.com&#x2F;&quot;&gt;Shopify&lt;&#x2F;a&gt;) shares a lot of syntax with &lt;a href=&quot;https:&#x2F;&#x2F;tera.netlify.app&#x2F;&quot;&gt;Tera&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Unlike our Zola blog the Jekyll one does not define named content blocks the &lt;code&gt;{{content}}&lt;&#x2F;code&gt; template entry will automatically pick up the content either from a markdown page or from a sub-template that will extend this one. &lt;code&gt;{{site.title}}&lt;&#x2F;code&gt; simply comes from our &lt;code&gt;_config.yml&lt;&#x2F;code&gt; file.&lt;&#x2F;p&gt;
+&lt;p&gt;We&#x27;ve separated our header navigation into an include in &lt;code&gt;_includes&#x2F;navigation.html&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;nav&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;{% link index.html %}&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Home&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;{% link blog.html %}&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Blog&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;{% link about.md %}&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;About&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;nav&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here we use the Jekyll &lt;code&gt;link&lt;&#x2F;code&gt; command to construct a link to the specific pages in the root of the project, as we can see this link can either be to an explicit HTML file or a Markdown file that will be processed by Jekyll during its build.&lt;&#x2F;p&gt;
+&lt;p&gt;So lets take a look at the &lt;code&gt;index.html&lt;&#x2F;code&gt; file that we&#x27;ve created:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;layout: default
+&lt;&#x2F;span&gt;&lt;span&gt;title: Home
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;This is the blog homepage&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Not much in the way of html in here, this is really just a front-matter telling Jekyll which layout template to plug this content in to and a title for the page.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;our-list-entries-pages&quot;&gt;Our List&#x2F;Entries pages&lt;&#x2F;h2&gt;
+&lt;p&gt;Our &lt;code&gt;blog.html&lt;&#x2F;code&gt; file will contain a title and give us a basic unordered list of the current blog entries on the site. Jekyll gives us a helpful &lt;code&gt;site.posts&lt;&#x2F;code&gt; variable that we can iterate over for this purpose:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;layout: default
+&lt;&#x2F;span&gt;&lt;span&gt;title: Blog
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;List of blog posts&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  {% for post in site.posts %}
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;{{ post.url }}&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;{{ post.title }}&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  {% endfor %}
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Again we&#x27;re using the default template here and injecting this content directly. So far so simple.&lt;&#x2F;p&gt;
+&lt;p&gt;The blog entry page template &lt;code&gt;blog-page.html&lt;&#x2F;code&gt; contains the following:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;layout: default
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;class&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;title&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	{{page.title}}
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;p &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;class&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;subtitle&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;strong&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;{{page.date}}&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;strong&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{{ content }}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;All we need to do here is pull out the page title and date from the &lt;code&gt;page&lt;&#x2F;code&gt; object Jekyll gives us and wrap these in some tags to be displayed at the top of the content block. Notice this templates front-matter where we have a &lt;code&gt;layout&lt;&#x2F;code&gt; property defined, this tells Jekyll to forward the results of merging this template with its markdown file into the &lt;code&gt;content&lt;&#x2F;code&gt; block of the &lt;code&gt;default.html&lt;&#x2F;code&gt; template defined above.&lt;&#x2F;p&gt;
+&lt;p&gt;The final part of these blog posts is the markdown itself, these files are placed in the &lt;code&gt;_posts&lt;&#x2F;code&gt; folder and their names are prefixed by the post release date e.g &lt;code&gt;2022-05-20-post-1.md&lt;&#x2F;code&gt; in these files we define a front-matter with template to use and title, then the content that makes up our blog post:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;markdown&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-markdown &quot;&gt;&lt;code class=&quot;language-markdown&quot; data-lang=&quot;markdown&quot;&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;layout: blog-page
+&lt;&#x2F;span&gt;&lt;span&gt;title: My first post
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;This is the first blog post
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;about-page&quot;&gt;About Page&lt;&#x2F;h2&gt;
+&lt;p&gt;The about page we will be using exists as a markdown file at the root of the project &lt;code&gt;about.md&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;markdown&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-markdown &quot;&gt;&lt;code class=&quot;language-markdown&quot; data-lang=&quot;markdown&quot;&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;layout: page
+&lt;&#x2F;span&gt;&lt;span&gt;title: About
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;This is the blog about page
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;It&#x27;s template &lt;code&gt;page.html&lt;&#x2F;code&gt;  looks like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;layout: default
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;article&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;{{page.title}}&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  {{ content }}
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;article&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Again we have a partial HTML file with some basic tags that wrap the markdown content and extract the page title into a header. As with the previous template this is then passed up to the &lt;code&gt;default.html&lt;&#x2F;code&gt; template and inserted into it&#x27;s &lt;code&gt;content&lt;&#x2F;code&gt; section.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;build-and-deploy&quot;&gt;Build and deploy&lt;&#x2F;h2&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ jekyll build
+&lt;&#x2F;span&gt;&lt;span&gt;Configuration file: &#x2F;Users&#x2F;jekyllblog&#x2F;_config.yml
+&lt;&#x2F;span&gt;&lt;span&gt;            Source: &#x2F;Users&#x2F;jekyllblog
+&lt;&#x2F;span&gt;&lt;span&gt;       Destination: &#x2F;Users&#x2F;jekyllblog&#x2F;_site
+&lt;&#x2F;span&gt;&lt;span&gt; Incremental build: disabled. Enable with&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; --incremental
+&lt;&#x2F;span&gt;&lt;span&gt;      Generating... 
+&lt;&#x2F;span&gt;&lt;span&gt;                    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;done&lt;&#x2F;span&gt;&lt;span&gt; in 0.02 seconds.
+&lt;&#x2F;span&gt;&lt;span&gt; Auto-regeneration: disabled. Use&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; --watch&lt;&#x2F;span&gt;&lt;span&gt; to enable.
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The build process is quick and generates the static HTML into a directory in our blog root &lt;code&gt;_site&lt;&#x2F;code&gt;. The directory structure &lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;_site&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- 2002&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |    +-- 05&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |         |-- 06&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |         |    +-- post-1.html
+&lt;&#x2F;span&gt;&lt;span&gt;  |         +-- 07&#x2F;
+&lt;&#x2F;span&gt;&lt;span&gt;  |              +-- post-2.html
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- about.html
+&lt;&#x2F;span&gt;&lt;span&gt;  |-- blog.html
+&lt;&#x2F;span&gt;&lt;span&gt;  +-- index.html
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;As you can see Jekyll uses post dates to create a URL structure for the generated website, the compiled about page looks almost identical to our &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;blog&#x2F;zola&#x2F;#building-for-deployment&quot;&gt;previous example&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;DOCTYPE &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;html &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;lang&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;en&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;meta &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;charset&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;utf-8&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;About | My Blog&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;My Blog&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;nav&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;          &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;&#x2F;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Home&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;          &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;&#x2F;blog.html&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Blog&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;          &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;&#x2F;about.html&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;About&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;nav&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;article&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;          &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;About&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;header&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;        &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;This is the blog about page&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;      &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;article&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;main&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Unlike our previous example Jekyll doesn&#x27;t provide us with any extras out of the box although it does provide a wide catalogue of &lt;a href=&quot;https:&#x2F;&#x2F;jekyllrb.com&#x2F;docs&#x2F;plugins&#x2F;&quot;&gt;plugins&lt;&#x2F;a&gt; that can be used with the site.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
+&lt;p&gt;Jekyll is easy to get up and running with all be it if you have previous knowledge of managing a Ruby installation on your system, it&#x27;s templating system is straightforward and the Liquid template engine is well documented. Jekyll&#x27;s built URL structure is a little archaic and actually goes against what many SEO guides &lt;a href=&quot;https:&#x2F;&#x2F;www.sistrix.com&#x2F;blog&#x2F;want-slowly-kill-content-google-simply-use-directory-structure-dates&#x2F;&quot;&gt;recommend&lt;&#x2F;a&gt;. The constructed site is smaller than the one generated by Zola, mostly because of the omitted extra files like the 404 page and sitemap, and comes in at around 20Kb.&lt;&#x2F;p&gt;
+</content>
+	</entry>
 	<entry xml:lang="en">
 		<title>Let&#x27;s write a blog - Part 2: Zola</title>
 		<published>2022-04-16T00:00:00+00:00</published>
