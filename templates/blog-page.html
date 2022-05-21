@@ -40,6 +40,14 @@
     </header>
     {{ page.content | safe }}
 
+    {% if page.extra.ghissue %}
+    <h2>Comments</h2>
+    <p>I'm currently working on something cool (hopefully) for comments on this site,
+    in the mean time however you can use <a href="{{ page.extra.ghissue }}">this github issue</a>
+    to leave comments on this post.
+    </p>
+    {% endif %}
+
     <br />
     <br />
 

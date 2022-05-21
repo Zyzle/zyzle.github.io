@@ -2,6 +2,9 @@
 
 {% block title %}Blog | {{ super() }}{% endblock title %}
 {% block meta_description %}{{ section.description }}{% endblock meta_description %}
+{% block head_extra %}
+<link rel="canonical" href="{{ get_url(path="@/blog/_index.md") }}" />
+{% endblock head_extra %}
 
 {% block main %}
 <nav><a href={{ get_url(path="@/_index.md") }}>&laquo; back to home</a></nav>

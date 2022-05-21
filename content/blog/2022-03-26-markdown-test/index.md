@@ -7,7 +7,7 @@ description = "A tester page used to check my site theme against the markdown ge
 tags = ["blog"]
 
 [extra]
-author = "Colin"
+author = "Colin McCulloch"
 +++
 
 This page is going to function as a test bed for the sites new styling, it's going to contain as many different markdown elements as possible in order to see whether or not we support them

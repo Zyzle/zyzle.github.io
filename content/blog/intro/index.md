@@ -7,7 +7,8 @@ description = "An Introduction to our series comparing various static site gener
 tags = ["blog", "zola", "jekyll", "hugo"]
 
 [extra]
-author = "Colin"
+author = "Colin McCulloch"
+ghissue = "https://github.com/Zyzle/zyzle.github.io/issues/4"
 +++
 
 I've been wanting to get back into blogging for some time but have no idea what to write about to start me off, so why not write about choosing a blog tool and it's setup. We're going to go through some of the tools I've considered and the reasons behind my final choice as well as the process of creating a template and deploying the blog.

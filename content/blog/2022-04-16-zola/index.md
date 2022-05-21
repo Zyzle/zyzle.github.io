@@ -7,7 +7,8 @@ description = "Evaluating the Zola static site generator for use in my blog"
 tags = ["blog", "zola"]
 
 [extra]
-author = "Colin"
+author = "Colin McCulloch"
+ghissue = "https://github.com/Zyzle/zyzle.github.io/issues/5"
 +++
 
 Zola (formally Gutenberg) is a SSG written in Rust. Zola has it's own templating engine [Tera](https://tera.netlify.app/) created by the same author and follows a similar design in it's templating to Jinja 2. Distributed as a single binary Zola has a much smaller footprint than the other SSGs we'll be looking at, it also promises to be fast (comparable to Hugo) and runs from a simple augmented markdown including shortcodes and custom internal linking.

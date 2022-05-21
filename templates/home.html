@@ -2,6 +2,9 @@
 
 {% block title %}Home | {{ super() }}{% endblock title %}
 {% block meta_description %}{{ section.description }}{% endblock meta_description %}
+{% block head_extra %}
+<link rel="canonical" href="{{ get_url(path="@/_index.md") }}" />
+{% endblock head_extra %}
 
 {% block main %}
 <article class="homepage">
