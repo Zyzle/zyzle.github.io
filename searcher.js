@@ -175,7 +175,7 @@ function initSearch() {
 			searchResults.appendChild(item);
 		}
 
-		console.log('RESULTS', results);
+    pa.track({name: 'search', value: term})
 	}, 150));
 
 }
