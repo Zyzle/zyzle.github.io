@@ -1,6 +1,6 @@
 +++
 title = "Let's write a blog - Part 3: Jekyll"
-date = 2022-05-15
+date = 2022-05-21
 
 [taxonomies]
 tags = ["blog", "jekyll"]
