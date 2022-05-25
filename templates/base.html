@@ -12,6 +12,9 @@
         <link rel="alternate" type={% if config.feed_filename=="atom.xml" %}"application/atom+xml"{% else
             %}"application/rss+xml"{% endif %} title="RSS" href="{{ get_url(path=config.feed_filename) | safe }}">
         {% endif %}
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Nunito:ital,wght@0,400;0,700;1,400;1,700&family=Pacifico&display=swap');
+        </style>
         <link rel="stylesheet" href="{{ get_url(path="styles.css", trailing_slash=false) | safe }}">
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
