@@ -1,22 +1,20 @@
 +++
-title = "Lets Write a Blog - Part 4: Hugo"
-date = 2022-04-01
+title = "Let's write a blog - Part 4: Hugo"
+date = 2022-05-26
+description = "Evaluating Hugo static site generator for use in my personal blog"
 draft = true
 
-[tagonomies]
+[taxonomies]
 tags = ["blog", "hugo"]
 
 [extra]
-author = "Colin"
+author = "Colin McCulloch"
+ghissue = "https://github.com/Zyzle/zyzle.github.io/issues/8"
 +++
 
-# Hugo
+[Hugo](https://gohugo.io/) bills itself as "The worlds fastest framework for building websites" it's gained a lot of popularity in recent years, written in Go and using the `html/template` and `text/template` modules as the basis for its templating although no previous knowledge of Go is required to get up and running with it
 
-## About
-
-* claims to be worlds fastest static site generator
-* one of the most popular today
-
+<!-- more -->
 
 ## Installation
 
@@ -24,7 +22,7 @@ author = "Colin"
 $ brew install hugo
 ```
 
-* version 0.89.4, size 54Mb
+* version 0.99.1, size 54Mb
 * also available Homebrew for linux, MacPorts, Chocolatey and scoop for windows
 * requires Go runtime
 

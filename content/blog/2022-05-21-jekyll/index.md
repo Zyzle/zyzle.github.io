@@ -1,6 +1,7 @@
 +++
 title = "Let's write a blog - Part 3: Jekyll"
 date = 2022-05-21
+description = "Evaluating Jekyll static site generator for use in my personal blog"
 
 [taxonomies]
 tags = ["blog", "jekyll"]
