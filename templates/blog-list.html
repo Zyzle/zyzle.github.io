@@ -8,6 +8,10 @@
 
 {% block main %}
 <nav><a href={{ get_url(path="@/_index.md") }}>&laquo; back to home</a></nav>
+<header class="list-title">
+    <img src="/blog.svg" alt="pen and paper icon" width="68px" height="68px" />
+    <h1>Blog</h1>
+</header>
 {% for post in section.pages %}
 <article class="post-mini">
     <header class="post-header">

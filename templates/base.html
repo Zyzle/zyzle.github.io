@@ -20,6 +20,15 @@
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
         <link rel="manifest" href="/site.webmanifest">
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q90233GSB3"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-Q90233GSB3');
+        </script>
         {% block head_extra %}{% endblock head_extra %}
     </head>
     <body>
@@ -27,9 +36,9 @@
             <div class="hwrapper">
                 <h1><a class="header-link" href="{{ get_url(path="@/_index.md")}}">{{ config.title }}</a></h1>
                 <span class="header-buttons">
-                    <a href="https://ko-fi.com/zyzle"><img src="/ko-fi.svg" alt="support me on Ko-fi" width="30px" height="30px" /></a>
-                    <a href="/tags"><img src="/tag.svg" alt="site tag list" width="30px" height="30px" /></a>
-                    <a href={{ get_url(path="@/search.md") }}><img src="/search.svg" alt="search zyzle.dev" width="30px" height="30px" /></a>
+                    <a href="https://ko-fi.com/zyzle"><img src="/ko-fi.svg" alt="support me on Ko-fi" width="40px" height="40px" /></a>
+                    <a href="/tags"><img src="/tag.svg" alt="site tag list" width="40px" height="40px" /></a>
+                    <a href={{ get_url(path="@/search.md") }}><img src="/search.svg" alt="search zyzle.dev" width="40px" height="40px" /></a>
                 </span>
             </div>
             <div id="progress-bar"></div>

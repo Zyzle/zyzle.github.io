@@ -9,9 +9,24 @@
 {% block main %}
 <article class="homepage">
 	<ul class="homepage-list">
-		<li><a href="{{ get_url(path="@/blog/_index.md")}}">Blog</a></li>
-		<li><a href="{{ get_url(path="@/snippets/_index.md")}}">Snippets</a></li>
-		<li><a href="{{ get_url(path="@/about.md")}}">About</a></li>
+		<li>
+			<a href="{{ get_url(path="@/blog/_index.md")}}">
+				<img src="/blog.svg" alt="pen and paper icon" width="100px" height="100px" />
+				Blog
+			</a>
+		</li>
+		<li>
+			<a href="{{ get_url(path="@/snippets/_index.md")}}">
+				<img src="/snippets.svg" alt="code tag icon" width="100px" height="100px" />
+				Snippets
+			</a>
+		</li>
+		<li>
+			<a href="{{ get_url(path="@/about.md")}}">
+				<img src="/about.svg" alt="person icon" width="100px" height="100px" />
+				About
+			</a>
+		</li>
 	</ul>
 </article>
 {% endblock main %}

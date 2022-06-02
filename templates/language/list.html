@@ -3,10 +3,11 @@
 {% block title %}Languages | {{ super() }}{% endblock title %}
 
 {% block main %}
+<header class="list-title">
+	<img src="/languages.svg" alt="tag icon" width="68px" height="68px" />
+	<h1>Languages</h1>
+</header>
 <article class="post">
-	<header class="post-header">
-		<h1 class="term-header-nohash">Languages</h1>
-	</header>
 	<div class="flow-container">
 		{% for lang in terms %}
 		<a href="{{ lang.permalink }}" class="lang-list-link"
