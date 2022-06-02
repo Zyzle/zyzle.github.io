@@ -40,14 +40,6 @@
     </header>
     {{ page.content | safe }}
 
-    {% if page.extra.ghissue %}
-    <h2>Comments</h2>
-    <p>I'm currently working on something cool (hopefully) for comments on this site,
-    in the mean time however you can use <a href="{{ page.extra.ghissue }}">this github issue</a>
-    to leave comments on this post.
-    </p>
-    {% endif %}
-
     <br />
     <br />
 
@@ -57,7 +49,21 @@
             Reading this using <a href="https://brave.com/">Brave</a> will help support me as a creator while also protecting your privacy or you can tip me BAT directly
             from the rewards button in the address bar, thanks :)</p>
     </aside>
+
+    {% if page.extra.ghissue %}
+    <h2>Comments</h2>
+    <p>I'm currently working on the site comments (post coming soon), <a href="{{ page.extra.ghissue }}">this github issue</a>'s
+    comments will be shown below hopefully I'll have the sign-in and edit working soon.
+    </p>
+    {% endif %}
 </article>
+
+<br />
+<br />
+
+{% if page.extra.ghissue %}
+<zyzle-commenter gh-repo="zyzle.github.io" owner="Zyzle" issue-number="{{ page.extra.ghissue }}"></zyzle-commenter>
+{% endif %}
 
 {% include "footer.html" %}
 {% endblock main %}

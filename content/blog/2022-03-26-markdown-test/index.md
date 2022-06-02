@@ -8,6 +8,7 @@ tags = ["blog"]
 
 [extra]
 author = "Colin McCulloch"
+ghissue = 7
 +++
 
 This page is going to function as a test bed for the sites new styling, it's going to contain as many different markdown elements as possible in order to see whether or not we support them

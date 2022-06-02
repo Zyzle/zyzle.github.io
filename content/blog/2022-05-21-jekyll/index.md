@@ -8,7 +8,7 @@ tags = ["blog", "jekyll"]
 
 [extra]
 author = "Colin McCulloch"
-ghissue = "https://github.com/Zyzle/zyzle.github.io/issues/6"
+ghissue = 6
 +++
 
 [Jekyll](https://jekyllrb.com/) is the oldest of the static site generators we'll be looking at it's 1.0 version appearing in 2013. It was originally designed to be centred around blogging but has grown into a more fully featured static site generator.
