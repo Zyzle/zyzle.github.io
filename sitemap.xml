@@ -41,7 +41,21 @@
         <loc>https://zyzle.dev/language/javascript/</loc>
     </url>
     <url>
+        <loc>https://zyzle.dev/language/rust/</loc>
+    </url>
+    <url>
         <loc>https://zyzle.dev/language/typescript/</loc>
+    </url>
+    <url>
+        <loc>https://zyzle.dev/projects/</loc>
+    </url>
+    <url>
+        <loc>https://zyzle.dev/projects/commenter/</loc>
+        <lastmod>2022-06-07</lastmod>
+    </url>
+    <url>
+        <loc>https://zyzle.dev/projects/lynx-rs/</loc>
+        <lastmod>2022-05-25</lastmod>
     </url>
     <url>
         <loc>https://zyzle.dev/search/</loc>
@@ -70,10 +84,17 @@
         <lastmod>2022-03-31</lastmod>
     </url>
     <url>
+        <loc>https://zyzle.dev/snippets/generate-uuid/</loc>
+        <lastmod>2022-06-04</lastmod>
+    </url>
+    <url>
         <loc>https://zyzle.dev/tags/</loc>
     </url>
     <url>
         <loc>https://zyzle.dev/tags/algorithm/</loc>
+    </url>
+    <url>
+        <loc>https://zyzle.dev/tags/angular/</loc>
     </url>
     <url>
         <loc>https://zyzle.dev/tags/blog/</loc>
@@ -85,13 +106,28 @@
         <loc>https://zyzle.dev/tags/jekyll/</loc>
     </url>
     <url>
+        <loc>https://zyzle.dev/tags/oauth/</loc>
+    </url>
+    <url>
         <loc>https://zyzle.dev/tags/os/</loc>
+    </url>
+    <url>
+        <loc>https://zyzle.dev/tags/project/</loc>
     </url>
     <url>
         <loc>https://zyzle.dev/tags/regex/</loc>
     </url>
     <url>
+        <loc>https://zyzle.dev/tags/rocket/</loc>
+    </url>
+    <url>
+        <loc>https://zyzle.dev/tags/rust/</loc>
+    </url>
+    <url>
         <loc>https://zyzle.dev/tags/snippet/</loc>
+    </url>
+    <url>
+        <loc>https://zyzle.dev/tags/typescript/</loc>
     </url>
     <url>
         <loc>https://zyzle.dev/tags/zola/</loc>

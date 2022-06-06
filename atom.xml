@@ -4,8 +4,42 @@
 	<link href="https://zyzle.dev/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://zyzle.dev"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2022-05-21T00:00:00+00:00</updated>
+	<updated>2022-06-07T00:00:00+00:00</updated>
 	<id>https://zyzle.dev/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Commenter</title>
+		<published>2022-06-07T00:00:00+00:00</published>
+		<updated>2022-06-07T00:00:00+00:00</updated>
+		<link href="https://zyzle.dev/projects/commenter/" type="text/html"/>
+		<id>https://zyzle.dev/projects/commenter/</id>
+		<content type="html">&lt;p&gt;Commenter is a webcomponents based comment system that allows you to use GitHub&#x27;s issues as your comments backend. This project works in conjunction with &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Zyzle&#x2F;lynx.rs&quot;&gt;lynx.rs&lt;&#x2F;a&gt; to authenticate with Github&#x27;s oauth.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Generate UUID v4</title>
+		<published>2022-06-04T00:00:00+00:00</published>
+		<updated>2022-06-04T00:00:00+00:00</updated>
+		<link href="https://zyzle.dev/snippets/generate-uuid/" type="text/html"/>
+		<id>https://zyzle.dev/snippets/generate-uuid/</id>
+		<content type="html">&lt;p&gt;Generates a UUID using the RFC 4122 specification.&lt;&#x2F;p&gt;
+&lt;p&gt;Version 4 UUIDs take the form &lt;code&gt;xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx&lt;&#x2F;code&gt; where &lt;code&gt;x&lt;&#x2F;code&gt; is any hex digit and &lt;code&gt;y&lt;&#x2F;code&gt; is in &lt;code&gt;[8, 9, a, b]&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Assuming these are generated with sufficient entropy, 1B uuids every second for 100 years would be ~50% chance of collision.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;typescript&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-typescript &quot;&gt;&lt;code class=&quot;language-typescript&quot; data-lang=&quot;typescript&quot;&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;&amp;#39; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1e7 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+ -&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1e3 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+ -&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;4e3 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+ -&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;8e3 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+ -&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1e11&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;  .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;replace&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&#x2F;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;0&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;g&lt;&#x2F;span&gt;&lt;span&gt;, () &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;Math&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;random&lt;&#x2F;span&gt;&lt;span&gt;() &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;16&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;toString&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;16&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;  });
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Lynx.rs</title>
+		<published>2022-05-25T00:00:00+00:00</published>
+		<updated>2022-05-25T00:00:00+00:00</updated>
+		<link href="https://zyzle.dev/projects/lynx-rs/" type="text/html"/>
+		<id>https://zyzle.dev/projects/lynx-rs/</id>
+		<content type="html">&lt;p&gt;In Greek, Norse, and North American mythologies lynx were known as mysterious creatures and keepers of secrets. This one provides a simple API endpoint to allow you to fulfil the GitHub OAuth flow without exposing your client secret to a JS front-end.&lt;&#x2F;p&gt;
+</content>
+	</entry>
 	<entry xml:lang="en">
 		<title>Let&#x27;s write a blog - Part 3: Jekyll</title>
 		<published>2022-05-21T00:00:00+00:00</published>
@@ -741,7 +775,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;})();
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;h1 id=&quot;text&quot;&gt;Text&lt;&#x2F;h1&gt;
-&lt;p&gt;Some text with &lt;em&gt;italic&lt;&#x2F;em&gt;, &lt;strong&gt;bold&lt;&#x2F;strong&gt;, &lt;em&gt;&lt;strong&gt;bold italic&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;, &lt;code&gt;monospaced&lt;&#x2F;code&gt;, &lt;a href=&quot;http:&#x2F;&#x2F;www.zyzle.dev&quot;&gt;a link&lt;&#x2F;a&gt;, &lt;del&gt;strike&lt;&#x2F;del&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Some text with &lt;em&gt;italic&lt;&#x2F;em&gt;, &lt;strong&gt;bold&lt;&#x2F;strong&gt;, &lt;em&gt;&lt;strong&gt;bold italic&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;, &lt;code&gt;monospaced&lt;&#x2F;code&gt;, &lt;a href=&quot;http:&#x2F;&#x2F;zyzle.dev&quot;&gt;a link&lt;&#x2F;a&gt;, &lt;del&gt;strike&lt;&#x2F;del&gt;&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;image&quot;&gt;Image&lt;&#x2F;h1&gt;
 &lt;p&gt;a basic image&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;img src=&quot;bg2.jpg&quot; alt=&quot;a caption for image&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
