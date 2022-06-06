@@ -7,7 +7,7 @@ tags = ["snippet"]
 language = ["css"]
 
 [extra]
-author = "Colin"
+author = "Colin McCulloch"
 +++
 
 Box shadow similar to the one from the material design spec

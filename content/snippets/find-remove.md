@@ -7,7 +7,7 @@ tags = ["snippet", "os"]
 language = ["bash"]
 
 [extra]
-author = "Colin"
+author = "Colin McCulloch"
 +++
 
 Find all files/directories based on a name pattern and remove them recursively from a base directory.

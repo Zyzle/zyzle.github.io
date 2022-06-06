@@ -7,7 +7,7 @@ tags = ["snippet", "regex"]
 language = ["javascript"]
 
 [extra]
-author = "Colin"
+author = "Colin McCulloch"
 +++
 
 Simple regex for determining file extension

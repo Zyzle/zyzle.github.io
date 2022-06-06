@@ -7,7 +7,7 @@ tags = ["snippet"]
 language = ["java"]
 
 [extra]
-author = "Colin"
+author = "Colin McCulloch"
 +++
 
 A Java classes `equals` and `hashCode` methods should always be overridden in pairs, the following shows how to do this manually without using 3rd party libraries

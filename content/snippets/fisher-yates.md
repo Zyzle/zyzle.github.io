@@ -7,7 +7,7 @@ tags = ["snippet", "algorithm"]
 language = ["typescript"]
 
 [extra]
-author = "Colin"
+author = "Colin McCulloch"
 +++
 
 Take a finite array and shuffle items in-place:

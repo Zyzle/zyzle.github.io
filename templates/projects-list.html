@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Projects | {{ super() }}{% endblock title %}
+{% block meta_description %}{{ section.description }}{% endblock meta_description %}
+
+{% block main %}
+<nav><a href={{ get_url(path="@/_index.md") }}>&laquo; back to home</a></nav>
+<header class="list-title">
+  <img src="/projects.svg" alt="tools icon" width="68px" height="68px" />
+  <h1>Projects</h1>
+</header>
+<p>This is a quick rundown of all the projects I'm currently working on for now most of these are in a terrible
+  state and are unfinished as all good hobby development should be :D
+</p>
+{% for project in section.pages %}
+<article class="post-mini">
+  <header class="post-header">
+    <a href="{{ project.extra.external_link }}"><h1>{{ project.title }}</h1></a>
+    <div class="post-info">
+      <time>{{ project.date }}</time>
+      <div class="tags">
+        {% if project.taxonomies.tags %}
+          {% for tag in project.taxonomies.tags %}
+            <a href={{ get_url(path="@/_index.md")}}tags/{{tag}}>{{ tag }}</a>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+  </header>
+  <section>
+    {{ project.content | safe }}
+  </section>
+</article>
+{% endfor %}
+{% include "footer.html" %}
+{% endblock main %}
