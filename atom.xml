@@ -775,7 +775,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;})();
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;h1 id=&quot;text&quot;&gt;Text&lt;&#x2F;h1&gt;
-&lt;p&gt;Some text with &lt;em&gt;italic&lt;&#x2F;em&gt;, &lt;strong&gt;bold&lt;&#x2F;strong&gt;, &lt;em&gt;&lt;strong&gt;bold italic&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;, &lt;code&gt;monospaced&lt;&#x2F;code&gt;, &lt;a href=&quot;http:&#x2F;&#x2F;zyzle.dev&quot;&gt;a link&lt;&#x2F;a&gt;, &lt;del&gt;strike&lt;&#x2F;del&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Some text with &lt;em&gt;italic&lt;&#x2F;em&gt;, &lt;strong&gt;bold&lt;&#x2F;strong&gt;, &lt;em&gt;&lt;strong&gt;bold italic&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;, &lt;code&gt;monospaced&lt;&#x2F;code&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&quot;&gt;a link&lt;&#x2F;a&gt;, &lt;del&gt;strike&lt;&#x2F;del&gt;&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;image&quot;&gt;Image&lt;&#x2F;h1&gt;
 &lt;p&gt;a basic image&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;img src=&quot;bg2.jpg&quot; alt=&quot;a caption for image&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
