@@ -64,7 +64,7 @@ This page is going to function as a test bed for the sites new styling, it's goi
 
 # Text
 
-Some text with *italic*, **bold**, ***bold italic***, `monospaced`, [a link](http://zyzle.dev), ~~strike~~
+Some text with *italic*, **bold**, ***bold italic***, `monospaced`, [a link](https://zyzle.dev), ~~strike~~
 
 # Image
 
