@@ -22,7 +22,7 @@
 			<div class="tags">
 				{% if snippet.taxonomies.tags %}
 					{% for tag in snippet.taxonomies.tags %}
-						<a href="{{ get_url(path="@/_index.md")}}tags/{{tag}}">{{ tag }}</a>
+						<a href="{{ get_url(path="@/_index.md")}}tags/{{tag}}/">{{ tag }}</a>
 					{% endfor %}
 				{% endif %}
 			</div>

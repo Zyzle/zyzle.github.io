@@ -21,7 +21,7 @@
       <div class="tags">
         {% if project.taxonomies.tags %}
           {% for tag in project.taxonomies.tags %}
-            <a href={{ get_url(path="@/_index.md")}}tags/{{tag}}>{{ tag }}</a>
+            <a href="{{ get_url(path="@/_index.md")}}tags/{{tag}}/">{{ tag }}</a>
           {% endfor %}
         {% endif %}
       </div>

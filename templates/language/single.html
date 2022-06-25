@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ term.name }} | {{ super() }}{% endblock title %}
+{% block title %}{{ term.name }} | Languages | {{ super() }}{% endblock title %}
 
 {% block main %}
 <article class="post">
@@ -18,7 +18,7 @@
 				<div class="tags">
 					{% if page.taxonomies.tags %}
 					{% for tag in page.taxonomies.tags %}
-					<a href="{{ get_url(path="@/_index.md")}}tags/{{tag}}">{{ tag }}</a>
+					<a href="{{ get_url(path="@/_index.md")}}tags/{{tag}}/">{{ tag }}</a>
 					{% endfor %}
 					{% endif %}
 				</div>

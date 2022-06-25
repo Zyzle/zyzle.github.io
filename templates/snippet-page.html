@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ page.title }} | {{ super() }}{% endblock title %}
+{% block title %}{{ page.title }} | Snippets | {{ super() }}{% endblock title %}
 
 {% block main %}
 <nav><a href={{ get_url(path="@/snippets/_index.md") }}>&laquo; back to snippets</a></nav>
@@ -12,7 +12,7 @@
 			<div class="tags">
 				{% if page.taxonomies.tags %}
 					{% for tag in page.taxonomies.tags %}
-						<a href="{{ get_url(path="@/_index.md")}}tags/{{tag}}">{{ tag }}</a>
+						<a href="{{ get_url(path="@/_index.md")}}tags/{{tag}}/">{{ tag }}</a>
 					{% endfor %}
 				{% endif %}
 			</div>
