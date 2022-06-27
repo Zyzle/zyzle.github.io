@@ -62,7 +62,12 @@
 <br />
 
 {% if page.extra.ghissue %}
-<zyzle-commenter gh-repo="zyzle.github.io" owner="Zyzle" issue-number="{{ page.extra.ghissue }}"></zyzle-commenter>
+<zyzle-commenter 
+    gh-repo="{{ config.extra.comments_repo }}"
+    owner="{{ config.extra.comments_repo_owner }}" 
+    issue-number="{{ page.extra.ghissue }}"
+    client-id="{{ config.extra.comments_oauth_client_id }}"
+    lynx-app="{{ config.extra.comments_lynx_app }}"></zyzle-commenter>
 {% endif %}
 
 {% include "footer.html" %}
