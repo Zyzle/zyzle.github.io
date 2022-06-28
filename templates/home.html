@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 
 {% block title %}Home | {{ super() }}{% endblock title %}
+{% block og_title %}Home | {{ super() }}{% endblock og_title %}
+
 {% block meta_description %}{{ section.description }}{% endblock meta_description %}
+{% block og_description %}{{ section.description }}{% endblock og_description %}
+
+{% block og_image %}{{ get_url(path="@/_index.md") }}android-chrome-512x512.png{% endblock og_image %}
+
 {% block head_extra %}
 <link rel="canonical" href="{{ get_url(path="@/_index.md") }}" />
 {% endblock head_extra %}

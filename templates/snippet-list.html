@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
 {% block title %}Snippets | {{ super() }}{% endblock title %}
+{% block og_title %}Snippets | {{ super() }}{% endblock og_title %}
+
 {% block meta_description %}{{ section.description }}{% endblock meta_description %}
+{% block og_description %}{{ section.description }}{% endblock og_description %}
 
 {% block main %}
 <nav><a href={{ get_url(path="@/_index.md") }}>&laquo; back to home</a></nav>

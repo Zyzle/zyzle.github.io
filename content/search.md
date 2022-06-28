@@ -1,7 +1,7 @@
 +++
 title = "Search"
 template = "search.html"
-description = "site-wide search"
+description = "Site-wide search for Zyzle.dev"
 
 [extra]
 author = "Colin McCulloch"

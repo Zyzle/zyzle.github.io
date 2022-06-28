@@ -1,5 +1,6 @@
 +++
 title = "About"
+description = "All about the site, the licenses for any 3rd party assets, and me!"
 
 [extra]
 author = "Colin McCulloch"

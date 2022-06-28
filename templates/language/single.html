@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block title %}{{ term.name }} | Languages | {{ super() }}{% endblock title %}
+{% block og_title %}{{ term.name }} | Languages | {{ super() }}{% endblock og_title %}
+
+{% block meta_description %}A list of all snippets or projects using the language: {{ term.name }}{% endblock meta_description %}
+{% block og_description %}A list of all snippets or projects using the language: {{ term.name }}{% endblock og_description %}
 
 {% block main %}
 <article class="post">

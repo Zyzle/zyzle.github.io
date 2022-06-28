@@ -2,6 +2,8 @@
 title = "CSS material box shadow"
 date = 2022-04-01
 
+description = "Box shadow similar to the one from the material design spec"
+
 [taxonomies]
 tags = ["snippet"]
 language = ["css"]
@@ -10,7 +12,6 @@ language = ["css"]
 author = "Colin McCulloch"
 +++
 
-Box shadow similar to the one from the material design spec
 
 ```css
 .shadow {

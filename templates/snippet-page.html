@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block title %}{{ page.title }} | Snippets | {{ super() }}{% endblock title %}
+{% block og_title %}{{ page.title }} | Snippets | {{ super() }}{% endblock og_title %}
+
+{% block meta_description %}{{ page.description }}{% endblock meta_description %}
+{% block og_description %}{{ page.description }}{% endblock og_description %}
 
 {% block main %}
 <nav><a href={{ get_url(path="@/snippets/_index.md") }}>&laquo; back to snippets</a></nav>
@@ -18,6 +22,8 @@
 			</div>
 		</div>
 	</header>
+	{{ page.description | safe}}
+	<br />
 	{{ page.content | safe }}
 </article>
 

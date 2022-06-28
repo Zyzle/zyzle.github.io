@@ -1,6 +1,7 @@
 +++
 title = "Fisher-Yates Shuffle"
 date = 2022-03-31
+description = "Take a finite array and shuffle items in-place"
 
 [taxonomies]
 tags = ["snippet", "algorithm"]
@@ -9,8 +10,6 @@ language = ["typescript"]
 [extra]
 author = "Colin McCulloch"
 +++
-
-Take a finite array and shuffle items in-place:
 
 
 ```typescript

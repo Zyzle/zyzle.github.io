@@ -1,6 +1,7 @@
 +++
 title = "Generate UUID v4"
 date = 2022-06-04
+description = "Generate a UUID using the RFC 4122 specification"
 
 [taxonomies]
 tags = ["snippet", "algorithm"]
@@ -10,7 +11,6 @@ language = ["typescript", "javascript"]
 author = "Colin McCulloch"
 +++
 
-Generates a UUID using the RFC 4122 specification.
 
 Version 4 UUIDs take the form `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx` where `x` is any hex digit and `y` is in `[8, 9, a, b]`
 

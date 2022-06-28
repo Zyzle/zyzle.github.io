@@ -1,6 +1,7 @@
 +++
 title = "File extension regex (js example)"
 date = 2022-04-01
+description = "Simple regex for determining file extension"
 
 [taxonomies]
 tags = ["snippet", "regex"]
@@ -10,7 +11,6 @@ language = ["javascript"]
 author = "Colin McCulloch"
 +++
 
-Simple regex for determining file extension
 
 ```js
 var re = /(?:\.([^.]+))?$/;

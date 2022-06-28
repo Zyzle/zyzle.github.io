@@ -1,6 +1,7 @@
 +++
 title = "Recursive find and remove"
 date = 2022-03-31
+description = "Find all files/directories based on a name pattern and remove them recursively from a base directory"
 
 [taxonomies]
 tags = ["snippet", "os"]
@@ -10,7 +11,6 @@ language = ["bash"]
 author = "Colin McCulloch"
 +++
 
-Find all files/directories based on a name pattern and remove them recursively from a base directory.
 
 For files:
 

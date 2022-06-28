@@ -1,6 +1,7 @@
 +++
 title = "Override equals and hashCode correctly"
 date = 2022-03-31
+description = "A Java classes '.equals' and '.hashCode' methods should always be overridden in pairs, the following shows how to do this manually without using 3rd party libraries"
 
 [taxonomies]
 tags = ["snippet"]
@@ -10,7 +11,6 @@ language = ["java"]
 author = "Colin McCulloch"
 +++
 
-A Java classes `equals` and `hashCode` methods should always be overridden in pairs, the following shows how to do this manually without using 3rd party libraries
 
 ```java
 public class Stock {
