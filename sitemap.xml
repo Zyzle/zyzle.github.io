@@ -10,6 +10,10 @@
         <loc>https://zyzle.dev/blog/</loc>
     </url>
     <url>
+        <loc>https://zyzle.dev/blog/colour-finder-1/</loc>
+        <lastmod>2022-07-04</lastmod>
+    </url>
+    <url>
         <loc>https://zyzle.dev/blog/intro/</loc>
         <lastmod>2022-04-09</lastmod>
     </url>
@@ -100,6 +104,9 @@
         <loc>https://zyzle.dev/tags/blog/</loc>
     </url>
     <url>
+        <loc>https://zyzle.dev/tags/fun/</loc>
+    </url>
+    <url>
         <loc>https://zyzle.dev/tags/hugo/</loc>
     </url>
     <url>
@@ -110,6 +117,9 @@
     </url>
     <url>
         <loc>https://zyzle.dev/tags/os/</loc>
+    </url>
+    <url>
+        <loc>https://zyzle.dev/tags/problems/</loc>
     </url>
     <url>
         <loc>https://zyzle.dev/tags/project/</loc>
@@ -128,6 +138,9 @@
     </url>
     <url>
         <loc>https://zyzle.dev/tags/typescript/</loc>
+    </url>
+    <url>
+        <loc>https://zyzle.dev/tags/web-dev/</loc>
     </url>
     <url>
         <loc>https://zyzle.dev/tags/zola/</loc>
