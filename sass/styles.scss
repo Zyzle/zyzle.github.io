@@ -208,11 +208,12 @@ a:hover {
 	}
 
 	ol {
-		list-style-type: upper-roman;
+		list-style-type: auto;
 	}
 
 	li {
 		padding-left: .5rem;
+		padding-bottom: .2rem;
 	}
 
 	h1, h2, h3, h4, h5, h6, ul, ol, pre, blockquote {
@@ -521,6 +522,7 @@ pre {
 	border-radius: 1rem;
 	font-family: "Fira Code", monospace;
 	border: 1px dashed;
+	tab-size: 2;
 }
 // The line numbers already provide some kind of left/right padding
 pre[data-linenos] {

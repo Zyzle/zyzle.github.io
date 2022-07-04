@@ -53,25 +53,18 @@
             from the rewards button in the address bar, thanks :)</p>
     </aside>
 
-    {% if page.extra.ghissue %}
-    <h2>Comments</h2>
-    <p>I'm currently working on the site comments (post coming soon), <a href="https://github.com/Zyzle/zyzle.github.io/issues/{{ page.extra.ghissue }}">this github issue</a>'s
-    comments will be shown below hopefully I'll have the sign-in and edit working soon.
-    </p>
-    {% endif %}
-</article>
-
-<br />
-<br />
 
 {% if page.extra.ghissue %}
-<zyzle-commenter 
-    gh-repo="{{ config.extra.comments_repo }}"
-    owner="{{ config.extra.comments_repo_owner }}" 
-    issue-number="{{ page.extra.ghissue }}"
-    client-id="{{ config.extra.comments_oauth_client_id }}"
-    lynx-app="{{ config.extra.comments_lynx_app }}"></zyzle-commenter>
+    <h2>Comments</h2>
+    <zyzle-commenter 
+        gh-repo="{{ config.extra.comments_repo }}"
+        owner="{{ config.extra.comments_repo_owner }}" 
+        issue-number="{{ page.extra.ghissue }}"
+        client-id="{{ config.extra.comments_oauth_client_id }}"
+        lynx-app="{{ config.extra.comments_lynx_app }}"></zyzle-commenter>
 {% endif %}
+
+</article>
 
 {% include "footer.html" %}
 {% endblock main %}

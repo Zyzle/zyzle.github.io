@@ -9,7 +9,7 @@ tags = ["blog", "hugo"]
 
 [extra]
 author = "Colin McCulloch"
-ghissue = "https://github.com/Zyzle/zyzle.github.io/issues/8"
+ghissue = 8
 +++
 
 [Hugo](https://gohugo.io/) bills itself as "The worlds fastest framework for building websites" it's gained a lot of popularity in recent years, written in Go and using the `html/template` and `text/template` modules as the basis for its templating although no previous knowledge of Go is required to get up and running with it
