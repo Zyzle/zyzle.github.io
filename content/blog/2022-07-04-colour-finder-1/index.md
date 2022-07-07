@@ -15,6 +15,8 @@ During the interview for my current job I was given a small pair-programming cod
 
 <!-- more -->
 
+> **Update:** Yes I know I'm mixing "colour" and "color" in this post, too much code writing over the years has warped my brain with American spellings :P I'll try and keep it to "colour" in copy and "color" in code from now on.
+
 Anyone waiting for part 4 of the "Let's write a blog" series, worry not, it will come eventually I just got distracted playing with this :P
 
 ## The Challenge
@@ -108,15 +110,15 @@ For an example, imagine an image where every pixel alternates between pure white
     #FFFFFFFF       #000000FF       #FFFFFFFF       #000000FF
 ```
 
-The middle row above shows the 16 entries of the array, above them are the individual pixel delimiters and below the HEX representation of the colors.
+The middle row above shows the 16 entries of the array, above them are the individual pixel delimiters and below the HEX representation of the colours.
 
-What We'll do now is consolidate these pixels into an array taking just the color:
+What We'll do now is consolidate these pixels into an array taking just the colour:
 
 ```js
-const pixelColours = [];
+const pixelColors = [];
 
 for (i = 0; i < imageData.length; i += 4) {
-	pixelColours.push([
+	pixelColors.push([
 		// 1
 		'#',
 		//2
@@ -152,13 +154,13 @@ This looks good so far, we appear to be generating the array correctly, now lets
 
 ```js
 // 1
-const colourCount = pixelColours.reduce((prev, curr) => {
+const colorCount = pixelColors.reduce((prev, curr) => {
 		prev[curr] = prev[curr] ? ++prev[curr] : 1;
 		return prev;
 	}, {});
 
 // 2
-const sorted = Object.entries(colourCount)
+const sorted = Object.entries(colorCount)
 	.sort((a, b) => {
 		return b[1] - a[1];
 	});
@@ -190,7 +192,7 @@ for (i = 0; i < top.length; i++){
 
 Ok what we're doing now is pulling out or `swatches` div we created earlier in the HTML and clear it of any current nodes (using `.textContent` can be slightly quicker as it skips the node parsing that setting `innerHTML` would trigger). 
 
-For each of our colours we create a new `span` element and create a text node with our colour in it. We append this text node to the span and then set the spans background colour to our found pixel color. Finally we add this to the swatches div and we're done.
+For each of our colours we create a new `span` element and create a text node with our colour in it. We append this text node to the span and then set the spans background colour to our found pixel colour. Finally we add this to the swatches div and we're done.
 
 So lets give it a try, I'll use the image above and drop it into our dropzone, lets see how this looks.
 
