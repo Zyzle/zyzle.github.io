@@ -14,6 +14,9 @@
 		<id>https://zyzle.dev/blog/colour-finder-1/</id>
 		<content type="html">&lt;p&gt;During the interview for my current job I was given a small pair-programming coding challenge to do. Like all good coding challenges it was probably beyond what could reasonably have been finished in an hour but it was fun and I got the job so my attempt couldn&#x27;t have been too bad. Not finishing the challenge did annoy me though so here&#x27;s my attempt at a more polished version of the challenge &lt;&#x2F;p&gt;
 &lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Update:&lt;&#x2F;strong&gt; Yes I know I&#x27;m mixing &amp;quot;colour&amp;quot; and &amp;quot;color&amp;quot; in this post, too much code writing over the years has warped my brain with American spellings :P I&#x27;ll try and keep it to &amp;quot;colour&amp;quot; in copy and &amp;quot;color&amp;quot; in code from now on.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
 &lt;p&gt;Anyone waiting for part 4 of the &amp;quot;Let&#x27;s write a blog&amp;quot; series, worry not, it will come eventually I just got distracted playing with this :P&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;the-challenge&quot;&gt;The Challenge&lt;&#x2F;h2&gt;
 &lt;p&gt;The challenge itself was worded something along the lines of: &amp;quot;Load an image and find the top n colours used in it&amp;quot; (side note there are problems with this but we&#x27;ll get to that in part 2). I&#x27;m going to extend this slightly with some requirements of my own because there are a few things I don&#x27;t know how to do but want to learn. &lt;&#x2F;p&gt;
@@ -38,7 +41,7 @@
     
         
     
-    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;13dcde0ca46a568b00.webp&quot; alt=&quot;our dropzone styled and on the page&quot; &#x2F;&gt;
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;79a0311c0d0e4a8f00.webp&quot; alt=&quot;our dropzone styled and on the page&quot; &#x2F;&gt;
     &lt;figcaption&gt;the styled dropzone&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;Let&#x27;s have a look at the javascript, again I&#x27;m not going to do anything fancy here just bung a &lt;code&gt;script&lt;&#x2F;code&gt; tag at the bottom of the screen with the following code that&#x27;ll display the image we&#x27;ve dropped into our empty &lt;code&gt;img&lt;&#x2F;code&gt; tag:&lt;&#x2F;p&gt;
@@ -93,12 +96,12 @@
 &lt;&#x2F;span&gt;&lt;span&gt;|---------------|---------------|---------------|---------------|
 &lt;&#x2F;span&gt;&lt;span&gt;    #FFFFFFFF       #000000FF       #FFFFFFFF       #000000FF
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;The middle row above shows the 16 entries of the array, above them are the individual pixel delimiters and below the HEX representation of the colors.&lt;&#x2F;p&gt;
-&lt;p&gt;What We&#x27;ll do now is consolidate these pixels into an array taking just the color:&lt;&#x2F;p&gt;
-&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;pixelColours &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;[];
+&lt;p&gt;The middle row above shows the 16 entries of the array, above them are the individual pixel delimiters and below the HEX representation of the colours.&lt;&#x2F;p&gt;
+&lt;p&gt;What We&#x27;ll do now is consolidate these pixels into an array taking just the colour:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;pixelColors &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;[];
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;(i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;; i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;lt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;imageData&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;length&lt;&#x2F;span&gt;&lt;span&gt;; i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span&gt;) {
-&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;pixelColours&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;push&lt;&#x2F;span&gt;&lt;span&gt;([
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;pixelColors&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;push&lt;&#x2F;span&gt;&lt;span&gt;([
 &lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 1
 &lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;#&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;,
 &lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F;2
@@ -125,19 +128,19 @@
     
         
     
-    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;885fc009487389c400.webp&quot; alt=&quot;image of the generated array&quot; &#x2F;&gt;
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;65540962d26d0c5600.webp&quot; alt=&quot;image of the generated array&quot; &#x2F;&gt;
     &lt;figcaption&gt;a section of our generated array&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;This looks good so far, we appear to be generating the array correctly, now lets look at rolling up this array into only unique colours with their associated counts.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;counting-up-and-displaying&quot;&gt;Counting up and displaying&lt;&#x2F;h2&gt;
 &lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 1
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colourCount &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;pixelColours&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;reduce&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;prev&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;curr&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colorCount &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;pixelColors&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;reduce&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;prev&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;curr&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
 &lt;&#x2F;span&gt;&lt;span&gt;		prev[curr] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;prev[curr] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;? ++&lt;&#x2F;span&gt;&lt;span&gt;prev[curr] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
 &lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;prev;
 &lt;&#x2F;span&gt;&lt;span&gt;	}, {});
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 2
-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;sorted &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;Object&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;entries&lt;&#x2F;span&gt;&lt;span&gt;(colourCount)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;sorted &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;Object&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;entries&lt;&#x2F;span&gt;&lt;span&gt;(colorCount)
 &lt;&#x2F;span&gt;&lt;span&gt;	.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;sort&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
 &lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;b[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;- &lt;&#x2F;span&gt;&lt;span&gt;a[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;];
 &lt;&#x2F;span&gt;&lt;span&gt;	});
@@ -164,14 +167,14 @@
 &lt;&#x2F;span&gt;&lt;span&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Ok what we&#x27;re doing now is pulling out or &lt;code&gt;swatches&lt;&#x2F;code&gt; div we created earlier in the HTML and clear it of any current nodes (using &lt;code&gt;.textContent&lt;&#x2F;code&gt; can be slightly quicker as it skips the node parsing that setting &lt;code&gt;innerHTML&lt;&#x2F;code&gt; would trigger). &lt;&#x2F;p&gt;
-&lt;p&gt;For each of our colours we create a new &lt;code&gt;span&lt;&#x2F;code&gt; element and create a text node with our colour in it. We append this text node to the span and then set the spans background colour to our found pixel color. Finally we add this to the swatches div and we&#x27;re done.&lt;&#x2F;p&gt;
+&lt;p&gt;For each of our colours we create a new &lt;code&gt;span&lt;&#x2F;code&gt; element and create a text node with our colour in it. We append this text node to the span and then set the spans background colour to our found pixel colour. Finally we add this to the swatches div and we&#x27;re done.&lt;&#x2F;p&gt;
 &lt;p&gt;So lets give it a try, I&#x27;ll use the image above and drop it into our dropzone, lets see how this looks.&lt;&#x2F;p&gt;
 &lt;figure&gt;
     
     
         
     
-    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;80fa2627f62123a100.webp&quot; alt=&quot;the complete image analyzed on the page&quot; &#x2F;&gt;
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;d89f1b83c53acfea00.webp&quot; alt=&quot;the complete image analyzed on the page&quot; &#x2F;&gt;
     &lt;figcaption&gt;woohoo! It works!&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;&lt;h2 id=&quot;so-job-done-right&quot;&gt;So job done, right?&lt;&#x2F;h2&gt;
 &lt;p&gt;Well it&#x27;s all looking good so far but lets try a more complex image...&lt;&#x2F;p&gt;
@@ -180,7 +183,7 @@
     
         
     
-    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;80fbb4c8af83e1b000.webp&quot; alt=&quot;picture of a red panda sitting in a tree scanned by our analyser&quot; &#x2F;&gt;
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;e85dcc4a16ffcc8000.webp&quot; alt=&quot;picture of a red panda sitting in a tree scanned by our analyser&quot; &#x2F;&gt;
     &lt;figcaption&gt;Red panda from Edinburgh Zoo&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;Hmmn, that doesn&#x27;t look right. We have a couple of dark greens there, but where&#x27;s the brown of the trees or the red from the panda?&lt;&#x2F;p&gt;
@@ -193,7 +196,7 @@
     
         
     
-    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;623c427f74c260f600.webp&quot; alt=&quot;some more colour swatches&quot; &#x2F;&gt;
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;80fab9d819e3ea7400.webp&quot; alt=&quot;some more colour swatches&quot; &#x2F;&gt;
     &lt;figcaption&gt;looks right?&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;So this looks ok but we&#x27;ve found the problem I hinted at earlier; There are so many colours in this image and we&#x27;re not doing anything to group them together so what we end up doing is missing out on what we as humans would consider predominant colours. &lt;&#x2F;p&gt;
@@ -203,7 +206,7 @@
     
         
     
-    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;cf29335caef4a6fd00.webp&quot; alt=&quot;square enix logo as an example&quot; &#x2F;&gt;
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;77239e4c4fa884fd00.webp&quot; alt=&quot;square enix logo as an example&quot; &#x2F;&gt;
     &lt;figcaption&gt;don&amp;#x27;t ask me why I have a Square Enix logo, I cant remember&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;If you asked someone to look at the image above and asked them, &amp;quot;what are the main colours here?&amp;quot;, the answer you&#x27;d expect would be &amp;quot;white, black, and red&amp;quot; the problem we have is that there are so many tiny variations in our white and black that the reds get pushed so far down our sorted list that we wont see them.&lt;&#x2F;p&gt;
