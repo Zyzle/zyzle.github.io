@@ -4,8 +4,266 @@
 	<link href="https://zyzle.dev/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://zyzle.dev"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2022-07-04T00:00:00+00:00</updated>
+	<updated>2022-07-16T00:00:00+00:00</updated>
 	<id>https://zyzle.dev/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Finding Colours - Part 2: Maths is hard</title>
+		<published>2022-07-16T00:00:00+00:00</published>
+		<updated>2022-07-16T00:00:00+00:00</updated>
+		<link href="https://zyzle.dev/blog/colour-finder-2/" type="text/html"/>
+		<id>https://zyzle.dev/blog/colour-finder-2/</id>
+		<content type="html">&lt;p&gt;Ok in &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;blog&#x2F;colour-finder-1&#x2F;&quot;&gt;part 1&lt;&#x2F;a&gt; we looked at finding dominant colours in an image, we got as far as showing the top 8 colours by pixel count, and showed that this isn&#x27;t necessarily the best solution for real world images as there are micro variations of colour within the image that aren&#x27;t always immediately obvious to the naked eye.&lt;&#x2F;p&gt;
+&lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;
+&lt;p&gt;Lets take a closer look at the first image we had trouble with the Panda:&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    
+    
+        
+    
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;a395013dc69f007600.webp&quot; alt=&quot;red panda in a tree&quot; &#x2F;&gt;
+    &lt;figcaption&gt;Maybe not the best pic in the world but I took it so I like it&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;The original image is cropped from a 10 megapixel DSLR and looks reasonably sharp but lets see what it looks like if we zoom in to the point where the individual pixels become visible:&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    
+    
+        
+    
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;9a4965755b944c1b00.webp&quot; alt=&quot;400% zoom of the panda image&quot; &#x2F;&gt;
+    &lt;figcaption&gt;Now enhance... no?&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;At around 400% we can see that there&#x27;s actually a fair amount of noise in this image, and what looks like single blocks of colour to our eyes are actually made up of many small colour variations that blend together into what we see. &lt;&#x2F;p&gt;
+&lt;p&gt;So how do we go from this to pulling out what we could consider dominant colours from the image? Lets take a look at one potential way of doing things.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;k-means-clustering&quot;&gt;&lt;em&gt;k&lt;&#x2F;em&gt;-means clustering&lt;&#x2F;h2&gt;
+&lt;p&gt;We&#x27;re looking to find distinct groups of similar colours, to do this we&#x27;ll use what&#x27;s known as &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;K-means_clustering&quot;&gt;k-means clustering&lt;&#x2F;a&gt; we&#x27;re going to use the naïve k-means which is one of the more simple versions of the algorithm and is unoptimized. The basic steps are as follows:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Grab all of our individual colours from the image as 3 point coordinates&lt;&#x2F;li&gt;
+&lt;li&gt;Determine an initial set of points, we&#x27;ll select these at random, our &lt;em&gt;k&lt;&#x2F;em&gt; clusters &lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Assign&lt;&#x2F;strong&gt; each colour to one of these initial &lt;em&gt;k&lt;&#x2F;em&gt; means based on the colours Euclidean distance to the cluster&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Update&lt;&#x2F;strong&gt; the means centroids based on the colours assigned to it&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;We repeat steps 3 and 4 until updates no longer change the &lt;em&gt;k&lt;&#x2F;em&gt;-means, this is known as &lt;em&gt;convergence&lt;&#x2F;em&gt; &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;It should be noted that the algorithm may never actually converge, so we&#x27;ll probably add in an artificial limit to how many times we want to run our assign&#x2F;update steps.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;h2 id=&quot;colours-in-3d-space&quot;&gt;Colours in 3D space&lt;&#x2F;h2&gt;
+&lt;p&gt;Let&#x27;s revisit our &lt;a href=&quot;https:&#x2F;&#x2F;developer.mozilla.org&#x2F;en-US&#x2F;docs&#x2F;Web&#x2F;API&#x2F;ImageData&quot;&gt;&lt;code&gt;ImageData&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; from the previous post. This contains a representation of the image split as a &lt;code&gt;UInt8ClampedArray&lt;&#x2F;code&gt; which might look something like the following:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;     pixel 1         pixel 2         pixel 3         pixel 4
+&lt;&#x2F;span&gt;&lt;span&gt;|---------------|---------------|---------------|---------------|
+&lt;&#x2F;span&gt;&lt;span&gt;|255|255|255|255| 0 | 0 | 0 |255|255|255|255|255| 0 | 0 | 0 |255|
+&lt;&#x2F;span&gt;&lt;span&gt;|---------------|---------------|---------------|---------------|
+&lt;&#x2F;span&gt;&lt;span&gt;    #FFFFFFFF       #000000FF       #FFFFFFFF       #000000FF
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;So each pixel here is made up of 3 colours that can be represented as an integer between 0 and 255 (we&#x27;re ignoring the alpha-channel which deals with the pixels opacity).&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s imagine these colours as a point in 3-dimensional space, where our red, green, and blue values become &lt;code&gt;(x, y, z)&lt;&#x2F;code&gt; coordinates, so a fully black pixel would exist at the origin &lt;code&gt;(0, 0, 0)&lt;&#x2F;code&gt; and a white one would be at point &lt;code&gt;(255, 255, 255)&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s change up the code to give us an array of unique colour objects in the form &lt;code&gt;{ r: number, b: number, g: number }&lt;&#x2F;code&gt;, we&#x27;ll remove most of the code in our file, everything after we grab the &lt;code&gt;imageData&lt;&#x2F;code&gt; array:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;imageData &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ctx&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;getImageData&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ibm&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;width&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ibm&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;height&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;data&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;colorData &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;[];
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;(i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;; i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;lt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;imageData&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;length&lt;&#x2F;span&gt;&lt;span&gt;; i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colStr &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;[
+&lt;&#x2F;span&gt;&lt;span&gt;		imageData[i],
+&lt;&#x2F;span&gt;&lt;span&gt;		imageData[i&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;],
+&lt;&#x2F;span&gt;&lt;span&gt;		imageData[i&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;	].&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;join&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;,&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colorData&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;push&lt;&#x2F;span&gt;&lt;span&gt;(colStr);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 1
+&lt;&#x2F;span&gt;&lt;span&gt;colorData &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;...new &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;Set&lt;&#x2F;span&gt;&lt;span&gt;(colorData)];
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;colorData &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colorData&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;rgb &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;v&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;split&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;,&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		r: rgb[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;],
+&lt;&#x2F;span&gt;&lt;span&gt;		g: rgb[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;],
+&lt;&#x2F;span&gt;&lt;span&gt;		b: rgb[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;],
+&lt;&#x2F;span&gt;&lt;span&gt;	};
+&lt;&#x2F;span&gt;&lt;span&gt;});
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;So we initially now create a string of the colour with each channel separated by a comma. The reason behind this is it makes it super simple (and quick) to reduce this to unique colours by simply pushing the array into a &lt;code&gt;Set&lt;&#x2F;code&gt; and spread this back into an array (&lt;code&gt;1&lt;&#x2F;code&gt;), after that we map these strings back into objects and we&#x27;re done.&lt;&#x2F;p&gt;
+&lt;p&gt;If we take the cropped section of our panda image above it would create a set of colours that will look as follows when graphed:&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    &lt;img src=&quot;3d-1.gif&quot; alt=&quot;showing the pixel colours plotted in a 3D coordinate space&quot; &#x2F;&gt;
+    &lt;figcaption&gt;Pixel colours shown in a 3D coordinate space&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The generation of these graphs is a little outside the scope of this post so I&#x27;ll not be going over it just the creation of the dataset because that&#x27;s what we&#x27;ll be using for our colour calculations. If you want to know more check out the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Zyzle&#x2F;image-colours&#x2F;tree&#x2F;v2.0.0&quot;&gt;project&#x27;s source&lt;&#x2F;a&gt; and the &lt;a href=&quot;https:&#x2F;&#x2F;plotly.com&#x2F;javascript&#x2F;&quot;&gt;Plotly.js&lt;&#x2F;a&gt; library&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;h2 id=&quot;random-k-clusters&quot;&gt;Random &lt;em&gt;k&lt;&#x2F;em&gt;-clusters&lt;&#x2F;h2&gt;
+&lt;p&gt;For the next step we&#x27;ll take 8 unique random colours from our array using the following:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;kClusters &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;Array&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;from&lt;&#x2F;span&gt;&lt;span&gt;({ length: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;8 &lt;&#x2F;span&gt;&lt;span&gt;}, () &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;colorData[
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;Math&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;floor&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;Math&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;random&lt;&#x2F;span&gt;&lt;span&gt;() &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colorData&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;length&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;	];
+&lt;&#x2F;span&gt;&lt;span&gt;});
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;code&gt;Array.from&lt;&#x2F;code&gt; lets us provide a set of config options to define the length of the array we want, and a mapping function that we can use to populate the array with random items from our &lt;code&gt;colorData&lt;&#x2F;code&gt; array. There is a slight chance here that we could have duplicated initial clusters but this should be low enough to not be a problem on most images with a reasonably high enough number of distinct colours.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;assign-colours-to-clusters&quot;&gt;Assign colours to clusters&lt;&#x2F;h2&gt;
+&lt;p&gt;Now we have our initial clusters we&#x27;re going to assign every colour to one (and just one) of these clusters. Remember we started treating colours as points in 3D space? Well this is why, for each point we will calculate what&#x27;s know as the &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Euclidean_distance&quot;&gt;Euclidean distance&lt;&#x2F;a&gt; to each of our &lt;em&gt;k&lt;&#x2F;em&gt;-clusters and assign the colour to the closest one.&lt;&#x2F;p&gt;
+&lt;p&gt;The equation to calculate this is the following for points &lt;code&gt;p,q&lt;&#x2F;code&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;$$d(p,q)={\sqrt {(p_{1}-q_{1})^{2}+(p_{2}-q_{2})^{2}+(p_{3}-q_{3})^{2}}}.$$&lt;&#x2F;p&gt;
+&lt;p&gt;What we&#x27;re doing in the above is repeatedly applying Pythagorean theorem for each of our 3 planes as shown in the image below:&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    
+    
+        
+    
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;95c3d03d77a098e200.webp&quot; alt=&quot;some alt&quot; &#x2F;&gt;
+    &lt;figcaption&gt;Euclidean distance in 3 dimensions &lt;a href=&#x27;https:&#x2F;&#x2F;commons.wikimedia.org&#x2F;w&#x2F;index.php?curid=67617269&#x27;&gt;By Kmhkmh - Own work, CC BY 4.0&lt;&#x2F;a&gt;&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;First we&#x27;ll add a function to calculate this distance outside of our drop handler:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;calcEuclideanDist&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;q&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;Math&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;sqrt&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;Math&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;pow&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;.r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;q&lt;&#x2F;span&gt;&lt;span&gt;.r, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;Math&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;pow&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;.g &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;q&lt;&#x2F;span&gt;&lt;span&gt;.g, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;Math&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;pow&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;.b &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;- &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;q&lt;&#x2F;span&gt;&lt;span&gt;.b, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;	);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Built in &lt;code&gt;Math&lt;&#x2F;code&gt; functions can be used here so no big calculations needed from us. &lt;&#x2F;p&gt;
+&lt;p&gt;Now we need to assign all of our unique colours to one of the selected &lt;em&gt;k&lt;&#x2F;em&gt;-clusters. For the first attempt at this we&#x27;ll run a reducer over the &lt;code&gt;colorData&lt;&#x2F;code&gt; array we created earlier:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 1
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;clusteredData &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colorData&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;reduce&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;	(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;prev&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;curr&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 2
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;distances &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;kClusters&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;k&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;calcEuclideanDist&lt;&#x2F;span&gt;&lt;span&gt;(k, curr));
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 3
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;minDistance &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;distances&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;reduce&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;			(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; Math&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;min&lt;&#x2F;span&gt;&lt;span&gt;(a, b),
+&lt;&#x2F;span&gt;&lt;span&gt;			&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;Infinity
+&lt;&#x2F;span&gt;&lt;span&gt;		);
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 4
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;selectedK &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;distances&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;findIndex&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;e&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;e &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;=== &lt;&#x2F;span&gt;&lt;span&gt;minDistance);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 5
+&lt;&#x2F;span&gt;&lt;span&gt;		prev[selectedK] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;...&lt;&#x2F;span&gt;&lt;span&gt;prev[selectedK], curr];
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;prev;
+&lt;&#x2F;span&gt;&lt;span&gt;	},
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;Array&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;from&lt;&#x2F;span&gt;&lt;span&gt;({ length: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;8 &lt;&#x2F;span&gt;&lt;span&gt;}, () &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;[])
+&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;I say first attempt because this reducer is pretty inefficient, for our zoomed image with ~125k unique colours it took around 25s to complete and since we&#x27;ll be running this in multiple passes per image that time will add up significantly. We&#x27;ll leave optimisation for now though and go through this line by line:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;we create our reducer function for our &lt;code&gt;colorData&lt;&#x2F;code&gt; array and create a 2D array as our initial value.&lt;&#x2F;li&gt;
+&lt;li&gt;we map the &lt;code&gt;kClusters&lt;&#x2F;code&gt; array and call our &lt;code&gt;calcEuclideanDist&lt;&#x2F;code&gt; function passing the current cluster and colour&lt;&#x2F;li&gt;
+&lt;li&gt;another reducer then to find the smallest distance from our newly created &lt;code&gt;distances&lt;&#x2F;code&gt; array. We could just spread the array into &lt;code&gt;Math.min&lt;&#x2F;code&gt; here but that will fail if we ever decide to increase the number of &lt;em&gt;k&lt;&#x2F;em&gt;-clusters beyond a certain point&lt;&#x2F;li&gt;
+&lt;li&gt;now we know the smallest distance we get its index from &lt;code&gt;distances&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;and now add this color to the array at that index in the array we are creating in this reducer. Phew&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;What we&#x27;ve created here in our &lt;code&gt;clusteredData&lt;&#x2F;code&gt; is an 8 item array with all our image colours sorted into the same index as our initially created clusters. If we console log it out it&#x27;ll look something like this:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;(8) [Array(24865), Array(32390), Array(7014), Array(3894), 
+&lt;&#x2F;span&gt;&lt;span&gt;Array(3236), Array(19094), Array(18360), Array(16286)]
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;update-our-k-clusters&quot;&gt;Update our &lt;em&gt;k&lt;&#x2F;em&gt;-clusters&lt;&#x2F;h2&gt;
+&lt;p&gt;Now we have all of our colour points assigned to one of the clusters we&#x27;ll use these collections to recalculate what our &lt;em&gt;k&lt;&#x2F;em&gt;-clusters should be. The formula to do this is as follows:&lt;&#x2F;p&gt;
+&lt;p&gt;$$m_{i}^{(t+1)}={\frac {1}{\left|S_{i}^{(t)}\right|}}\sum_{x_{j}\in S_{i}^{(t)}}x_{j}$$&lt;&#x2F;p&gt;
+&lt;p&gt;This looks complicated but it&#x27;s really just telling us that for each of the coordinate components &lt;code&gt;(x,y,z)&lt;&#x2F;code&gt;, or in our case &lt;code&gt;(r,g,b)&lt;&#x2F;code&gt;, for all of the colours in our cluster array we take the average of that component and use it... I think.&lt;&#x2F;p&gt;
+&lt;p&gt;We can calculate these new clusters by mapping over our clustered data and averaging the individual chanel components:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;newKs &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;clusteredData&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;colors&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;g &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;b &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colors&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;forEach&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;color&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;color&lt;&#x2F;span&gt;&lt;span&gt;.r;
+&lt;&#x2F;span&gt;&lt;span&gt;		g &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;color&lt;&#x2F;span&gt;&lt;span&gt;.g;
+&lt;&#x2F;span&gt;&lt;span&gt;		b &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;color&lt;&#x2F;span&gt;&lt;span&gt;.b;
+&lt;&#x2F;span&gt;&lt;span&gt;	});
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		r: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;Math&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;round&lt;&#x2F;span&gt;&lt;span&gt;(r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colors&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;length&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;		g: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;Math&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;round&lt;&#x2F;span&gt;&lt;span&gt;(g &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colors&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;length&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;		b: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;Math&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;round&lt;&#x2F;span&gt;&lt;span&gt;(b &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colors&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;length&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;	};
+&lt;&#x2F;span&gt;&lt;span&gt;});
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;iterating-to-find-clusters&quot;&gt;Iterating to find clusters&lt;&#x2F;h2&gt;
+&lt;p&gt;Ok, we&#x27;re not quite done yet. We need a way to iterate over this process and a way of determining whether or not we&#x27;re &#x27;done&#x27;.&lt;&#x2F;p&gt;
+&lt;p&gt;As mentioned before given the nature of the algorithm and the fact that we&#x27;re rounding values in certain places there is a chance that it will never fully converge, that is, our &lt;em&gt;k&lt;&#x2F;em&gt;-clusters will never stop updating their positions on subsequent iterations.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m going to take 2 approaches to solving this issue, the first will simply be a hard limit on the number of iterations allowed, say 10, the second will be to calculate a distance shifted between our old and new clusters and stop of this shift falls below a certain threshold.&lt;&#x2F;p&gt;
+&lt;p&gt;First off lets move our two cluster calculation steps from above out into their own function&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;calcNewClusters&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;kClusters&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;colorData&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;clusteredData &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colorData&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;reduce&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; ...
+&lt;&#x2F;span&gt;&lt;span&gt;	);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;newKs &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;clusteredData&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;colors&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; ...
+&lt;&#x2F;span&gt;&lt;span&gt;	});
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;newKs;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Where this code used to be, after our initialisation of our initial &lt;em&gt;k&lt;&#x2F;em&gt;-clusters, we&#x27;ll create 3 new variables&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;iterations &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;distanceShift &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;newClusters &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;[];
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;code&gt;iterations&lt;&#x2F;code&gt; will hold how many times we&#x27;ve run through our steps, we&#x27;ll use this to enforce our hard limit, &lt;code&gt;distanceShift&lt;&#x2F;code&gt; will be used to hold the change between the newly calculated set of &lt;em&gt;k&lt;&#x2F;em&gt;-clusters &lt;code&gt;newClusters&lt;&#x2F;code&gt; and the previous one.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m going to use a &lt;code&gt;do&lt;&#x2F;code&gt;&#x2F;&lt;code&gt;while&lt;&#x2F;code&gt; loop here to  call our &lt;code&gt;calcNewClusters&lt;&#x2F;code&gt; function, calculate our &lt;code&gt;distanceShift&lt;&#x2F;code&gt;, and replace or current set of &lt;em&gt;k&lt;&#x2F;em&gt;-clusters with the newly generated one.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;do &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;	newClusters &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;calcNewClusters&lt;&#x2F;span&gt;&lt;span&gt;(kClusters, colorData);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;newClusters&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;forEach&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;v&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;i&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;		distanceShift &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;calcEuclideanDist&lt;&#x2F;span&gt;&lt;span&gt;(v, kClusters[i]);
+&lt;&#x2F;span&gt;&lt;span&gt;	});
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	distanceShift &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;distanceShift &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;newClusters&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;length&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	kClusters &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;newClusters;
+&lt;&#x2F;span&gt;&lt;span&gt;	iterations &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;while &lt;&#x2F;span&gt;&lt;span&gt;(distanceShift &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;5 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;amp;&amp;amp; &lt;&#x2F;span&gt;&lt;span&gt;iterations &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;lt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;10&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;For &lt;code&gt;distanceShift&lt;&#x2F;code&gt; once we&#x27;ve found our new clusters, we take each of those and calculate the Euclidean distance between it and its previous position and average these distances. I&#x27;ve arbitrarily chosen 5 to be the minimum required shift before we consider our iterations done but you can try other values here if you like.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;update-swatches&quot;&gt;Update swatches&lt;&#x2F;h2&gt;
+&lt;p&gt;The final step then is to update our swatches to use our found &lt;em&gt;k&lt;&#x2F;em&gt;-clusters:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;(i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;; i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;lt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;kClusters&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;length&lt;&#x2F;span&gt;&lt;span&gt;; i&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;++&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;swatch &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;document&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;createElement&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;span&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colorStr &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;`#&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;${&lt;&#x2F;span&gt;&lt;span&gt;kClusters[i].r
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;		&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;toString&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;16&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;		&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;padStart&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;0&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;}${&lt;&#x2F;span&gt;&lt;span&gt;kClusters[i].g
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;		&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;toString&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;16&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;		&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;padStart&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;0&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;}${&lt;&#x2F;span&gt;&lt;span&gt;kClusters[i].b
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;		&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;toString&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;16&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;		&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;padStart&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;0&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;`&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;color &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;document&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;createTextNode&lt;&#x2F;span&gt;&lt;span&gt;(colorStr);
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;swatch&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;appendChild&lt;&#x2F;span&gt;&lt;span&gt;(color);
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;swatch&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;classList&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;add&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;p-2&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;swatch&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;classList&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;add&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;mb-2&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;swatch&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;style&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;backgroundColor &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;colorStr;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;swatches&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;appendChild&lt;&#x2F;span&gt;&lt;span&gt;(swatch);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Really the only difference here is we&#x27;re generating a hex string from our colour objects.&lt;&#x2F;p&gt;
+&lt;figure&gt;
+    
+    
+        
+    
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;f958d72b5c585d8c00.webp&quot; alt=&quot;screenshot of the app in action&quot; &#x2F;&gt;
+    &lt;figcaption&gt;Random screenshot from my favourite game, bonus points for first commenter who can identify it&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;And this definitely looks a lot better, there will always be some level of randomness in what the eventual clusters chosen might be because of the calculations, but this is a lot better than what we had before.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;so-this-time-we-re-done-right&quot;&gt;So &lt;em&gt;this&lt;&#x2F;em&gt; time we&#x27;re done right?&lt;&#x2F;h2&gt;
+&lt;p&gt;Well, no. As mentioned earlier this code has some serious efficiency problems, the image above was about 1000x400 pixels, this calculation took 5 iterations (the distanceShift wen&#x27;t down to 3.5), but this took over 80 seconds! &lt;&#x2F;p&gt;
+&lt;figure&gt;
+    
+    
+        
+    
+    &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;c7b426b991eeb95500.webp&quot; alt=&quot;app used with a digital camera photograph of my dog&quot; &#x2F;&gt;
+    &lt;figcaption&gt;The algorithm can have other drawbacks too&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;This shows some of the other drawbacks, the colours here look good but I would expect to see some deeper oranges, the brighter yellow, or even something closer to black. This is likely due to the random nature of the initial choice of clusters. Also it took over 5 minutes for 6 iterations on this 4000x3000 pixel image.&lt;&#x2F;p&gt;
+&lt;p&gt;We&#x27;ll look at addressing these issues in Part 3 of this series. For now though the completed code for this part can be found in our &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Zyzle&#x2F;image-colours&#x2F;tree&#x2F;v2.0.0&quot;&gt;Github repository&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+	</entry>
 	<entry xml:lang="en">
 		<title>Finding Colours - Part 1: This should be easy...right?</title>
 		<published>2022-07-04T00:00:00+00:00</published>
@@ -24,7 +282,7 @@
 &lt;h2 id=&quot;challenge-1-the-dropzone&quot;&gt;Challenge 1: The dropzone&lt;&#x2F;h2&gt;
 &lt;p&gt;This part is pretty easy, we just need to hook into a drop event and retrieve the file dropped.&lt;&#x2F;p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Side note:&lt;&#x2F;strong&gt; For the code examples I&#x27;m going to be showing stripped down versions of the HTML without most of the structural elements or styling information. If you&#x27;re interesting in seeing this you can have a look at the github repository for this project &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Zyzle&#x2F;image-colours&quot;&gt;Image-Colours&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Side note:&lt;&#x2F;strong&gt; For the code examples I&#x27;m going to be showing stripped down versions of the HTML without most of the structural elements or styling information. If you&#x27;re interesting in seeing this you can have a look at the github repository for this project &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Zyzle&#x2F;image-colours&#x2F;tree&#x2F;v1.0.0&quot;&gt;Image-Colours&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
 &lt;&#x2F;blockquote&gt;
 &lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;img &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;id&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;image-display&amp;quot; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;src&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;div &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;id&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;swatches&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;div&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
@@ -207,10 +465,10 @@
         
     
     &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;77239e4c4fa884fd00.webp&quot; alt=&quot;square enix logo as an example&quot; &#x2F;&gt;
-    &lt;figcaption&gt;don&amp;#x27;t ask me why I have a Square Enix logo, I cant remember&lt;&#x2F;figcaption&gt;
+    &lt;figcaption&gt;don&#x27;t ask me why I have a Square Enix logo, I cant remember&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;If you asked someone to look at the image above and asked them, &amp;quot;what are the main colours here?&amp;quot;, the answer you&#x27;d expect would be &amp;quot;white, black, and red&amp;quot; the problem we have is that there are so many tiny variations in our white and black that the reds get pushed so far down our sorted list that we wont see them.&lt;&#x2F;p&gt;
-&lt;p&gt;So what&#x27;s the solution? Well we&#x27;ll get to that in part 2 of this series, stay tuned for that :D&lt;&#x2F;p&gt;
+&lt;p&gt;So what&#x27;s the solution? Well we&#x27;ll get to that in &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;blog&#x2F;colour-finder-2&#x2F;&quot;&gt;part 2&lt;&#x2F;a&gt; of this series, stay tuned for that :D&lt;&#x2F;p&gt;
 </content>
 	</entry>
 	<entry xml:lang="en">
