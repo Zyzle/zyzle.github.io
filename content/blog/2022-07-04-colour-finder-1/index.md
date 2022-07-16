@@ -29,7 +29,7 @@ I'm going to build a site with a dropzone I can drag an image in to, at which po
 
 This part is pretty easy, we just need to hook into a drop event and retrieve the file dropped.
 
-  > **Side note:** For the code examples I'm going to be showing stripped down versions of the HTML without most of the structural elements or styling information. If you're interesting in seeing this you can have a look at the github repository for this project [Image-Colours](https://github.com/Zyzle/image-colours)
+  > **Side note:** For the code examples I'm going to be showing stripped down versions of the HTML without most of the structural elements or styling information. If you're interesting in seeing this you can have a look at the github repository for this project [Image-Colours](https://github.com/Zyzle/image-colours/tree/v1.0.0)
 
 ```html
 <img id="image-display" src="" />
@@ -223,4 +223,4 @@ Let's use a simpler image to demonstrate this.
 
 If you asked someone to look at the image above and asked them, "what are the main colours here?", the answer you'd expect would be "white, black, and red" the problem we have is that there are so many tiny variations in our white and black that the reds get pushed so far down our sorted list that we wont see them.
 
-So what's the solution? Well we'll get to that in part 2 of this series, stay tuned for that :D
+So what's the solution? Well we'll get to that in [part 2](@/blog/2022-07-16-colour-finder-2/index.md) of this series, stay tuned for that :D
