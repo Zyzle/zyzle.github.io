@@ -1,7 +1,7 @@
 +++
 title = "Finding Colours - Part 2: Maths is hard"
 date = 2022-07-16
-description = "Part 2 of our series on finding dominant colours in images using client side javascript"
+description = "Part 2 of our series on finding dominant colours in images using client-side javascript"
 
 [taxonomies]
 tags = ["web-dev", "fun", "problems", "maths"]
@@ -9,31 +9,32 @@ tags = ["web-dev", "fun", "problems", "maths"]
 [extra]
 author = "Colin McCulloch"
 usesKtex = true
+ghissue = 9
 +++
 
-Ok in [part 1](@/blog/2022-07-04-colour-finder-1/index.md) we looked at finding dominant colours in an image, we got as far as showing the top 8 colours by pixel count, and showed that this isn't necessarily the best solution for real world images as there are micro variations of colour within the image that aren't always immediately obvious to the naked eye.
+Ok in [part 1](@/blog/2022-07-04-colour-finder-1/index.md) we looked at finding dominant colours in an image, we got as far as showing the top 8 colours by pixel count, and showed that this isn't necessarily the best solution for real-world images as there are micro variations of colour within the image that aren't always immediately obvious to the naked eye.
 
 <!-- more -->
 
-Lets take a closer look at the first image we had trouble with the Panda:
+Let's take a closer look at the first image we had trouble with the Panda:
 
 {{ figure(path="panda.jpeg", isColocated=true, caption="Maybe not the best pic in the world but I took it so I like it", alt="red panda in a tree") }}
 
-The original image is cropped from a 10 megapixel DSLR and looks reasonably sharp but lets see what it looks like if we zoom in to the point where the individual pixels become visible:
+The original image is cropped from a 10-megapixel DSLR and looks reasonably sharp but let's see what it looks like if we zoom in to the point where the individual pixels become visible:
 
 {{ figure(path="zoom.png", isColocated=true, caption="Now enhance... no?", alt="400% zoom of the panda image") }}
 
 At around 400% we can see that there's actually a fair amount of noise in this image, and what looks like single blocks of colour to our eyes are actually made up of many small colour variations that blend together into what we see. 
 
-So how do we go from this to pulling out what we could consider dominant colours from the image? Lets take a look at one potential way of doing things.
+So how do we go from this to pulling out what we could consider dominant colours from the image? Let's take a look at one potential way of doing things.
 
 ## *k*-means clustering
 
 We're looking to find distinct groups of similar colours, to do this we'll use what's known as [k-means clustering](https://en.wikipedia.org/wiki/K-means_clustering) we're going to use the naïve k-means which is one of the more simple versions of the algorithm and is unoptimized. The basic steps are as follows:
 
-1. Grab all of our individual colours from the image as 3 point coordinates
+1. Grab all of the colours from the image as 3-point coordinates
 2. Determine an initial set of points, we'll select these at random, our *k* clusters 
-3. **Assign** each colour to one of these initial *k* means based on the colours Euclidean distance to the cluster
+3. **Assign** each colour to one of these initial *k* means based on the colours' Euclidean distance to the cluster
 4. **Update** the means centroids based on the colours assigned to it
 
 We repeat steps 3 and 4 until updates no longer change the *k*-means, this is known as *convergence* 
@@ -52,7 +53,7 @@ Let's revisit our [`ImageData`](https://developer.mozilla.org/en-US/docs/Web/API
     #FFFFFFFF       #000000FF       #FFFFFFFF       #000000FF
 ```
 
-So each pixel here is made up of 3 colours that can be represented as an integer between 0 and 255 (we're ignoring the alpha-channel which deals with the pixels opacity).
+So each pixel here is made up of 3 colours that can be represented as an integer between 0 and 255 (we're ignoring the alpha-channel which deals with the pixels' opacity).
 
 Let's imagine these colours as a point in 3-dimensional space, where our red, green, and blue values become `(x, y, z)` coordinates, so a fully black pixel would exist at the origin `(0, 0, 0)` and a white one would be at point `(255, 255, 255)`.
 
@@ -86,7 +87,7 @@ colorData = colorData.map(v => {
 });
 ```
 
-So we initially now create a string of the colour with each channel separated by a comma. The reason behind this is it makes it super simple (and quick) to reduce this to unique colours by simply pushing the array into a `Set` and spread this back into an array (`1`), after that we map these strings back into objects and we're done.
+So we initially now create a string of the colour with each channel separated by a comma. The reason behind this is it makes it super simple (and quick) to reduce this to unique colours by simply pushing the array into a `Set` and spreading this back into an array (`1`), after that, we map these strings back into objects and we're done.
 
 If we take the cropped section of our panda image above it would create a set of colours that will look as follows when graphed:
 
@@ -110,7 +111,7 @@ let kClusters = Array.from({ length: 8 }, () => {
 
 ## Assign colours to clusters
 
-Now we have our initial clusters we're going to assign every colour to one (and just one) of these clusters. Remember we started treating colours as points in 3D space? Well this is why, for each point we will calculate what's know as the [Euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance) to each of our *k*-clusters and assign the colour to the closest one.
+Now we have our initial clusters we're going to assign every colour to one (and just one) of these clusters. Remember we started treating colours as points in 3D space? Well, this is why for each point we will calculate what's known as the [Euclidean distance](https://en.wikipedia.org/wiki/Euclidean_distance) to each of our *k*-clusters and assign the colour to the closest one.
 
 The equation to calculate this is the following for points `p,q`. 
 
@@ -158,15 +159,15 @@ const clusteredData = colorData.reduce(
 	Array.from({ length: 8 }, () => [])
 );
 ```
-I say first attempt because this reducer is pretty inefficient, for our zoomed image with ~125k unique colours it took around 25s to complete and since we'll be running this in multiple passes per image that time will add up significantly. We'll leave optimisation for now though and go through this line by line:
+I say the first attempt because this reducer is pretty inefficient, for our zoomed image with ~125k unique colours it took around 25s to complete and since we'll be running this in multiple passes per image that time will add up significantly. We'll leave optimisation for now though and go through this line by line:
 
 1. we create our reducer function for our `colorData` array and create a 2D array as our initial value.
 2. we map the `kClusters` array and call our `calcEuclideanDist` function passing the current cluster and colour
 3. another reducer then to find the smallest distance from our newly created `distances` array. We could just spread the array into `Math.min` here but that will fail if we ever decide to increase the number of *k*-clusters beyond a certain point
 4. now we know the smallest distance we get its index from `distances`
-5. and now add this color to the array at that index in the array we are creating in this reducer. Phew
+5. and now add this colour to the array at that index in the array we are creating in this reducer. Phew
 
-What we've created here in our `clusteredData` is an 8 item array with all our image colours sorted into the same index as our initially created clusters. If we console log it out it'll look something like this:
+What we've created here in our `clusteredData` is an 8-item array with all our image colours sorted into the same index as our initially created clusters. If we console log it out it'll look something like this:
 
 ```
 (8) [Array(24865), Array(32390), Array(7014), Array(3894), 
@@ -181,7 +182,7 @@ $$m_{i}^{(t+1)}={\frac {1}{\left|S_{i}^{(t)}\right|}}\sum_{x_{j}\in S_{i}^{(t)}}
 
 This looks complicated but it's really just telling us that for each of the coordinate components `(x,y,z)`, or in our case `(r,g,b)`, for all of the colours in our cluster array we take the average of that component and use it... I think.
 
-We can calculate these new clusters by mapping over our clustered data and averaging the individual chanel components:
+We can calculate these new clusters by mapping over our clustered data and averaging the individual channel components:
 
 ```js
 const newKs = clusteredData.map((colors) => {
@@ -209,9 +210,9 @@ Ok, we're not quite done yet. We need a way to iterate over this process and a w
 
 As mentioned before given the nature of the algorithm and the fact that we're rounding values in certain places there is a chance that it will never fully converge, that is, our *k*-clusters will never stop updating their positions on subsequent iterations.
 
-I'm going to take 2 approaches to solving this issue, the first will simply be a hard limit on the number of iterations allowed, say 10, the second will be to calculate a distance shifted between our old and new clusters and stop of this shift falls below a certain threshold.
+I'm going to take 2 approaches to solve this issue, the first will simply be a hard limit on the number of iterations allowed, say 10, and the second will be to calculate a distance shifted between our old and new clusters and stop if this shift falls below a certain threshold.
 
-First off lets move our two cluster calculation steps from above out into their own function
+First off let's move our two cluster calculation steps from above out into their own function
 
 ```js
 function calcNewClusters(kClusters, colorData) {
@@ -236,7 +237,7 @@ let newClusters = [];
 ```
 `iterations` will hold how many times we've run through our steps, we'll use this to enforce our hard limit, `distanceShift` will be used to hold the change between the newly calculated set of *k*-clusters `newClusters` and the previous one.
 
-I'm going to use a `do`/`while` loop here to  call our `calcNewClusters` function, calculate our `distanceShift`, and replace or current set of *k*-clusters with the newly generated one.
+I'm going to use a `do`/`while` loop here to call our `calcNewClusters` function, calculate our `distanceShift`, and replace our current set of *k*-clusters with the newly generated one.
 
 ```js
 do {
@@ -280,18 +281,18 @@ for (i = 0; i < kClusters.length; i++) {
 }
 ```
 
-Really the only difference here is we're generating a hex string from our colour objects.
+The only difference here is we're generating a hex string from our colour objects.
 
 {{ figure(path="working.png", isColocated=true, caption="Random screenshot from my favourite game, bonus points for first commenter who can identify it", alt="screenshot of the app in action")}}
 
-And this definitely looks a lot better, there will always be some level of randomness in what the eventual clusters chosen might be because of the calculations, but this is a lot better than what we had before.
+And this looks a lot better, there will always be some level of randomness in what the eventual clusters chosen might be because of the calculations, but this is a lot better than what we had before.
 
-## So _this_ time we're done right?
+## So _this_ time we're done, right?
 
-Well, no. As mentioned earlier this code has some serious efficiency problems, the image above was about 1000x400 pixels, this calculation took 5 iterations (the distanceShift wen't down to 3.5), but this took over 80 seconds! 
+Well, no. As mentioned earlier this code has some serious efficiency problems, the image above was about 1000x400 pixels and this calculation took 5 iterations (the distanceShift went down to 3.5), but this took over 80 seconds! 
 
 {{ figure(path="drawbacks.png", isColocated=true, caption="The algorithm can have other drawbacks too", alt="app used with a digital camera photograph of my dog")}}
 
-This shows some of the other drawbacks, the colours here look good but I would expect to see some deeper oranges, the brighter yellow, or even something closer to black. This is likely due to the random nature of the initial choice of clusters. Also it took over 5 minutes for 6 iterations on this 4000x3000 pixel image.
+This shows some of the other drawbacks, the colours here look good but I would expect to see some deeper oranges, the brighter yellow, or even something closer to black. This is likely due to the random nature of the initial choice of clusters. Also, it took over 5 minutes for 6 iterations on this 4000x3000 pixel image.
 
-We'll look at addressing these issues in Part 3 of this series. For now though the completed code for this part can be found in our [Github repository](https://github.com/Zyzle/image-colours/tree/v2.0.0)
+We'll look at addressing these issues in Part 3 of this series. For now though, the completed code for this part can be found in our [Github repository](https://github.com/Zyzle/image-colours/tree/v2.0.0)

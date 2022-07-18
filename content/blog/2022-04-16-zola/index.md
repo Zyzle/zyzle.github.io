@@ -11,21 +11,21 @@ author = "Colin McCulloch"
 ghissue = 5
 +++
 
-Zola (formally Gutenberg) is a SSG written in Rust. Zola has it's own templating engine [Tera](https://tera.netlify.app/) created by the same author and follows a similar design in it's templating to Jinja 2. Distributed as a single binary Zola has a much smaller footprint than the other SSGs we'll be looking at, it also promises to be fast (comparable to Hugo) and runs from a simple augmented markdown including shortcodes and custom internal linking.
+Zola (formally Gutenberg) is an SSG written in Rust. Zola has its own templating engine, [Tera](https://tera.netlify.app/) created by the same author and follows a similar design in its templating to Jinja 2. Distributed as a single binary Zola has a much smaller footprint than the other SSGs we'll be looking at, it also promises to be fast (comparable to Hugo) and runs from a simple augmented markdown including shortcodes and custom internal linking.
 
 <!-- more -->
 
 ## Installation
 
-Zola comes as a single binary distributable, on MacOS the simplest way to install it is with homebrew.
+Zola comes as a single binary distributable, on macOS the simplest way to install it is with homebrew.
 
 ```bash
 $ brew install zola
 ```
 
-Zola is also available on MacPorts, Chocolatey, Scoop, and various linux package structures. With no external dependencies Zola is probably the simplest of the 3 tools we're looking at.
+Zola is also available on MacPorts, Chocolatey, Scoop, and various Linux package structures. With no external dependencies, Zola is probably the simplest of the 3 tools we're looking at.
 
-The version we'll be using is the current stable 0.15.3 (23rd Jan 2022) at the time of writing, with a total size of ~19mb it also has one of the smallest install footprints. 
+The version we'll be using is the current stable 0.15.3 (23rd Jan 2022) at the time of writing, with a total size of ~19Mb it also has one of the smallest install footprints. 
 
 ## Site setup
 
@@ -37,12 +37,12 @@ $ zola init zolablog
 
 Wizard process asks (defaults shown): 
 
-    * site url
+    * site URL
     * Sass compilation (Y/n)
     * syntax highlighting (y/N)
     * search index (y/N)
 
-created site has following structure:
+The created site has the following structure:
 
 ```
 zolablog/
@@ -54,7 +54,7 @@ zolablog/
   +-- config.toml
 ```
 
-A few empty directories and a `config.toml` with the minimal configuration I selected in the site setup wizard. The full list of Zola configuration options can be found [in the zola documentation](https://www.getzola.org/documentation/getting-started/configuration/). The config will looks something like the following:
+A few empty directories and a `config.toml` with the minimal configuration I selected in the site setup wizard. The full list of Zola configuration options can be found [in the Zola documentation](https://www.getzola.org/documentation/getting-started/configuration/). The config will look something like the following:
 
 ```toml
 # The URL the site will be built for
@@ -120,13 +120,13 @@ We'll start with a `base.html` file that all our other templates will inherit fr
 </html>
 ```
 
-This is a fairly standard html5 template using some semantic html tags. Tera has 3 types of expression delimiters:
+This is a fairly standard html5 template using some semantic HTML tags. Tera has 3 types of expression delimiters:
 
 * `{{` and `}}` for expressions
 * `{%` and `%}` for statements
 * `{#` and `#}` for comments
 
-In the above we pick out the site title from the configuration file with `config.title` and wrap this with a `title` named block which we can override later. We also define a block called `content` inside the sites `<main>` tags that we'll be substituting with out page content in later templates. For now lets have a look at the `navigation.html` template that will be included in the the `header` tag.
+In the above, we pick out the site title from the configuration file with `config.title` and wrap this with a `title` named block which we can override later. We also define a block called `content` inside the site's `<main>` tags that we'll be substituting with our page content in later templates. For now, let's have a look at the `navigation.html` template that will be included in the `header` tag.
 
 
 ```html
@@ -139,7 +139,7 @@ In the above we pick out the site title from the configuration file with `config
 </nav>
 ```
 
-The `get_url` function gives the permalink for a given path the `@/` will be treated as an internal link to the root of the Zola `content` directory. Lets have a look at the first entry here, the `_index.md`
+The `get_url` function gives the permalink for a given path the `@/` will be treated as an internal link to the root of the Zola `content` directory. Let's have a look at the first entry here, the `_index.md`
 
 ```toml
 +++
@@ -147,7 +147,7 @@ page_template = "page.html"
 +++
 ```
 
-This simple markdown frontmatter does is tell zola that any pages contained in this directory should be rendered with the `page.html` template, we'll come back to the contents of this later. 
+This simple markdown frontmatter does is tell Zola that any pages contained in this directory should be rendered with the `page.html` template, we'll come back to the contents of this later. 
 
 Zola will also render the `index.html` file found in the templates directory at the site root
 
@@ -161,13 +161,13 @@ Zola will also render the `index.html` file found in the templates directory at 
 {% endblock content %}
 ```
 
-Here we are again extending the sites `base.html` and overriding the named blocks, first our `title` block, this has the interesting `super()` method which places the blocks existing content defined in the base template at the calling location allowing us to keep the sites name without having to redefine it in every template.
+Here we are again extending the site's `base.html` and overriding the named blocks, first our `title` block, this has the interesting `super()` method which places the blocks existing content defined in the base template at the calling location allowing us to keep the sites name without having to redefine it in every template.
 
 We just add a simple static paragraph of text into the `content` block of the template.
 
 ## Pages
 
-Zola considers directories inside the `content` directory as sections, we'll create a new dir and file `/blog/_index.md` and add some toml frontmatter that will tell Zola how to render this sections root page and any sub-pages:
+Zola considers directories inside the `content` directory as sections, we'll create a new dir and file `/blog/_index.md` and add some TOML frontmatter that will tell Zola how to render this sections root page and any sub-pages:
 
 ```toml
 +++
@@ -178,11 +178,11 @@ page_template = "blog-page.html"
 +++
 ```
 
-This tells Zola, render the `blog/` index url using the `blog.html` template and apply the `blog-page.html` template to any markdown files in this section folder, the `sort_by` directive also tells Zola to sort the articles in this section by date, default newest first. 
+This tells Zola to render the `blog/` index URL using the `blog.html` template and apply the `blog-page.html` template to any markdown files in this section folder, the `sort_by` directive also tells Zola to sort the articles in this section by date, default newest first. 
 
 ### Blog list
 
-Lets look at the index page template `blog.html` first:
+Let's look at the index page template `blog.html` first:
 
 ```j2
 {% extends "base.html" %}
@@ -201,7 +201,7 @@ Lets look at the index page template `blog.html` first:
 {% endblock content %}
 ```
 
-As we've seen before we start by extending the `base.html` template and override the title section using `super` again to keep our site title, then we insert into our `content` block. We use `section.title` to pull out the title we defined in the front matter in `_index.md`.
+As we've seen before we start by extending the `base.html` template and override the title section using `super` again to keep our site title, then we insert it into our `content` block. We use `section.title` to pull out the title we defined in the front matter in `_index.md`.
 
 Now we get on to showing the blog list. Zola offers us the `section.pages` variable that gives us a sorted list of page objects representing pages in our section that we can iterate over and provide links to using their `permalink` and `title` variables.
 
@@ -223,7 +223,7 @@ There's not much in this template, again we're extending the `base.html` file an
 
 ### About
 
-Our final template is the top level `page.html` we use to render the `about.md` about page content.
+Our final template is the top-level `page.html` we use to render the `about.md` about page content.
 
 ```j2
 {% extends "base.html" %}
@@ -240,7 +240,7 @@ Our final template is the top level `page.html` we use to render the `about.md` 
 {% endblock content %}
 ```
 
-There's nothing here we haven't looked at already, it's just a cut down version of the blog page template.
+There's nothing here we haven't looked at already, it's just a cut-down version of the blog page template.
 
 ## Building for deployment
 
@@ -271,7 +271,7 @@ public/
   +-- sitemap.xml
 ```
 
-So our pages have been placed into individual HTML files using the templates we defined in the previous steps as an example here's what the about page looks like compiled:
+So our pages have been placed into individual HTML files using the templates we defined in the previous steps as an example, here's what the about page looks like compiled:
 
 ```html
 <!DOCTYPE html>
@@ -311,7 +311,7 @@ We haven't defined a template for a 404 page so Zola generates us a default one:
 <h1>404 Not Found</h1>
 ```
 
-There's also a basic `robots.txt` which points to our auto-generated `sitemap.xml` and if we had chosen it when we did the setup wizard we would have a JS search index file as well as a copy of [Elasticlunr](http://elasticlunr.com/) that can be hooked up to provide search functionality to our site. These are all extra features generated that I may take a deeper dive into later on but for now we're done with the basic setup.
+There's also a basic `robots.txt` which points to our auto-generated `sitemap.xml` and if we had chosen it when we did the setup wizard we would have a JS search index file as well as a copy of [Elasticlunr](http://elasticlunr.com/) that can be hooked up to provide search functionality to our site. These are all extra features generated that I may take a deeper dive into later on but for now, we're done with the basic setup.
 
 ## Conclusion
 
