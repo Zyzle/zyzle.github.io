@@ -12,9 +12,9 @@
 		<updated>2022-07-16T00:00:00+00:00</updated>
 		<link href="https://zyzle.dev/blog/colour-finder-2/" type="text/html"/>
 		<id>https://zyzle.dev/blog/colour-finder-2/</id>
-		<content type="html">&lt;p&gt;Ok in &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;blog&#x2F;colour-finder-1&#x2F;&quot;&gt;part 1&lt;&#x2F;a&gt; we looked at finding dominant colours in an image, we got as far as showing the top 8 colours by pixel count, and showed that this isn&#x27;t necessarily the best solution for real world images as there are micro variations of colour within the image that aren&#x27;t always immediately obvious to the naked eye.&lt;&#x2F;p&gt;
+		<content type="html">&lt;p&gt;Ok in &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;blog&#x2F;colour-finder-1&#x2F;&quot;&gt;part 1&lt;&#x2F;a&gt; we looked at finding dominant colours in an image, we got as far as showing the top 8 colours by pixel count, and showed that this isn&#x27;t necessarily the best solution for real-world images as there are micro variations of colour within the image that aren&#x27;t always immediately obvious to the naked eye.&lt;&#x2F;p&gt;
 &lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;
-&lt;p&gt;Lets take a closer look at the first image we had trouble with the Panda:&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s take a closer look at the first image we had trouble with the Panda:&lt;&#x2F;p&gt;
 &lt;figure&gt;
     
     
@@ -23,7 +23,7 @@
     &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;a395013dc69f007600.webp&quot; alt=&quot;red panda in a tree&quot; &#x2F;&gt;
     &lt;figcaption&gt;Maybe not the best pic in the world but I took it so I like it&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
-&lt;p&gt;The original image is cropped from a 10 megapixel DSLR and looks reasonably sharp but lets see what it looks like if we zoom in to the point where the individual pixels become visible:&lt;&#x2F;p&gt;
+&lt;p&gt;The original image is cropped from a 10-megapixel DSLR and looks reasonably sharp but let&#x27;s see what it looks like if we zoom in to the point where the individual pixels become visible:&lt;&#x2F;p&gt;
 &lt;figure&gt;
     
     
@@ -33,13 +33,13 @@
     &lt;figcaption&gt;Now enhance... no?&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
 &lt;p&gt;At around 400% we can see that there&#x27;s actually a fair amount of noise in this image, and what looks like single blocks of colour to our eyes are actually made up of many small colour variations that blend together into what we see. &lt;&#x2F;p&gt;
-&lt;p&gt;So how do we go from this to pulling out what we could consider dominant colours from the image? Lets take a look at one potential way of doing things.&lt;&#x2F;p&gt;
+&lt;p&gt;So how do we go from this to pulling out what we could consider dominant colours from the image? Let&#x27;s take a look at one potential way of doing things.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;k-means-clustering&quot;&gt;&lt;em&gt;k&lt;&#x2F;em&gt;-means clustering&lt;&#x2F;h2&gt;
 &lt;p&gt;We&#x27;re looking to find distinct groups of similar colours, to do this we&#x27;ll use what&#x27;s known as &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;K-means_clustering&quot;&gt;k-means clustering&lt;&#x2F;a&gt; we&#x27;re going to use the naïve k-means which is one of the more simple versions of the algorithm and is unoptimized. The basic steps are as follows:&lt;&#x2F;p&gt;
 &lt;ol&gt;
-&lt;li&gt;Grab all of our individual colours from the image as 3 point coordinates&lt;&#x2F;li&gt;
+&lt;li&gt;Grab all of the colours from the image as 3-point coordinates&lt;&#x2F;li&gt;
 &lt;li&gt;Determine an initial set of points, we&#x27;ll select these at random, our &lt;em&gt;k&lt;&#x2F;em&gt; clusters &lt;&#x2F;li&gt;
-&lt;li&gt;&lt;strong&gt;Assign&lt;&#x2F;strong&gt; each colour to one of these initial &lt;em&gt;k&lt;&#x2F;em&gt; means based on the colours Euclidean distance to the cluster&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Assign&lt;&#x2F;strong&gt; each colour to one of these initial &lt;em&gt;k&lt;&#x2F;em&gt; means based on the colours&#x27; Euclidean distance to the cluster&lt;&#x2F;li&gt;
 &lt;li&gt;&lt;strong&gt;Update&lt;&#x2F;strong&gt; the means centroids based on the colours assigned to it&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
 &lt;p&gt;We repeat steps 3 and 4 until updates no longer change the &lt;em&gt;k&lt;&#x2F;em&gt;-means, this is known as &lt;em&gt;convergence&lt;&#x2F;em&gt; &lt;&#x2F;p&gt;
@@ -54,7 +54,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;|---------------|---------------|---------------|---------------|
 &lt;&#x2F;span&gt;&lt;span&gt;    #FFFFFFFF       #000000FF       #FFFFFFFF       #000000FF
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;So each pixel here is made up of 3 colours that can be represented as an integer between 0 and 255 (we&#x27;re ignoring the alpha-channel which deals with the pixels opacity).&lt;&#x2F;p&gt;
+&lt;p&gt;So each pixel here is made up of 3 colours that can be represented as an integer between 0 and 255 (we&#x27;re ignoring the alpha-channel which deals with the pixels&#x27; opacity).&lt;&#x2F;p&gt;
 &lt;p&gt;Let&#x27;s imagine these colours as a point in 3-dimensional space, where our red, green, and blue values become &lt;code&gt;(x, y, z)&lt;&#x2F;code&gt; coordinates, so a fully black pixel would exist at the origin &lt;code&gt;(0, 0, 0)&lt;&#x2F;code&gt; and a white one would be at point &lt;code&gt;(255, 255, 255)&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;Let&#x27;s change up the code to give us an array of unique colour objects in the form &lt;code&gt;{ r: number, b: number, g: number }&lt;&#x2F;code&gt;, we&#x27;ll remove most of the code in our file, everything after we grab the &lt;code&gt;imageData&lt;&#x2F;code&gt; array:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;imageData &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ctx&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;getImageData&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ibm&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;width&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ibm&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;height&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;data&lt;&#x2F;span&gt;&lt;span&gt;;
@@ -83,7 +83,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;	};
 &lt;&#x2F;span&gt;&lt;span&gt;});
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;So we initially now create a string of the colour with each channel separated by a comma. The reason behind this is it makes it super simple (and quick) to reduce this to unique colours by simply pushing the array into a &lt;code&gt;Set&lt;&#x2F;code&gt; and spread this back into an array (&lt;code&gt;1&lt;&#x2F;code&gt;), after that we map these strings back into objects and we&#x27;re done.&lt;&#x2F;p&gt;
+&lt;p&gt;So we initially now create a string of the colour with each channel separated by a comma. The reason behind this is it makes it super simple (and quick) to reduce this to unique colours by simply pushing the array into a &lt;code&gt;Set&lt;&#x2F;code&gt; and spreading this back into an array (&lt;code&gt;1&lt;&#x2F;code&gt;), after that, we map these strings back into objects and we&#x27;re done.&lt;&#x2F;p&gt;
 &lt;p&gt;If we take the cropped section of our panda image above it would create a set of colours that will look as follows when graphed:&lt;&#x2F;p&gt;
 &lt;figure&gt;
     &lt;img src=&quot;3d-1.gif&quot; alt=&quot;showing the pixel colours plotted in a 3D coordinate space&quot; &#x2F;&gt;
@@ -102,7 +102,7 @@
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;&lt;code&gt;Array.from&lt;&#x2F;code&gt; lets us provide a set of config options to define the length of the array we want, and a mapping function that we can use to populate the array with random items from our &lt;code&gt;colorData&lt;&#x2F;code&gt; array. There is a slight chance here that we could have duplicated initial clusters but this should be low enough to not be a problem on most images with a reasonably high enough number of distinct colours.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;assign-colours-to-clusters&quot;&gt;Assign colours to clusters&lt;&#x2F;h2&gt;
-&lt;p&gt;Now we have our initial clusters we&#x27;re going to assign every colour to one (and just one) of these clusters. Remember we started treating colours as points in 3D space? Well this is why, for each point we will calculate what&#x27;s know as the &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Euclidean_distance&quot;&gt;Euclidean distance&lt;&#x2F;a&gt; to each of our &lt;em&gt;k&lt;&#x2F;em&gt;-clusters and assign the colour to the closest one.&lt;&#x2F;p&gt;
+&lt;p&gt;Now we have our initial clusters we&#x27;re going to assign every colour to one (and just one) of these clusters. Remember we started treating colours as points in 3D space? Well, this is why for each point we will calculate what&#x27;s known as the &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Euclidean_distance&quot;&gt;Euclidean distance&lt;&#x2F;a&gt; to each of our &lt;em&gt;k&lt;&#x2F;em&gt;-clusters and assign the colour to the closest one.&lt;&#x2F;p&gt;
 &lt;p&gt;The equation to calculate this is the following for points &lt;code&gt;p,q&lt;&#x2F;code&gt;. &lt;&#x2F;p&gt;
 &lt;p&gt;$$d(p,q)={\sqrt {(p_{1}-q_{1})^{2}+(p_{2}-q_{2})^{2}+(p_{3}-q_{3})^{2}}}.$$&lt;&#x2F;p&gt;
 &lt;p&gt;What we&#x27;re doing in the above is repeatedly applying Pythagorean theorem for each of our 3 planes as shown in the image below:&lt;&#x2F;p&gt;
@@ -146,15 +146,15 @@
 &lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;Array&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;from&lt;&#x2F;span&gt;&lt;span&gt;({ length: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;8 &lt;&#x2F;span&gt;&lt;span&gt;}, () &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;[])
 &lt;&#x2F;span&gt;&lt;span&gt;);
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;I say first attempt because this reducer is pretty inefficient, for our zoomed image with ~125k unique colours it took around 25s to complete and since we&#x27;ll be running this in multiple passes per image that time will add up significantly. We&#x27;ll leave optimisation for now though and go through this line by line:&lt;&#x2F;p&gt;
+&lt;p&gt;I say the first attempt because this reducer is pretty inefficient, for our zoomed image with ~125k unique colours it took around 25s to complete and since we&#x27;ll be running this in multiple passes per image that time will add up significantly. We&#x27;ll leave optimisation for now though and go through this line by line:&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;we create our reducer function for our &lt;code&gt;colorData&lt;&#x2F;code&gt; array and create a 2D array as our initial value.&lt;&#x2F;li&gt;
 &lt;li&gt;we map the &lt;code&gt;kClusters&lt;&#x2F;code&gt; array and call our &lt;code&gt;calcEuclideanDist&lt;&#x2F;code&gt; function passing the current cluster and colour&lt;&#x2F;li&gt;
 &lt;li&gt;another reducer then to find the smallest distance from our newly created &lt;code&gt;distances&lt;&#x2F;code&gt; array. We could just spread the array into &lt;code&gt;Math.min&lt;&#x2F;code&gt; here but that will fail if we ever decide to increase the number of &lt;em&gt;k&lt;&#x2F;em&gt;-clusters beyond a certain point&lt;&#x2F;li&gt;
 &lt;li&gt;now we know the smallest distance we get its index from &lt;code&gt;distances&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
-&lt;li&gt;and now add this color to the array at that index in the array we are creating in this reducer. Phew&lt;&#x2F;li&gt;
+&lt;li&gt;and now add this colour to the array at that index in the array we are creating in this reducer. Phew&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
-&lt;p&gt;What we&#x27;ve created here in our &lt;code&gt;clusteredData&lt;&#x2F;code&gt; is an 8 item array with all our image colours sorted into the same index as our initially created clusters. If we console log it out it&#x27;ll look something like this:&lt;&#x2F;p&gt;
+&lt;p&gt;What we&#x27;ve created here in our &lt;code&gt;clusteredData&lt;&#x2F;code&gt; is an 8-item array with all our image colours sorted into the same index as our initially created clusters. If we console log it out it&#x27;ll look something like this:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;(8) [Array(24865), Array(32390), Array(7014), Array(3894), 
 &lt;&#x2F;span&gt;&lt;span&gt;Array(3236), Array(19094), Array(18360), Array(16286)]
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
@@ -162,7 +162,7 @@
 &lt;p&gt;Now we have all of our colour points assigned to one of the clusters we&#x27;ll use these collections to recalculate what our &lt;em&gt;k&lt;&#x2F;em&gt;-clusters should be. The formula to do this is as follows:&lt;&#x2F;p&gt;
 &lt;p&gt;$$m_{i}^{(t+1)}={\frac {1}{\left|S_{i}^{(t)}\right|}}\sum_{x_{j}\in S_{i}^{(t)}}x_{j}$$&lt;&#x2F;p&gt;
 &lt;p&gt;This looks complicated but it&#x27;s really just telling us that for each of the coordinate components &lt;code&gt;(x,y,z)&lt;&#x2F;code&gt;, or in our case &lt;code&gt;(r,g,b)&lt;&#x2F;code&gt;, for all of the colours in our cluster array we take the average of that component and use it... I think.&lt;&#x2F;p&gt;
-&lt;p&gt;We can calculate these new clusters by mapping over our clustered data and averaging the individual chanel components:&lt;&#x2F;p&gt;
+&lt;p&gt;We can calculate these new clusters by mapping over our clustered data and averaging the individual channel components:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;newKs &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;clusteredData&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;colors&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
 &lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
 &lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;g &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
@@ -184,8 +184,8 @@
 &lt;h2 id=&quot;iterating-to-find-clusters&quot;&gt;Iterating to find clusters&lt;&#x2F;h2&gt;
 &lt;p&gt;Ok, we&#x27;re not quite done yet. We need a way to iterate over this process and a way of determining whether or not we&#x27;re &#x27;done&#x27;.&lt;&#x2F;p&gt;
 &lt;p&gt;As mentioned before given the nature of the algorithm and the fact that we&#x27;re rounding values in certain places there is a chance that it will never fully converge, that is, our &lt;em&gt;k&lt;&#x2F;em&gt;-clusters will never stop updating their positions on subsequent iterations.&lt;&#x2F;p&gt;
-&lt;p&gt;I&#x27;m going to take 2 approaches to solving this issue, the first will simply be a hard limit on the number of iterations allowed, say 10, the second will be to calculate a distance shifted between our old and new clusters and stop of this shift falls below a certain threshold.&lt;&#x2F;p&gt;
-&lt;p&gt;First off lets move our two cluster calculation steps from above out into their own function&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m going to take 2 approaches to solve this issue, the first will simply be a hard limit on the number of iterations allowed, say 10, and the second will be to calculate a distance shifted between our old and new clusters and stop if this shift falls below a certain threshold.&lt;&#x2F;p&gt;
+&lt;p&gt;First off let&#x27;s move our two cluster calculation steps from above out into their own function&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;function &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;calcNewClusters&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;kClusters&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;colorData&lt;&#x2F;span&gt;&lt;span&gt;) {
 &lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;clusteredData &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colorData&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;reduce&lt;&#x2F;span&gt;&lt;span&gt;(
 &lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; ...
@@ -204,7 +204,7 @@
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;newClusters &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;[];
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;&lt;code&gt;iterations&lt;&#x2F;code&gt; will hold how many times we&#x27;ve run through our steps, we&#x27;ll use this to enforce our hard limit, &lt;code&gt;distanceShift&lt;&#x2F;code&gt; will be used to hold the change between the newly calculated set of &lt;em&gt;k&lt;&#x2F;em&gt;-clusters &lt;code&gt;newClusters&lt;&#x2F;code&gt; and the previous one.&lt;&#x2F;p&gt;
-&lt;p&gt;I&#x27;m going to use a &lt;code&gt;do&lt;&#x2F;code&gt;&#x2F;&lt;code&gt;while&lt;&#x2F;code&gt; loop here to  call our &lt;code&gt;calcNewClusters&lt;&#x2F;code&gt; function, calculate our &lt;code&gt;distanceShift&lt;&#x2F;code&gt;, and replace or current set of &lt;em&gt;k&lt;&#x2F;em&gt;-clusters with the newly generated one.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m going to use a &lt;code&gt;do&lt;&#x2F;code&gt;&#x2F;&lt;code&gt;while&lt;&#x2F;code&gt; loop here to call our &lt;code&gt;calcNewClusters&lt;&#x2F;code&gt; function, calculate our &lt;code&gt;distanceShift&lt;&#x2F;code&gt;, and replace our current set of &lt;em&gt;k&lt;&#x2F;em&gt;-clusters with the newly generated one.&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;do &lt;&#x2F;span&gt;&lt;span&gt;{
 &lt;&#x2F;span&gt;&lt;span&gt;	newClusters &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;calcNewClusters&lt;&#x2F;span&gt;&lt;span&gt;(kClusters, colorData);
 &lt;&#x2F;span&gt;&lt;span&gt;
@@ -240,7 +240,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;swatches&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;appendChild&lt;&#x2F;span&gt;&lt;span&gt;(swatch);
 &lt;&#x2F;span&gt;&lt;span&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Really the only difference here is we&#x27;re generating a hex string from our colour objects.&lt;&#x2F;p&gt;
+&lt;p&gt;The only difference here is we&#x27;re generating a hex string from our colour objects.&lt;&#x2F;p&gt;
 &lt;figure&gt;
     
     
@@ -249,9 +249,9 @@
     &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;f958d72b5c585d8c00.webp&quot; alt=&quot;screenshot of the app in action&quot; &#x2F;&gt;
     &lt;figcaption&gt;Random screenshot from my favourite game, bonus points for first commenter who can identify it&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
-&lt;p&gt;And this definitely looks a lot better, there will always be some level of randomness in what the eventual clusters chosen might be because of the calculations, but this is a lot better than what we had before.&lt;&#x2F;p&gt;
-&lt;h2 id=&quot;so-this-time-we-re-done-right&quot;&gt;So &lt;em&gt;this&lt;&#x2F;em&gt; time we&#x27;re done right?&lt;&#x2F;h2&gt;
-&lt;p&gt;Well, no. As mentioned earlier this code has some serious efficiency problems, the image above was about 1000x400 pixels, this calculation took 5 iterations (the distanceShift wen&#x27;t down to 3.5), but this took over 80 seconds! &lt;&#x2F;p&gt;
+&lt;p&gt;And this looks a lot better, there will always be some level of randomness in what the eventual clusters chosen might be because of the calculations, but this is a lot better than what we had before.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;so-this-time-we-re-done-right&quot;&gt;So &lt;em&gt;this&lt;&#x2F;em&gt; time we&#x27;re done, right?&lt;&#x2F;h2&gt;
+&lt;p&gt;Well, no. As mentioned earlier this code has some serious efficiency problems, the image above was about 1000x400 pixels and this calculation took 5 iterations (the distanceShift went down to 3.5), but this took over 80 seconds! &lt;&#x2F;p&gt;
 &lt;figure&gt;
     
     
@@ -260,8 +260,8 @@
     &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;c7b426b991eeb95500.webp&quot; alt=&quot;app used with a digital camera photograph of my dog&quot; &#x2F;&gt;
     &lt;figcaption&gt;The algorithm can have other drawbacks too&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
-&lt;p&gt;This shows some of the other drawbacks, the colours here look good but I would expect to see some deeper oranges, the brighter yellow, or even something closer to black. This is likely due to the random nature of the initial choice of clusters. Also it took over 5 minutes for 6 iterations on this 4000x3000 pixel image.&lt;&#x2F;p&gt;
-&lt;p&gt;We&#x27;ll look at addressing these issues in Part 3 of this series. For now though the completed code for this part can be found in our &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Zyzle&#x2F;image-colours&#x2F;tree&#x2F;v2.0.0&quot;&gt;Github repository&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;This shows some of the other drawbacks, the colours here look good but I would expect to see some deeper oranges, the brighter yellow, or even something closer to black. This is likely due to the random nature of the initial choice of clusters. Also, it took over 5 minutes for 6 iterations on this 4000x3000 pixel image.&lt;&#x2F;p&gt;
+&lt;p&gt;We&#x27;ll look at addressing these issues in Part 3 of this series. For now though, the completed code for this part can be found in our &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Zyzle&#x2F;image-colours&#x2F;tree&#x2F;v2.0.0&quot;&gt;Github repository&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
 </content>
 	</entry>
 	<entry xml:lang="en">
@@ -270,15 +270,15 @@
 		<updated>2022-07-04T00:00:00+00:00</updated>
 		<link href="https://zyzle.dev/blog/colour-finder-1/" type="text/html"/>
 		<id>https://zyzle.dev/blog/colour-finder-1/</id>
-		<content type="html">&lt;p&gt;During the interview for my current job I was given a small pair-programming coding challenge to do. Like all good coding challenges it was probably beyond what could reasonably have been finished in an hour but it was fun and I got the job so my attempt couldn&#x27;t have been too bad. Not finishing the challenge did annoy me though so here&#x27;s my attempt at a more polished version of the challenge &lt;&#x2F;p&gt;
+		<content type="html">&lt;p&gt;During the interview for my current job, I was given a small pair-programming coding challenge to do. Like all good coding challenges it was probably beyond what could reasonably have been finished in an hour but it was fun and I got the job so my attempt couldn&#x27;t have been too bad. Not finishing the challenge did annoy me though so here&#x27;s my attempt at a more polished version of the challenge &lt;&#x2F;p&gt;
 &lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Update:&lt;&#x2F;strong&gt; Yes I know I&#x27;m mixing &amp;quot;colour&amp;quot; and &amp;quot;color&amp;quot; in this post, too much code writing over the years has warped my brain with American spellings :P I&#x27;ll try and keep it to &amp;quot;colour&amp;quot; in copy and &amp;quot;color&amp;quot; in code from now on.&lt;&#x2F;p&gt;
 &lt;&#x2F;blockquote&gt;
 &lt;p&gt;Anyone waiting for part 4 of the &amp;quot;Let&#x27;s write a blog&amp;quot; series, worry not, it will come eventually I just got distracted playing with this :P&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;the-challenge&quot;&gt;The Challenge&lt;&#x2F;h2&gt;
-&lt;p&gt;The challenge itself was worded something along the lines of: &amp;quot;Load an image and find the top n colours used in it&amp;quot; (side note there are problems with this but we&#x27;ll get to that in part 2). I&#x27;m going to extend this slightly with some requirements of my own because there are a few things I don&#x27;t know how to do but want to learn. &lt;&#x2F;p&gt;
-&lt;p&gt;I&#x27;m going to build a site with a dropzone I can drag an image in to, at which point the process loop will take over, bring me back the dominant colours (have you spotted the problem yet?) from the image and display them to the user along with the dropped image.&lt;&#x2F;p&gt;
+&lt;p&gt;The challenge itself was worded something along the lines of &amp;quot;Load an image and find the top n colours used in it&amp;quot; (side note there are problems with this but we&#x27;ll get to that in part 2). I&#x27;m going to extend this slightly with some requirements of my own because there are a few things I don&#x27;t know how to do but want to learn. &lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m going to build a site with a dropzone I can drag an image into, at which point the process loop will take over, bring me back the dominant colours (have you spotted the problem yet?) from the image and display them to the user along with the dropped image.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;challenge-1-the-dropzone&quot;&gt;Challenge 1: The dropzone&lt;&#x2F;h2&gt;
 &lt;p&gt;This part is pretty easy, we just need to hook into a drop event and retrieve the file dropped.&lt;&#x2F;p&gt;
 &lt;blockquote&gt;
@@ -293,7 +293,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;	&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Drop an image into the box to analyze&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;div&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;This is all pretty simple, we have an &lt;code&gt;img&lt;&#x2F;code&gt; element with no pre-defined &lt;code&gt;src&lt;&#x2F;code&gt; attribute where our image will be shown to the user, an empty &lt;code&gt;div&lt;&#x2F;code&gt; that we&#x27;ll add a list of our colours to and a final &lt;code&gt;div&lt;&#x2F;code&gt; that&#x27;ll act as our drop zone. I&#x27;ll pretty it up with some styling ant it&#x27;ll look like the image below&lt;&#x2F;p&gt;
+&lt;p&gt;This is all pretty simple, we have an &lt;code&gt;img&lt;&#x2F;code&gt; element with no pre-defined &lt;code&gt;src&lt;&#x2F;code&gt; attribute where our image will be shown to the user, an empty &lt;code&gt;div&lt;&#x2F;code&gt; that we&#x27;ll add a list of our colours and a final &lt;code&gt;div&lt;&#x2F;code&gt; that&#x27;ll act as our drop zone. I&#x27;ll pretty it up with some styling and it&#x27;ll look like the image below&lt;&#x2F;p&gt;
 &lt;figure&gt;
     
     
@@ -323,13 +323,13 @@
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Not much to see here, when a file is dropped onto our dropzone on the page we get this handler function called. I&#x27;ll go through what we&#x27;re doing here.&lt;&#x2F;p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;code&gt;e.preventDefault()&lt;&#x2F;code&gt; Most browsers, when an image is dropped in to them will display that image, we kill this event here to stop it propagating up and triggering this behaviour.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;e.preventDefault()&lt;&#x2F;code&gt; Most browsers, when an image is dropped into them will display that image, we kill this event here to stop it from propagating up and triggering this behaviour.&lt;&#x2F;li&gt;
 &lt;li&gt;The drag event gives us a &lt;a href=&quot;https:&#x2F;&#x2F;developer.mozilla.org&#x2F;en-US&#x2F;docs&#x2F;Web&#x2F;API&#x2F;DataTransfer&quot;&gt;DataTransfer&lt;&#x2F;a&gt; object which contains a &lt;code&gt;DataTransferList&lt;&#x2F;code&gt; object, of the items being dragged in. We check if the first one of these is a file before continuing, I could also check the &lt;code&gt;type&lt;&#x2F;code&gt; property here to make sure it&#x27;s actually an image but I&#x27;m lazy and don&#x27;t really care if people try and drop something other than images.&lt;&#x2F;li&gt;
-&lt;li&gt;&lt;code&gt;getAsFile()&lt;&#x2F;code&gt; method unsurprisingly gives us a &lt;code&gt;File&lt;&#x2F;code&gt; object &lt;&#x2F;li&gt;
-&lt;li&gt;Which finally we can create a URL for and pass this to our &lt;code&gt;img&lt;&#x2F;code&gt; element displaying the image to the user&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;getAsFile()&lt;&#x2F;code&gt; method unsurprisingly gives us a &lt;code&gt;File&lt;&#x2F;code&gt; object.&lt;&#x2F;li&gt;
+&lt;li&gt;Which, finally we can create a URL for, and pass this to our &lt;code&gt;img&lt;&#x2F;code&gt; element displaying the image to the user&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
 &lt;h2 id=&quot;accessing-the-image-bitmap&quot;&gt;Accessing the image bitmap&lt;&#x2F;h2&gt;
-&lt;p&gt;So here&#x27;s the plan. We have our image loaded now, we should iterate over it one pixel at a time, get that pixels colour and take note, then add a +1 to a count for this particular colour every time another pixel with that colour is found. &lt;&#x2F;p&gt;
+&lt;p&gt;So here&#x27;s the plan. We have our image loaded now, we should iterate over it one pixel at a time, get that pixel&#x27;s colour and take note, then add a +1 to a count for this particular colour every time another pixel with that colour is found. &lt;&#x2F;p&gt;
 &lt;p&gt;The file object doesn&#x27;t give me a way of accessing the image pixels directly, but I can create a bitmap from this file and render it to a canvas which I can then pull the raw image data from;&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;createImageBitmap&lt;&#x2F;span&gt;&lt;span&gt;(file)
 &lt;&#x2F;span&gt;&lt;span&gt;	.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;then&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;ibm &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
@@ -342,19 +342,19 @@
 &lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; remaining code goes here
 &lt;&#x2F;span&gt;&lt;span&gt;	});
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;This process returns a Promise so we do all the fun stuff in the resolution. I don&#x27;t actually want to display the canvas on the page so using &lt;code&gt;OffscreenCanvas&lt;&#x2F;code&gt; is a good solution as it exists only in memory and doesn&#x27;t require a target HTML element. Handily having the ImageBitmap object gives us the needed width and height properties so we know what size to make the canvas.&lt;&#x2F;p&gt;
+&lt;p&gt;This process returns a Promise so we do all the fun stuff in the resolution. I don&#x27;t want to display the canvas on the page so using &lt;code&gt;OffscreenCanvas&lt;&#x2F;code&gt; is a good solution as it exists only in memory and doesn&#x27;t require a target HTML element. Handily having the ImageBitmap object gives us the needed width and height properties so we know what size to make the canvas.&lt;&#x2F;p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;The &lt;a href=&quot;https:&#x2F;&#x2F;developer.mozilla.org&#x2F;en-US&#x2F;docs&#x2F;Web&#x2F;API&#x2F;OffscreenCanvas&quot;&gt;&lt;code&gt;OffscreenCanvas&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; won&#x27;t in itself provide any major performance benefits over it&#x27;s regular counterpart, however it does give one major benefit, that the code can be moved into a web worker, this will allow expensive operations to be run in the background and not block the main thread. We wont be using this just yet but it&#x27;s a nice feature&lt;&#x2F;p&gt;
 &lt;&#x2F;blockquote&gt;
-&lt;p&gt;We&#x27;re working in a 2d context here rather than a 3d one so the first step is to retrieve that, then we render our image into it, we use the whole image here so no need to specify the last 2 arguments of &lt;code&gt;drawImage&lt;&#x2F;code&gt;. The final step here, we retrieve the image data back from the canvas starting at coordinates (0, 0) end ending at the width and height of the image so we get every pixel. The returned &lt;a href=&quot;https:&#x2F;&#x2F;developer.mozilla.org&#x2F;en-US&#x2F;docs&#x2F;Web&#x2F;API&#x2F;ImageData&quot;&gt;&lt;code&gt;ImageData&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; object contains an Unsigned 8 clamped array that contains the channel data for every pixel in the image in RGBA format, that is every 4 integers represents the channel information for one pixel in the image (Red, Green, Blue, Alpha) limited to the maximum value for an unsigned 8 int (255).&lt;&#x2F;p&gt;
-&lt;p&gt;For an example, imagine an image where every pixel alternates between pure white and pure black, the &lt;code&gt;ImageData&lt;&#x2F;code&gt; array for the first 4 pixels would look like this:&lt;&#x2F;p&gt;
+&lt;p&gt;We&#x27;re working in a 2d context here rather than a 3d one so the first step is to retrieve that, and then we render our image into it, we use the whole image here so no need to specify the last 2 arguments of &lt;code&gt;drawImage&lt;&#x2F;code&gt;. In the final step here, we retrieve the image data back from the canvas starting at coordinates (0, 0) end ending at the width and height of the image so we get every pixel. The returned &lt;a href=&quot;https:&#x2F;&#x2F;developer.mozilla.org&#x2F;en-US&#x2F;docs&#x2F;Web&#x2F;API&#x2F;ImageData&quot;&gt;&lt;code&gt;ImageData&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; object contains an Unsigned 8 clamped array that contains the channel data for every pixel in the image in RGBA format, that is every 4 integers represents the channel information for one pixel in the image (Red, Green, Blue, Alpha) limited to the maximum value for an unsigned 8 int (255).&lt;&#x2F;p&gt;
+&lt;p&gt;For example, imagine an image where every pixel alternates between pure white and pure black, the &lt;code&gt;ImageData&lt;&#x2F;code&gt; array for the first 4 pixels would look like this:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;     pixel 1         pixel 2         pixel 3         pixel 4
 &lt;&#x2F;span&gt;&lt;span&gt;|---------------|---------------|---------------|---------------|
 &lt;&#x2F;span&gt;&lt;span&gt;|255|255|255|255| 0 | 0 | 0 |255|255|255|255|255| 0 | 0 | 0 |255|
 &lt;&#x2F;span&gt;&lt;span&gt;|---------------|---------------|---------------|---------------|
 &lt;&#x2F;span&gt;&lt;span&gt;    #FFFFFFFF       #000000FF       #FFFFFFFF       #000000FF
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;The middle row above shows the 16 entries of the array, above them are the individual pixel delimiters and below the HEX representation of the colours.&lt;&#x2F;p&gt;
+&lt;p&gt;The middle row above shows the 16 entries of the array, above them, are the individual pixel delimiters and below the HEX representation of the colours.&lt;&#x2F;p&gt;
 &lt;p&gt;What We&#x27;ll do now is consolidate these pixels into an array taking just the colour:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;pixelColors &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;[];
 &lt;&#x2F;span&gt;&lt;span&gt;
@@ -374,10 +374,10 @@
 &lt;p&gt;On each of these iterations then we do a push to our &lt;code&gt;pixelColours&lt;&#x2F;code&gt; array with the following:&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;the &lt;code&gt;#&lt;&#x2F;code&gt; character to denote the string we&#x27;ll be creating as a HEX value&lt;&#x2F;li&gt;
-&lt;li&gt;we take the integer from the image data and transform it to HEX with &lt;code&gt;toString(16)&lt;&#x2F;code&gt; we then use &lt;code&gt;padString(2, &#x27;0&#x27;)&lt;&#x2F;code&gt; to ensure we always have 2 digits as this this would cause incorrect colours if we return single characters for low chanel values.&lt;&#x2F;li&gt;
-&lt;li&gt;finally we just join these individual entries into a single string&lt;&#x2F;li&gt;
+&lt;li&gt;we take the integer from the image data and transform it to HEX with &lt;code&gt;toString(16)&lt;&#x2F;code&gt; we then use &lt;code&gt;padString(2, &#x27;0&#x27;)&lt;&#x2F;code&gt; to ensure we always have 2 digits as this would cause incorrect colours if we return single characters for low channel values.&lt;&#x2F;li&gt;
+&lt;li&gt;Finally, we just join these individual entries into a single string&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
-&lt;p&gt;Lets try running what we have so far and try giving it a simple test image.&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s try running what we have so far and try giving it a simple test image.&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;img src=&quot;test.png&quot; alt=&quot;The image we&#x27;ll be using for testing&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;This is a pretty basic 100x100px image with some nice distinct colour blocks on a white background. &lt;&#x2F;p&gt;
 &lt;p&gt;Let&#x27;s run this in and take a look at a random section of the array&lt;&#x2F;p&gt;
@@ -389,7 +389,7 @@
     &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;65540962d26d0c5600.webp&quot; alt=&quot;image of the generated array&quot; &#x2F;&gt;
     &lt;figcaption&gt;a section of our generated array&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
-&lt;p&gt;This looks good so far, we appear to be generating the array correctly, now lets look at rolling up this array into only unique colours with their associated counts.&lt;&#x2F;p&gt;
+&lt;p&gt;This looks good so far, we appear to be generating the array correctly, now let&#x27;s look at rolling up this array into only unique colours with their associated counts.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;counting-up-and-displaying&quot;&gt;Counting up and displaying&lt;&#x2F;h2&gt;
 &lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 1
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colorCount &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;pixelColors&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;reduce&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;prev&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;curr&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
@@ -407,7 +407,7 @@
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Ok so what we&#x27;re doing here is:&lt;&#x2F;p&gt;
 &lt;ol&gt;
-&lt;li&gt;run a reducer over our array that turns it into an object who&#x27;s keys are the unique colours, with a value of the number of times this pixel colour occurred.&lt;&#x2F;li&gt;
+&lt;li&gt;run a reducer over our array that turns it into an object whose keys are the unique colours, with a value of the number of times this pixel colour occurred.&lt;&#x2F;li&gt;
 &lt;li&gt;take the &lt;code&gt;Object.entries&lt;&#x2F;code&gt; key&#x2F;value pair array for this object and sort it by the value.&lt;&#x2F;li&gt;
 &lt;li&gt;grab a slice of the first 8 elements to give us the top 8 pixel colours.&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
@@ -424,9 +424,9 @@
 &lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;swatches&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;appendChild&lt;&#x2F;span&gt;&lt;span&gt;(swatch);
 &lt;&#x2F;span&gt;&lt;span&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Ok what we&#x27;re doing now is pulling out or &lt;code&gt;swatches&lt;&#x2F;code&gt; div we created earlier in the HTML and clear it of any current nodes (using &lt;code&gt;.textContent&lt;&#x2F;code&gt; can be slightly quicker as it skips the node parsing that setting &lt;code&gt;innerHTML&lt;&#x2F;code&gt; would trigger). &lt;&#x2F;p&gt;
-&lt;p&gt;For each of our colours we create a new &lt;code&gt;span&lt;&#x2F;code&gt; element and create a text node with our colour in it. We append this text node to the span and then set the spans background colour to our found pixel colour. Finally we add this to the swatches div and we&#x27;re done.&lt;&#x2F;p&gt;
-&lt;p&gt;So lets give it a try, I&#x27;ll use the image above and drop it into our dropzone, lets see how this looks.&lt;&#x2F;p&gt;
+&lt;p&gt;Ok, what we&#x27;re doing now is pulling out or &lt;code&gt;swatches&lt;&#x2F;code&gt; div we created earlier in the HTML and clearing it of any current nodes (using &lt;code&gt;.textContent&lt;&#x2F;code&gt; can be slightly quicker as it skips the node parsing that setting &lt;code&gt;innerHTML&lt;&#x2F;code&gt; would trigger). &lt;&#x2F;p&gt;
+&lt;p&gt;For each of our colours, we create a new &lt;code&gt;span&lt;&#x2F;code&gt; element and create a text node with our colour in it. We append this text node to the span and then set the span&#x27;s background colour to our found pixel colour. Finally, we add this to the swatches div and we&#x27;re done.&lt;&#x2F;p&gt;
+&lt;p&gt;So let&#x27;s give it a try, I&#x27;ll use the image above and drop it into our dropzone, let&#x27;s see how this looks.&lt;&#x2F;p&gt;
 &lt;figure&gt;
     
     
@@ -435,7 +435,7 @@
     &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;d89f1b83c53acfea00.webp&quot; alt=&quot;the complete image analyzed on the page&quot; &#x2F;&gt;
     &lt;figcaption&gt;woohoo! It works!&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;&lt;h2 id=&quot;so-job-done-right&quot;&gt;So job done, right?&lt;&#x2F;h2&gt;
-&lt;p&gt;Well it&#x27;s all looking good so far but lets try a more complex image...&lt;&#x2F;p&gt;
+&lt;p&gt;Well, it&#x27;s all looking good so far but let&#x27;s try a more complex image...&lt;&#x2F;p&gt;
 &lt;figure&gt;
     
     
@@ -444,7 +444,7 @@
     &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;e85dcc4a16ffcc8000.webp&quot; alt=&quot;picture of a red panda sitting in a tree scanned by our analyser&quot; &#x2F;&gt;
     &lt;figcaption&gt;Red panda from Edinburgh Zoo&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
-&lt;p&gt;Hmmn, that doesn&#x27;t look right. We have a couple of dark greens there, but where&#x27;s the brown of the trees or the red from the panda?&lt;&#x2F;p&gt;
+&lt;p&gt;Hmmm, that doesn&#x27;t look right. We have a couple of dark greens there, but where&#x27;s the brown of the trees or the red from the panda?&lt;&#x2F;p&gt;
 &lt;p&gt;let me expand the number of swatches brought back and created:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; edit the 8 in our slice call to pull back more entries
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;top &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;sorted&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;slice&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;8&lt;&#x2F;span&gt;&lt;span&gt;);
@@ -457,7 +457,7 @@
     &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;80fab9d819e3ea7400.webp&quot; alt=&quot;some more colour swatches&quot; &#x2F;&gt;
     &lt;figcaption&gt;looks right?&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
-&lt;p&gt;So this looks ok but we&#x27;ve found the problem I hinted at earlier; There are so many colours in this image and we&#x27;re not doing anything to group them together so what we end up doing is missing out on what we as humans would consider predominant colours. &lt;&#x2F;p&gt;
+&lt;p&gt;So this looks ok but we&#x27;ve found the problem I hinted at earlier; There are so many colours in this image and we&#x27;re not doing anything to group them so what we end up doing is missing out on what we as humans would consider predominant colours. &lt;&#x2F;p&gt;
 &lt;p&gt;Let&#x27;s use a simpler image to demonstrate this.&lt;&#x2F;p&gt;
 &lt;figure&gt;
     
@@ -465,10 +465,10 @@
         
     
     &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;77239e4c4fa884fd00.webp&quot; alt=&quot;square enix logo as an example&quot; &#x2F;&gt;
-    &lt;figcaption&gt;don&#x27;t ask me why I have a Square Enix logo, I cant remember&lt;&#x2F;figcaption&gt;
+    &lt;figcaption&gt;don&#x27;t ask me why I have a Square Enix logo, I can&#x27;t remember&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
-&lt;p&gt;If you asked someone to look at the image above and asked them, &amp;quot;what are the main colours here?&amp;quot;, the answer you&#x27;d expect would be &amp;quot;white, black, and red&amp;quot; the problem we have is that there are so many tiny variations in our white and black that the reds get pushed so far down our sorted list that we wont see them.&lt;&#x2F;p&gt;
-&lt;p&gt;So what&#x27;s the solution? Well we&#x27;ll get to that in &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;blog&#x2F;colour-finder-2&#x2F;&quot;&gt;part 2&lt;&#x2F;a&gt; of this series, stay tuned for that :D&lt;&#x2F;p&gt;
+&lt;p&gt;If you asked someone to look at the image above and asked them, &amp;quot;what are the main colours here?&amp;quot;, the answer you&#x27;d expect would be &amp;quot;white, black, and red&amp;quot; the problem we have is that there are so many tiny variations in our white and black that the reds get pushed so far down our sorted list that we won&#x27;t see them.&lt;&#x2F;p&gt;
+&lt;p&gt;So what&#x27;s the solution? Well, we&#x27;ll get to that in &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;blog&#x2F;colour-finder-2&#x2F;&quot;&gt;part 2&lt;&#x2F;a&gt; of this series, stay tuned for that :D&lt;&#x2F;p&gt;
 </content>
 	</entry>
 	<entry xml:lang="en">
@@ -510,16 +510,16 @@
 		<updated>2022-05-21T00:00:00+00:00</updated>
 		<link href="https://zyzle.dev/blog/jekyll/" type="text/html"/>
 		<id>https://zyzle.dev/blog/jekyll/</id>
-		<content type="html">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;jekyllrb.com&#x2F;&quot;&gt;Jekyll&lt;&#x2F;a&gt; is the oldest of the static site generators we&#x27;ll be looking at it&#x27;s 1.0 version appearing in 2013. It was originally designed to be centred around blogging but has grown into a more fully featured static site generator.&lt;&#x2F;p&gt;
+		<content type="html">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;jekyllrb.com&#x2F;&quot;&gt;Jekyll&lt;&#x2F;a&gt; is the oldest of the static site generators we&#x27;ll be looking at its 1.0 version appearing in 2013. It was originally designed to be centred around blogging but has grown into a more fully featured static site generator.&lt;&#x2F;p&gt;
 &lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;
-&lt;p&gt;The application is written in ruby and the sites and themes are build around gems. One additional benefit of Jekyll is it comes fully supported by GitHub which will be my preferred way of hosting the blog for now.&lt;&#x2F;p&gt;
+&lt;p&gt;The application is written in ruby and the sites and themes are built around gems. One additional benefit of Jekyll is it comes fully supported by GitHub which will be my preferred way of hosting the blog for now.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;installation&quot;&gt;Installation&lt;&#x2F;h2&gt;
-&lt;p&gt;This is where the first hurdles with Jekyll come in to play. For one thing apparently you shouldn&#x27;t use the macOS system of Ruby for &lt;a href=&quot;https:&#x2F;&#x2F;www.moncefbelyamani.com&#x2F;why-you-shouldn-t-use-the-system-ruby-to-install-gems-on-a-mac&#x2F;&quot;&gt;various reasons&lt;&#x2F;a&gt; so we&#x27;re going to first have to install the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;postmodern&#x2F;chruby&quot;&gt;chruby&lt;&#x2F;a&gt; tool. I&#x27;m going to skip the exact steps I went through for this but you can follow the instructions on the &lt;a href=&quot;https:&#x2F;&#x2F;jekyllrb.com&#x2F;docs&#x2F;installation&#x2F;macos&#x2F;&quot;&gt;Jekyll site&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;This is where the first hurdles with Jekyll come into play. For one thing, you shouldn&#x27;t use the macOS system of Ruby for &lt;a href=&quot;https:&#x2F;&#x2F;www.moncefbelyamani.com&#x2F;why-you-shouldn-t-use-the-system-ruby-to-install-gems-on-a-mac&#x2F;&quot;&gt;various reasons&lt;&#x2F;a&gt; so we&#x27;re going to first have to install the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;postmodern&#x2F;chruby&quot;&gt;chruby&lt;&#x2F;a&gt; tool. I&#x27;m going to skip the exact steps I went through for this but you can follow the instructions on the &lt;a href=&quot;https:&#x2F;&#x2F;jekyllrb.com&#x2F;docs&#x2F;installation&#x2F;macos&#x2F;&quot;&gt;Jekyll site&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ gem install bundler jekyll
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;As well as requiring a Ruby install Jekyll has quite a few gem dependencies making it one of the larger install footprints we&#x27;ll be looking at.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;site-setup&quot;&gt;Site setup&lt;&#x2F;h2&gt;
-&lt;p&gt;First we make a new directory for our blog and run the command&lt;&#x2F;p&gt;
+&lt;p&gt;First, we make a new directory for our blog and run the command&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ bundle init
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;This gives us an empty &lt;code&gt;Gemfile&lt;&#x2F;code&gt; which we&#x27;ll add our dependencies to:&lt;&#x2F;p&gt;
@@ -533,7 +533,7 @@
 &lt;p&gt;Once these dependencies are in the gemfile we can use the bundle tool to install them with&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ bundle
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Now we have our dependencies installed lets go ahead and create some basic directory structure for the site:&lt;&#x2F;p&gt;
+&lt;p&gt;Now we have our dependencies installed let&#x27;s go ahead and create some basic directory structure for the site:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;jekyllblog&#x2F;
 &lt;&#x2F;span&gt;&lt;span&gt;  |-- _includes&#x2F;
 &lt;&#x2F;span&gt;&lt;span&gt;  |-- _layouts&#x2F;
@@ -542,8 +542,8 @@
 &lt;&#x2F;span&gt;&lt;span&gt;  |-- _config.yml
 &lt;&#x2F;span&gt;&lt;span&gt;  +-- Gemfile
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;These directory names are fairly self explanatory, &lt;code&gt;_includes&lt;&#x2F;code&gt; will hold our template partials that can be included in other files, &lt;code&gt;_layouts&lt;&#x2F;code&gt; will contain our main template files, &lt;code&gt;_posts&lt;&#x2F;code&gt; will be where we put our blog page markdown files, and &lt;code&gt;assets&lt;&#x2F;code&gt; contains site assets.&lt;&#x2F;p&gt;
-&lt;p&gt;The &lt;code&gt;_config.yml&lt;&#x2F;code&gt; is our Jekyll config file, we wont be adding much to this for the moment, just the sites title:&lt;&#x2F;p&gt;
+&lt;p&gt;These directory names are fairly self-explanatory, &lt;code&gt;_includes&lt;&#x2F;code&gt; will hold our template partials that can be included in other files, &lt;code&gt;_layouts&lt;&#x2F;code&gt; will contain our main template files, &lt;code&gt;_posts&lt;&#x2F;code&gt; will be where we put our blog page markdown files, and &lt;code&gt;assets&lt;&#x2F;code&gt; contains the site assets.&lt;&#x2F;p&gt;
+&lt;p&gt;The &lt;code&gt;_config.yml&lt;&#x2F;code&gt; is our Jekyll config file, we won&#x27;t be adding much to this for the moment, just the sites title:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;yaml&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-yaml &quot;&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;My Blog
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Now we have the basics we can run Jekyll in watch mode to serve our site for us while we develop&lt;&#x2F;p&gt;
@@ -560,7 +560,7 @@
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;If we navigate to &lt;code&gt;http:&#x2F;&#x2F;127.0.0.1:4000&lt;&#x2F;code&gt; right now all we&#x27;ll see is the output directory listing from webrick so let&#x27;s go ahead and add some templates and content.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;templating-101&quot;&gt;Templating 101&lt;&#x2F;h2&gt;
-&lt;p&gt;Let&#x27;s go through the templates for our site. First the base template which we&#x27;ll call &lt;code&gt;default.html&lt;&#x2F;code&gt; which we&#x27;ll place in our &lt;code&gt;_layouts&lt;&#x2F;code&gt; its content will be as follows:&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s go through the templates for our site. First, the base template which we&#x27;ll call &lt;code&gt;default.html&lt;&#x2F;code&gt; which we&#x27;ll place in our &lt;code&gt;_layouts&lt;&#x2F;code&gt; its content will be as follows:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;DOCTYPE &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;html &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;lang&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;en&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
@@ -578,7 +578,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;If you read the &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;blog&#x2F;zola&#x2F;#templating-101&quot;&gt;previous entry&lt;&#x2F;a&gt; in our series this base template should fairly familiar, Jekyll&#x27;s templating engine &lt;a href=&quot;https:&#x2F;&#x2F;shopify.github.io&#x2F;liquid&#x2F;&quot;&gt;Liquid&lt;&#x2F;a&gt; (originally developed by &lt;a href=&quot;https:&#x2F;&#x2F;www.shopify.com&#x2F;&quot;&gt;Shopify&lt;&#x2F;a&gt;) shares a lot of syntax with &lt;a href=&quot;https:&#x2F;&#x2F;tera.netlify.app&#x2F;&quot;&gt;Tera&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
-&lt;p&gt;Unlike our Zola blog the Jekyll one does not define named content blocks the &lt;code&gt;{{content}}&lt;&#x2F;code&gt; template entry will automatically pick up the content either from a markdown page or from a sub-template that will extend this one. &lt;code&gt;{{site.title}}&lt;&#x2F;code&gt; simply comes from our &lt;code&gt;_config.yml&lt;&#x2F;code&gt; file.&lt;&#x2F;p&gt;
+&lt;p&gt;Unlike our Zola blog, the Jekyll one does not define named content blocks the &lt;code&gt;{{content}}&lt;&#x2F;code&gt; template entry will automatically pick up the content either from a markdown page or from a sub-template that will extend this one. &lt;code&gt;{{site.title}}&lt;&#x2F;code&gt; simply comes from our &lt;code&gt;_config.yml&lt;&#x2F;code&gt; file.&lt;&#x2F;p&gt;
 &lt;p&gt;We&#x27;ve separated our header navigation into an include in &lt;code&gt;_includes&#x2F;navigation.html&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;nav&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
@@ -589,7 +589,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;nav&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Here we use the Jekyll &lt;code&gt;link&lt;&#x2F;code&gt; command to construct a link to the specific pages in the root of the project, as we can see this link can either be to an explicit HTML file or a Markdown file that will be processed by Jekyll during its build.&lt;&#x2F;p&gt;
-&lt;p&gt;So lets take a look at the &lt;code&gt;index.html&lt;&#x2F;code&gt; file that we&#x27;ve created:&lt;&#x2F;p&gt;
+&lt;p&gt;So let&#x27;s take a look at the &lt;code&gt;index.html&lt;&#x2F;code&gt; file that we&#x27;ve created:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;---
 &lt;&#x2F;span&gt;&lt;span&gt;layout: default
 &lt;&#x2F;span&gt;&lt;span&gt;title: Home
@@ -597,7 +597,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;This is the blog homepage&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;p&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Not much in the way of html in here, this is really just a front-matter telling Jekyll which layout template to plug this content in to and a title for the page.&lt;&#x2F;p&gt;
+&lt;p&gt;Not much in the way of HTML in here, this is really just a front-matter telling Jekyll which layout template to plug this content into and a title for the page.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;our-list-entries-pages&quot;&gt;Our List&#x2F;Entries pages&lt;&#x2F;h2&gt;
 &lt;p&gt;Our &lt;code&gt;blog.html&lt;&#x2F;code&gt; file will contain a title and give us a basic unordered list of the current blog entries on the site. Jekyll gives us a helpful &lt;code&gt;site.posts&lt;&#x2F;code&gt; variable that we can iterate over for this purpose:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;---
@@ -628,8 +628,8 @@
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span&gt;{{ content }}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;All we need to do here is pull out the page title and date from the &lt;code&gt;page&lt;&#x2F;code&gt; object Jekyll gives us and wrap these in some tags to be displayed at the top of the content block. Notice this templates front-matter where we have a &lt;code&gt;layout&lt;&#x2F;code&gt; property defined, this tells Jekyll to forward the results of merging this template with its markdown file into the &lt;code&gt;content&lt;&#x2F;code&gt; block of the &lt;code&gt;default.html&lt;&#x2F;code&gt; template defined above.&lt;&#x2F;p&gt;
-&lt;p&gt;The final part of these blog posts is the markdown itself, these files are placed in the &lt;code&gt;_posts&lt;&#x2F;code&gt; folder and their names are prefixed by the post release date e.g &lt;code&gt;2022-05-20-post-1.md&lt;&#x2F;code&gt; in these files we define a front-matter with template to use and title, then the content that makes up our blog post:&lt;&#x2F;p&gt;
+&lt;p&gt;All we need to do here is pull out the page title and date from the &lt;code&gt;page&lt;&#x2F;code&gt; object Jekyll gives us and wrap these in some tags to be displayed at the top of the content block. Notice this template&#x27;s front-matter where we have a &lt;code&gt;layout&lt;&#x2F;code&gt; property defined, this tells Jekyll to forward the results of merging this template with its markdown file into the &lt;code&gt;content&lt;&#x2F;code&gt; block of the &lt;code&gt;default.html&lt;&#x2F;code&gt; template defined above.&lt;&#x2F;p&gt;
+&lt;p&gt;The final part of these blog posts is the markdown itself, these files are placed in the &lt;code&gt;_posts&lt;&#x2F;code&gt; folder and their names are prefixed by the posts release date e.g &lt;code&gt;2022-05-20-post-1.md&lt;&#x2F;code&gt; in these files we define a front-matter with template to use and title, then the content that makes up our blog post:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;markdown&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-markdown &quot;&gt;&lt;code class=&quot;language-markdown&quot; data-lang=&quot;markdown&quot;&gt;&lt;span&gt;---
 &lt;&#x2F;span&gt;&lt;span&gt;layout: blog-page
 &lt;&#x2F;span&gt;&lt;span&gt;title: My first post
@@ -646,7 +646,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span&gt;This is the blog about page
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;It&#x27;s template &lt;code&gt;page.html&lt;&#x2F;code&gt;  looks like this:&lt;&#x2F;p&gt;
+&lt;p&gt;Its template &lt;code&gt;page.html&lt;&#x2F;code&gt;  looks like this:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;---
 &lt;&#x2F;span&gt;&lt;span&gt;layout: default
 &lt;&#x2F;span&gt;&lt;span&gt;---
@@ -658,7 +658,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;  {{ content }}
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;article&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Again we have a partial HTML file with some basic tags that wrap the markdown content and extract the page title into a header. As with the previous template this is then passed up to the &lt;code&gt;default.html&lt;&#x2F;code&gt; template and inserted into it&#x27;s &lt;code&gt;content&lt;&#x2F;code&gt; section.&lt;&#x2F;p&gt;
+&lt;p&gt;Again we have a partial HTML file with some basic tags that wrap the markdown content and extract the page title into a header. As with the previous template, this is then passed up to the &lt;code&gt;default.html&lt;&#x2F;code&gt; template and inserted into its &lt;code&gt;content&lt;&#x2F;code&gt; section.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;build-and-deploy&quot;&gt;Build and deploy&lt;&#x2F;h2&gt;
 &lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ jekyll build
 &lt;&#x2F;span&gt;&lt;span&gt;Configuration file: &#x2F;Users&#x2F;jekyllblog&#x2F;_config.yml
@@ -710,9 +710,9 @@
 &lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Unlike our previous example Jekyll doesn&#x27;t provide us with any extras out of the box although it does provide a wide catalogue of &lt;a href=&quot;https:&#x2F;&#x2F;jekyllrb.com&#x2F;docs&#x2F;plugins&#x2F;&quot;&gt;plugins&lt;&#x2F;a&gt; that can be used with the site.&lt;&#x2F;p&gt;
+&lt;p&gt;Unlike our previous example, Jekyll doesn&#x27;t provide us with any extras out of the box although it does provide a wide catalogue of &lt;a href=&quot;https:&#x2F;&#x2F;jekyllrb.com&#x2F;docs&#x2F;plugins&#x2F;&quot;&gt;plugins&lt;&#x2F;a&gt; that can be used with the site.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
-&lt;p&gt;Jekyll is easy to get up and running with all be it if you have previous knowledge of managing a Ruby installation on your system, it&#x27;s templating system is straightforward and the Liquid template engine is well documented. Jekyll&#x27;s built URL structure is a little archaic and actually goes against what many SEO guides &lt;a href=&quot;https:&#x2F;&#x2F;www.sistrix.com&#x2F;blog&#x2F;want-slowly-kill-content-google-simply-use-directory-structure-dates&#x2F;&quot;&gt;recommend&lt;&#x2F;a&gt;. The constructed site is smaller than the one generated by Zola, mostly because of the omitted extra files like the 404 page and sitemap, and comes in at around 20Kb.&lt;&#x2F;p&gt;
+&lt;p&gt;Jekyll is easy to get up and running with, all be it if you have previous knowledge of managing a Ruby installation on your system, its templating system is straightforward and the Liquid template engine is well documented. Jekyll&#x27;s built URL structure is a little archaic and actually goes against what many SEO guides &lt;a href=&quot;https:&#x2F;&#x2F;www.sistrix.com&#x2F;blog&#x2F;want-slowly-kill-content-google-simply-use-directory-structure-dates&#x2F;&quot;&gt;recommend&lt;&#x2F;a&gt;. The constructed site is smaller than the one generated by Zola, mostly because of the omitted extra files like the 404 page and sitemap, and comes in at around 20Kb.&lt;&#x2F;p&gt;
 </content>
 	</entry>
 	<entry xml:lang="en">
@@ -721,24 +721,24 @@
 		<updated>2022-04-16T00:00:00+00:00</updated>
 		<link href="https://zyzle.dev/blog/zola/" type="text/html"/>
 		<id>https://zyzle.dev/blog/zola/</id>
-		<content type="html">&lt;p&gt;Zola (formally Gutenberg) is a SSG written in Rust. Zola has it&#x27;s own templating engine &lt;a href=&quot;https:&#x2F;&#x2F;tera.netlify.app&#x2F;&quot;&gt;Tera&lt;&#x2F;a&gt; created by the same author and follows a similar design in it&#x27;s templating to Jinja 2. Distributed as a single binary Zola has a much smaller footprint than the other SSGs we&#x27;ll be looking at, it also promises to be fast (comparable to Hugo) and runs from a simple augmented markdown including shortcodes and custom internal linking.&lt;&#x2F;p&gt;
+		<content type="html">&lt;p&gt;Zola (formally Gutenberg) is an SSG written in Rust. Zola has its own templating engine, &lt;a href=&quot;https:&#x2F;&#x2F;tera.netlify.app&#x2F;&quot;&gt;Tera&lt;&#x2F;a&gt; created by the same author and follows a similar design in its templating to Jinja 2. Distributed as a single binary Zola has a much smaller footprint than the other SSGs we&#x27;ll be looking at, it also promises to be fast (comparable to Hugo) and runs from a simple augmented markdown including shortcodes and custom internal linking.&lt;&#x2F;p&gt;
 &lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;&#x2F;h2&gt;
-&lt;p&gt;Zola comes as a single binary distributable, on MacOS the simplest way to install it is with homebrew.&lt;&#x2F;p&gt;
+&lt;p&gt;Zola comes as a single binary distributable, on macOS the simplest way to install it is with homebrew.&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ brew install zola
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Zola is also available on MacPorts, Chocolatey, Scoop, and various linux package structures. With no external dependencies Zola is probably the simplest of the 3 tools we&#x27;re looking at.&lt;&#x2F;p&gt;
-&lt;p&gt;The version we&#x27;ll be using is the current stable 0.15.3 (23rd Jan 2022) at the time of writing, with a total size of ~19mb it also has one of the smallest install footprints. &lt;&#x2F;p&gt;
+&lt;p&gt;Zola is also available on MacPorts, Chocolatey, Scoop, and various Linux package structures. With no external dependencies, Zola is probably the simplest of the 3 tools we&#x27;re looking at.&lt;&#x2F;p&gt;
+&lt;p&gt;The version we&#x27;ll be using is the current stable 0.15.3 (23rd Jan 2022) at the time of writing, with a total size of ~19Mb it also has one of the smallest install footprints. &lt;&#x2F;p&gt;
 &lt;h2 id=&quot;site-setup&quot;&gt;Site setup&lt;&#x2F;h2&gt;
 &lt;p&gt;Zola has a simple setup wizard that runs through some basic configuration options&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ zola init zolablog
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;Wizard process asks (defaults shown): &lt;&#x2F;p&gt;
-&lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;* site url
+&lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;* site URL
 &lt;&#x2F;span&gt;&lt;span&gt;* Sass compilation (Y&#x2F;n)
 &lt;&#x2F;span&gt;&lt;span&gt;* syntax highlighting (y&#x2F;N)
 &lt;&#x2F;span&gt;&lt;span&gt;* search index (y&#x2F;N)
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;created site has following structure:&lt;&#x2F;p&gt;
+&lt;p&gt;The created site has the following structure:&lt;&#x2F;p&gt;
 &lt;pre style=&quot;background-color:#282c34;color:#abb2bf;&quot;&gt;&lt;code&gt;&lt;span&gt;zolablog&#x2F;
 &lt;&#x2F;span&gt;&lt;span&gt;  |-- content&#x2F;
 &lt;&#x2F;span&gt;&lt;span&gt;  |-- sass&#x2F;
@@ -747,7 +747,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;  |-- themes&#x2F;
 &lt;&#x2F;span&gt;&lt;span&gt;  +-- config.toml
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;A few empty directories and a &lt;code&gt;config.toml&lt;&#x2F;code&gt; with the minimal configuration I selected in the site setup wizard. The full list of Zola configuration options can be found &lt;a href=&quot;https:&#x2F;&#x2F;www.getzola.org&#x2F;documentation&#x2F;getting-started&#x2F;configuration&#x2F;&quot;&gt;in the zola documentation&lt;&#x2F;a&gt;. The config will looks something like the following:&lt;&#x2F;p&gt;
+&lt;p&gt;A few empty directories and a &lt;code&gt;config.toml&lt;&#x2F;code&gt; with the minimal configuration I selected in the site setup wizard. The full list of Zola configuration options can be found &lt;a href=&quot;https:&#x2F;&#x2F;www.getzola.org&#x2F;documentation&#x2F;getting-started&#x2F;configuration&#x2F;&quot;&gt;in the Zola documentation&lt;&#x2F;a&gt;. The config will look something like the following:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;toml&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-toml &quot;&gt;&lt;code class=&quot;language-toml&quot; data-lang=&quot;toml&quot;&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;# The URL the site will be built for
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;base_url &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;https:&#x2F;&#x2F;example.com&amp;quot;
 &lt;&#x2F;span&gt;&lt;span&gt;
@@ -801,13 +801,13 @@
 &lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;body&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;This is a fairly standard html5 template using some semantic html tags. Tera has 3 types of expression delimiters:&lt;&#x2F;p&gt;
+&lt;p&gt;This is a fairly standard html5 template using some semantic HTML tags. Tera has 3 types of expression delimiters:&lt;&#x2F;p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;{{&lt;&#x2F;code&gt; and &lt;code&gt;}}&lt;&#x2F;code&gt; for expressions&lt;&#x2F;li&gt;
 &lt;li&gt;&lt;code&gt;{%&lt;&#x2F;code&gt; and &lt;code&gt;%}&lt;&#x2F;code&gt; for statements&lt;&#x2F;li&gt;
 &lt;li&gt;&lt;code&gt;{#&lt;&#x2F;code&gt; and &lt;code&gt;#}&lt;&#x2F;code&gt; for comments&lt;&#x2F;li&gt;
 &lt;&#x2F;ul&gt;
-&lt;p&gt;In the above we pick out the site title from the configuration file with &lt;code&gt;config.title&lt;&#x2F;code&gt; and wrap this with a &lt;code&gt;title&lt;&#x2F;code&gt; named block which we can override later. We also define a block called &lt;code&gt;content&lt;&#x2F;code&gt; inside the sites &lt;code&gt;&amp;lt;main&amp;gt;&lt;&#x2F;code&gt; tags that we&#x27;ll be substituting with out page content in later templates. For now lets have a look at the &lt;code&gt;navigation.html&lt;&#x2F;code&gt; template that will be included in the the &lt;code&gt;header&lt;&#x2F;code&gt; tag.&lt;&#x2F;p&gt;
+&lt;p&gt;In the above, we pick out the site title from the configuration file with &lt;code&gt;config.title&lt;&#x2F;code&gt; and wrap this with a &lt;code&gt;title&lt;&#x2F;code&gt; named block which we can override later. We also define a block called &lt;code&gt;content&lt;&#x2F;code&gt; inside the site&#x27;s &lt;code&gt;&amp;lt;main&amp;gt;&lt;&#x2F;code&gt; tags that we&#x27;ll be substituting with our page content in later templates. For now, let&#x27;s have a look at the &lt;code&gt;navigation.html&lt;&#x2F;code&gt; template that will be included in the &lt;code&gt;header&lt;&#x2F;code&gt; tag.&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;nav&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;    &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;href&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;{{ get_url(path=&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;@&lt;&#x2F;span&gt;&lt;span&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;_index.md&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;) }}&lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;Home&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;li&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
@@ -816,12 +816,12 @@
 &lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;ul&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;nav&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;The &lt;code&gt;get_url&lt;&#x2F;code&gt; function gives the permalink for a given path the &lt;code&gt;@&#x2F;&lt;&#x2F;code&gt; will be treated as an internal link to the root of the Zola &lt;code&gt;content&lt;&#x2F;code&gt; directory. Lets have a look at the first entry here, the &lt;code&gt;_index.md&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The &lt;code&gt;get_url&lt;&#x2F;code&gt; function gives the permalink for a given path the &lt;code&gt;@&#x2F;&lt;&#x2F;code&gt; will be treated as an internal link to the root of the Zola &lt;code&gt;content&lt;&#x2F;code&gt; directory. Let&#x27;s have a look at the first entry here, the &lt;code&gt;_index.md&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;toml&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-toml &quot;&gt;&lt;code class=&quot;language-toml&quot; data-lang=&quot;toml&quot;&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;+++&lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;page_template &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;page.html&amp;quot;
 &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;+++&lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;This simple markdown frontmatter does is tell zola that any pages contained in this directory should be rendered with the &lt;code&gt;page.html&lt;&#x2F;code&gt; template, we&#x27;ll come back to the contents of this later. &lt;&#x2F;p&gt;
+&lt;p&gt;This simple markdown frontmatter does is tell Zola that any pages contained in this directory should be rendered with the &lt;code&gt;page.html&lt;&#x2F;code&gt; template, we&#x27;ll come back to the contents of this later. &lt;&#x2F;p&gt;
 &lt;p&gt;Zola will also render the &lt;code&gt;index.html&lt;&#x2F;code&gt; file found in the templates directory at the site root&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;j2&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-j2 &quot;&gt;&lt;code class=&quot;language-j2&quot; data-lang=&quot;j2&quot;&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;extends &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;base.html&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;%}
 &lt;&#x2F;span&gt;&lt;span&gt;
@@ -831,10 +831,10 @@
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;p&amp;gt;This is the blog homepage&amp;lt;&#x2F;p&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;endblock &lt;&#x2F;span&gt;&lt;span&gt;content %}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Here we are again extending the sites &lt;code&gt;base.html&lt;&#x2F;code&gt; and overriding the named blocks, first our &lt;code&gt;title&lt;&#x2F;code&gt; block, this has the interesting &lt;code&gt;super()&lt;&#x2F;code&gt; method which places the blocks existing content defined in the base template at the calling location allowing us to keep the sites name without having to redefine it in every template.&lt;&#x2F;p&gt;
+&lt;p&gt;Here we are again extending the site&#x27;s &lt;code&gt;base.html&lt;&#x2F;code&gt; and overriding the named blocks, first our &lt;code&gt;title&lt;&#x2F;code&gt; block, this has the interesting &lt;code&gt;super()&lt;&#x2F;code&gt; method which places the blocks existing content defined in the base template at the calling location allowing us to keep the sites name without having to redefine it in every template.&lt;&#x2F;p&gt;
 &lt;p&gt;We just add a simple static paragraph of text into the &lt;code&gt;content&lt;&#x2F;code&gt; block of the template.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;pages&quot;&gt;Pages&lt;&#x2F;h2&gt;
-&lt;p&gt;Zola considers directories inside the &lt;code&gt;content&lt;&#x2F;code&gt; directory as sections, we&#x27;ll create a new dir and file &lt;code&gt;&#x2F;blog&#x2F;_index.md&lt;&#x2F;code&gt; and add some toml frontmatter that will tell Zola how to render this sections root page and any sub-pages:&lt;&#x2F;p&gt;
+&lt;p&gt;Zola considers directories inside the &lt;code&gt;content&lt;&#x2F;code&gt; directory as sections, we&#x27;ll create a new dir and file &lt;code&gt;&#x2F;blog&#x2F;_index.md&lt;&#x2F;code&gt; and add some TOML frontmatter that will tell Zola how to render this sections root page and any sub-pages:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;toml&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-toml &quot;&gt;&lt;code class=&quot;language-toml&quot; data-lang=&quot;toml&quot;&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;+++&lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;List of blog posts&amp;quot;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;sort_by &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;date&amp;quot;
@@ -842,9 +842,9 @@
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;page_template &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;blog-page.html&amp;quot;
 &lt;&#x2F;span&gt;&lt;span style=&quot;background-color:#f8f8f0;color:#c678dd;&quot;&gt;+++&lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;This tells Zola, render the &lt;code&gt;blog&#x2F;&lt;&#x2F;code&gt; index url using the &lt;code&gt;blog.html&lt;&#x2F;code&gt; template and apply the &lt;code&gt;blog-page.html&lt;&#x2F;code&gt; template to any markdown files in this section folder, the &lt;code&gt;sort_by&lt;&#x2F;code&gt; directive also tells Zola to sort the articles in this section by date, default newest first. &lt;&#x2F;p&gt;
+&lt;p&gt;This tells Zola to render the &lt;code&gt;blog&#x2F;&lt;&#x2F;code&gt; index URL using the &lt;code&gt;blog.html&lt;&#x2F;code&gt; template and apply the &lt;code&gt;blog-page.html&lt;&#x2F;code&gt; template to any markdown files in this section folder, the &lt;code&gt;sort_by&lt;&#x2F;code&gt; directive also tells Zola to sort the articles in this section by date, default newest first. &lt;&#x2F;p&gt;
 &lt;h3 id=&quot;blog-list&quot;&gt;Blog list&lt;&#x2F;h3&gt;
-&lt;p&gt;Lets look at the index page template &lt;code&gt;blog.html&lt;&#x2F;code&gt; first:&lt;&#x2F;p&gt;
+&lt;p&gt;Let&#x27;s look at the index page template &lt;code&gt;blog.html&lt;&#x2F;code&gt; first:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;j2&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-j2 &quot;&gt;&lt;code class=&quot;language-j2&quot; data-lang=&quot;j2&quot;&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;extends &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;base.html&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;%}
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;block &lt;&#x2F;span&gt;&lt;span&gt;title %}{{ section.title }} | {{ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;super&lt;&#x2F;span&gt;&lt;span&gt;() }}{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;endblock &lt;&#x2F;span&gt;&lt;span&gt;title %}
@@ -860,7 +860,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;ul&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;endblock &lt;&#x2F;span&gt;&lt;span&gt;content %}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;As we&#x27;ve seen before we start by extending the &lt;code&gt;base.html&lt;&#x2F;code&gt; template and override the title section using &lt;code&gt;super&lt;&#x2F;code&gt; again to keep our site title, then we insert into our &lt;code&gt;content&lt;&#x2F;code&gt; block. We use &lt;code&gt;section.title&lt;&#x2F;code&gt; to pull out the title we defined in the front matter in &lt;code&gt;_index.md&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;As we&#x27;ve seen before we start by extending the &lt;code&gt;base.html&lt;&#x2F;code&gt; template and override the title section using &lt;code&gt;super&lt;&#x2F;code&gt; again to keep our site title, then we insert it into our &lt;code&gt;content&lt;&#x2F;code&gt; block. We use &lt;code&gt;section.title&lt;&#x2F;code&gt; to pull out the title we defined in the front matter in &lt;code&gt;_index.md&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
 &lt;p&gt;Now we get on to showing the blog list. Zola offers us the &lt;code&gt;section.pages&lt;&#x2F;code&gt; variable that gives us a sorted list of page objects representing pages in our section that we can iterate over and provide links to using their &lt;code&gt;permalink&lt;&#x2F;code&gt; and &lt;code&gt;title&lt;&#x2F;code&gt; variables.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;blog-page&quot;&gt;Blog Page&lt;&#x2F;h3&gt;
 &lt;pre data-lang=&quot;j2&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-j2 &quot;&gt;&lt;code class=&quot;language-j2&quot; data-lang=&quot;j2&quot;&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;extends &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;base.html&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;%}
@@ -875,7 +875,7 @@
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;There&#x27;s not much in this template, again we&#x27;re extending the &lt;code&gt;base.html&lt;&#x2F;code&gt; file and inserting our content into the named block. We&#x27;ll also apply the Zola &lt;code&gt;safe&lt;&#x2F;code&gt; filter to the content because no html escaping is required for the content generated from the markdown by Zola.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;about&quot;&gt;About&lt;&#x2F;h3&gt;
-&lt;p&gt;Our final template is the top level &lt;code&gt;page.html&lt;&#x2F;code&gt; we use to render the &lt;code&gt;about.md&lt;&#x2F;code&gt; about page content.&lt;&#x2F;p&gt;
+&lt;p&gt;Our final template is the top-level &lt;code&gt;page.html&lt;&#x2F;code&gt; we use to render the &lt;code&gt;about.md&lt;&#x2F;code&gt; about page content.&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;j2&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-j2 &quot;&gt;&lt;code class=&quot;language-j2&quot; data-lang=&quot;j2&quot;&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;extends &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;base.html&amp;quot; &lt;&#x2F;span&gt;&lt;span&gt;%}
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;block &lt;&#x2F;span&gt;&lt;span&gt;title%}{{ page.title }} | {{ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;super&lt;&#x2F;span&gt;&lt;span&gt;() }}{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;endblock &lt;&#x2F;span&gt;&lt;span&gt;title %}
@@ -889,7 +889,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&#x2F;article&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;{% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;endblock &lt;&#x2F;span&gt;&lt;span&gt;content %}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;There&#x27;s nothing here we haven&#x27;t looked at already, it&#x27;s just a cut down version of the blog page template.&lt;&#x2F;p&gt;
+&lt;p&gt;There&#x27;s nothing here we haven&#x27;t looked at already, it&#x27;s just a cut-down version of the blog page template.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;building-for-deployment&quot;&gt;Building for deployment&lt;&#x2F;h2&gt;
 &lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;$ zola build
 &lt;&#x2F;span&gt;&lt;span&gt;Building site...
@@ -913,7 +913,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;  |-- robots.txt
 &lt;&#x2F;span&gt;&lt;span&gt;  +-- sitemap.xml
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;So our pages have been placed into individual HTML files using the templates we defined in the previous steps as an example here&#x27;s what the about page looks like compiled:&lt;&#x2F;p&gt;
+&lt;p&gt;So our pages have been placed into individual HTML files using the templates we defined in the previous steps as an example, here&#x27;s what the about page looks like compiled:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;html&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-html &quot;&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span&gt;&amp;lt;!&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;DOCTYPE &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;html&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;html &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;lang&lt;&#x2F;span&gt;&lt;span&gt;=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;en&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;  &amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;head&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
@@ -947,7 +947,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;404 Not Found&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;title&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;404 Not Found&amp;lt;&#x2F;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;h1&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;There&#x27;s also a basic &lt;code&gt;robots.txt&lt;&#x2F;code&gt; which points to our auto-generated &lt;code&gt;sitemap.xml&lt;&#x2F;code&gt; and if we had chosen it when we did the setup wizard we would have a JS search index file as well as a copy of &lt;a href=&quot;http:&#x2F;&#x2F;elasticlunr.com&#x2F;&quot;&gt;Elasticlunr&lt;&#x2F;a&gt; that can be hooked up to provide search functionality to our site. These are all extra features generated that I may take a deeper dive into later on but for now we&#x27;re done with the basic setup.&lt;&#x2F;p&gt;
+&lt;p&gt;There&#x27;s also a basic &lt;code&gt;robots.txt&lt;&#x2F;code&gt; which points to our auto-generated &lt;code&gt;sitemap.xml&lt;&#x2F;code&gt; and if we had chosen it when we did the setup wizard we would have a JS search index file as well as a copy of &lt;a href=&quot;http:&#x2F;&#x2F;elasticlunr.com&#x2F;&quot;&gt;Elasticlunr&lt;&#x2F;a&gt; that can be hooked up to provide search functionality to our site. These are all extra features generated that I may take a deeper dive into later on but for now, we&#x27;re done with the basic setup.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;&#x2F;h2&gt;
 &lt;p&gt;Zola was easy to get up and running with, the templating engine is simple and seems well documented. Zola provides a lot of good integrations for more advanced features such as search and site feeds we&#x27;ll look at in later sections. The final built site for our Zola example comes in at 32Kb.&lt;&#x2F;p&gt;
 </content>
@@ -958,24 +958,24 @@
 		<updated>2022-04-09T00:00:00+00:00</updated>
 		<link href="https://zyzle.dev/blog/intro/" type="text/html"/>
 		<id>https://zyzle.dev/blog/intro/</id>
-		<content type="html">&lt;p&gt;I&#x27;ve been wanting to get back into blogging for some time but have no idea what to write about to start me off, so why not write about choosing a blog tool and it&#x27;s setup. We&#x27;re going to go through some of the tools I&#x27;ve considered and the reasons behind my final choice as well as the process of creating a template and deploying the blog.&lt;&#x2F;p&gt;
+		<content type="html">&lt;p&gt;I&#x27;ve been wanting to get back into blogging for some time but have no idea what to write about to start me off, so why not write about choosing a blog tool and its setup. We&#x27;re going to go through some of the tools I&#x27;ve considered and the reasons behind my final choice as well as the process of creating a template and deploying the blog.&lt;&#x2F;p&gt;
 &lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;&lt;h2 id=&quot;why-static-site&quot;&gt;Why static site?&lt;&#x2F;h2&gt;
-&lt;p&gt;For a couple of reasons I&#x27;ve chosen to look at static site generators for this task. Firstly while I wan&#x27;t to create, style, and release my content as simply as possible I want to be in control of it. With the blogging platforms available today I don&#x27;t really find I get this. &lt;&#x2F;p&gt;
-&lt;p&gt;Another big plus for me with the static site generators is I can keep all of the content in git in simple text files (usually markdown). The benefit if this to me is it allows my content to be stored in a version control system, I can look back through the history of drafts to see how things have progressed or even revert to older versions if I go off in a direction I later want to revise. &lt;&#x2F;p&gt;
-&lt;p&gt;I&#x27;ve always been a fan of reducing page bloat as much as possible, these days even simple articles are bogged down with so much unnecessary scripts, includes, and poorly optimised assets that page sizes are out of control. I chose at random a reasonably sized Medium blog post of around 1300 words, this clocked in at 4.4Mb! The actual readable text content of the page consisting of only 8Kb of this total, so yeah &amp;lt;0.2%  of the page is actual content.&lt;&#x2F;p&gt;
+&lt;p&gt;For a couple of reasons, I&#x27;ve chosen to look at static site generators for this task. Firstly while I want to create, style, and release my content as simply as possible I want to be in control of it. With the blogging platforms available today I don&#x27;t find I get this. &lt;&#x2F;p&gt;
+&lt;p&gt;Another big plus for me with the static site generators is I can keep all of the content in git in simple text files (usually markdown). The benefit of this to me is it allows my content to be stored in a version control system, I can look back through the history of drafts to see how things have progressed or even revert to older versions if I go off in a direction I later want to revise. &lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve always been a fan of reducing page bloat as much as possible, these days even simple articles are bogged down with so many unnecessary scripts, includes, and poorly optimised assets that page sizes are out of control. I chose at random a reasonably sized Medium blog post of around 1300 words, this clocked in at 4.4Mb! The actual readable text content of the page consists of only 8Kb of this total, so yeah &amp;lt;0.2%  of the page is actual content.&lt;&#x2F;p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Maciej Ceglowski has a great talk about this, the text of which can be found &lt;a href=&quot;https:&#x2F;&#x2F;idlewords.com&#x2F;talks&#x2F;website_obesity.htm&quot;&gt;here&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
 &lt;&#x2F;blockquote&gt;
 &lt;p&gt;From what I can see all of the most common blogging platforms these days share this issue with Medium and I don&#x27;t really want to have to hand-crank every page of my blog from scratch so the obvious solution seems to be a static site generator.&lt;&#x2F;p&gt;
-&lt;p&gt;These have become popular with content creators in recent years because they allow you to keep your content blog entries, pages, sections etc. in a set of simple markdown files which can then be processed by the engine into a set of pre-defined html templates creating a more complete looking web experience for the end user. &lt;&#x2F;p&gt;
-&lt;p&gt;There are many of these tools available currently but we&#x27;ll be focusing on 3 for the purposes of this blog, basically because I don&#x27;t want to have to learn more than 3 tools and re-implementing the site more than that.&lt;&#x2F;p&gt;
+&lt;p&gt;These have become popular with content creators in recent years because they allow you to keep your content blog entries, pages, sections etc. in a set of simple markdown files which can then be processed by the engine into a set of pre-defined HTML templates creating a more complete looking web experience for the end user. &lt;&#x2F;p&gt;
+&lt;p&gt;There are many of these tools available currently but we&#x27;ll be focusing on 3 for this blog because I don&#x27;t want to have to learn more than 3 tools and re-implementing the site more than that.&lt;&#x2F;p&gt;
 &lt;p&gt;The three tools I&#x27;ve chosen to look at are:&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;hugo&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;gohugo.io&#x2F;&quot;&gt;Hugo&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
-&lt;p&gt;One of the most popular static site generators, more generic site template engine than the other two we&#x27;ll be looking at. Claims to be one of the fastest static site generators around. Written in Go and uses Go&#x27;s &lt;code&gt;html&#x2F;template&lt;&#x2F;code&gt; and &lt;code&gt;text&#x2F;template&lt;&#x2F;code&gt; libraries for its templating.&lt;&#x2F;p&gt;
+&lt;p&gt;One of the most popular static site generators, a more generic site template engine than the other two we&#x27;ll be looking at. Claims to be one of the fastest static site generators around. Written in Go and uses Go&#x27;s &lt;code&gt;html&#x2F;template&lt;&#x2F;code&gt; and &lt;code&gt;text&#x2F;template&lt;&#x2F;code&gt; libraries for its templating.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;jekyll&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;jekyllrb.com&#x2F;&quot;&gt;Jekyll&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
-&lt;p&gt;One of the older static site generators and the first (only?) one to be integrated into github pages. Built in Ruby and does appear to require some Ruby knowledge to use.&lt;&#x2F;p&gt;
+&lt;p&gt;One of the older static site generators and the first (only?) one to be integrated into Github pages. Built-in Ruby and does appear to require some Ruby knowledge to use.&lt;&#x2F;p&gt;
 &lt;h3 id=&quot;zola&quot;&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.getzola.org&#x2F;&quot;&gt;Zola&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
-&lt;p&gt;The newest of the three we&#x27;ll be looking at written in Rust and using a custom template engine similar to Jinja. Has a strong opinion on how content should be structured but has good freedom in it&#x27;s templates.&lt;&#x2F;p&gt;
+&lt;p&gt;The newest of the three we&#x27;ll be looking at is written in Rust and uses a custom template engine similar to Jinja. Has a strong opinion on how content should be structured but has good freedom in its templates.&lt;&#x2F;p&gt;
 &lt;p&gt;The plan is to implement the new blog, or at least a very small subset of it in each of these 3 tools  looking at things like: &lt;&#x2F;p&gt;
 &lt;ul&gt;
 &lt;li&gt;simplicity of setup&lt;&#x2F;li&gt;
@@ -1003,12 +1003,12 @@
 &lt;li&gt;simple site structure&lt;&#x2F;li&gt;
 &lt;li&gt;taxonomies support&lt;&#x2F;li&gt;
 &lt;li&gt;ability to draft entries&lt;&#x2F;li&gt;
-&lt;li&gt;template that can be reused&lt;&#x2F;li&gt;
+&lt;li&gt;a template that can be reused&lt;&#x2F;li&gt;
 &lt;li&gt;integration with GH-pages deploy&lt;&#x2F;li&gt;
 &lt;&#x2F;ul&gt;
 &lt;&#x2F;li&gt;
 &lt;&#x2F;ul&gt;
-&lt;p&gt;For the first part of this series I&#x27;ll create the same simple site template and basic page set in each of the three static site generators. I&#x27;m going to start with a simple homepage showing site title, a navigations section linking to homepage and an about page, a list of two blog entries showing title a summary of the page content and a link to continue reading. I&#x27;ll also need another two templates, one for the free-form About page and one for our blog posts. &lt;&#x2F;p&gt;
+&lt;p&gt;For the first part of this series, I&#x27;ll create the same simple site template and basic page set in each of the three static site generators. I&#x27;m going to start with a simple homepage showing the site title, a navigations section linking to the homepage and an about page, a list of two blog entries showing the title a summary of the page content and a link to continue reading. I&#x27;ll also need another two templates, one for the free-form About page and one for our blog posts. &lt;&#x2F;p&gt;
 &lt;p&gt;The basic sites first iteration should look something like the following:&lt;&#x2F;p&gt;
 &lt;p&gt;&lt;figure&gt;
     
@@ -1043,7 +1043,7 @@
     &lt;figcaption&gt;A basic post page&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;I&#x27;ll also try and keep parity between the HTML generated by each &lt;&#x2F;p&gt;
-&lt;p&gt;By the time you read this I&#x27;ll have a decision made on which tool to use (spoiler it&#x27;s Zola), in the coming posts I&#x27;ll go through what I&#x27;ve found evaluation the 3 of these and hopefully my decision will become clear.&lt;&#x2F;p&gt;
+&lt;p&gt;By the time you read this I&#x27;ll have a decision made on which tool to use (spoiler it&#x27;s Zola), in the coming posts I&#x27;ll go through what I&#x27;ve found evaluating the 3 of these and hopefully my decision will become clear.&lt;&#x2F;p&gt;
 </content>
 	</entry>
 	<entry xml:lang="en">
