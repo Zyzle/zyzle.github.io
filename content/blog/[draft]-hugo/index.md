@@ -12,7 +12,7 @@ author = "Colin McCulloch"
 ghissue = 8
 +++
 
-[Hugo](https://gohugo.io/) bills itself as "The worlds fastest framework for building websites" it's gained a lot of popularity in recent years, written in Go and using the `html/template` and `text/template` modules as the basis for its templating although no previous knowledge of Go is required to get up and running with it
+[Hugo](https://gohugo.io/) bills itself as "The world's fastest framework for building websites" it's gained a lot of popularity in recent years, written in Go and using the `html/template` and `text/template` modules as the basis for its templating although no previous knowledge of Go is required to get up and running with it
 
 <!-- more -->
 
@@ -22,9 +22,9 @@ ghissue = 8
 $ brew install hugo
 ```
 
-* version 0.99.1, size 54Mb
-* also available Homebrew for linux, MacPorts, Chocolatey and scoop for windows
-* requires Go runtime
+- version 0.99.1, size 54Mb
+- also available Homebrew for linux, MacPorts, Chocolatey and scoop for windows
+- requires Go runtime
 
 ## Site setup
 
@@ -32,7 +32,7 @@ $ brew install hugo
 $ hugo new site hugoblog
 ```
 
-No options to give here but does give a hint about next steps:
+No options to give here but does give a hint about the next steps:
 
 ```
 1. Download a theme into the same-named folder.
@@ -53,13 +53,13 @@ create a new barebones theme with the cli
 $ hugo new theme mytheme
 ```
 
-but there's a problem 
+but there's a problem
 
 ```bash
 WARN 2021/11/19 01:49:10 found no layout file for "HTML" for kind "home": You should create a template file which matches Hugo Layouts Lookup Rules for this combination.
 ```
 
-My bad, forgot to add the theme to my `config.toml` file
+My bad forgot to add the theme to my `config.toml` file
 
 ```toml
 baseURL = 'http://example.org/'
@@ -68,9 +68,7 @@ title = 'My New Hugo Site'
 theme = "mytheme"
 ```
 
-Now the compilation step is error free but nothing but a white screen is showing on the development url, lets fix that.
-
-
+Now the compilation step is error-free, but nothing but a white screen is showing on the development URL, let's fix that.
 
 ## Our List/Entries pages
 
@@ -81,4 +79,3 @@ $ hugo new blog/first.md
 ```
 
 ## Conclusion
-

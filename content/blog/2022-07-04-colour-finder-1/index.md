@@ -11,17 +11,19 @@ author = "Colin McCulloch"
 ghissue = 8
 +++
 
-During the interview for my current job, I was given a small pair-programming coding challenge to do. Like all good coding challenges it was probably beyond what could reasonably have been finished in an hour but it was fun and I got the job so my attempt couldn't have been too bad. Not finishing the challenge did annoy me though so here's my attempt at a more polished version of the challenge 
+During the interview for my current job, I was given a small pair-programming coding challenge to do. Like all good coding challenges it was probably beyond what could reasonably have been finished in an hour but it was fun and I got the job so my attempt couldn't have been too bad. Not finishing the challenge did annoy me though so here's my attempt at a more polished version of the challenge
 
 <!-- more -->
 
 > **Update:** Yes I know I'm mixing "colour" and "color" in this post, too much code writing over the years has warped my brain with American spellings :P I'll try and keep it to "colour" in copy and "color" in code from now on.
 
+> **Update 2:** Somehow it escaped my notice that OffscreenCanvas in the way I'm using it here isn't compatible with either Firefox or Safari browsers! The correction can be found [in this Gist](https://gist.github.com/Zyzle/1cf16675d7224ef90b0ef1639c7783a9), serves me right for not checking the compatibility table at the bottom of each MDN page :D
+
 Anyone waiting for part 4 of the "Let's write a blog" series, worry not, it will come eventually I just got distracted playing with this :P
 
 ## The Challenge
 
-The challenge itself was worded something along the lines of "Load an image and find the top n colours used in it" (side note there are problems with this but we'll get to that in part 2). I'm going to extend this slightly with some requirements of my own because there are a few things I don't know how to do but want to learn. 
+The challenge itself was worded something along the lines of "Load an image and find the top n colours used in it" (side note there are problems with this but we'll get to that in part 2). I'm going to extend this slightly with some requirements of my own because there are a few things I don't know how to do but want to learn.
 
 I'm going to build a site with a dropzone I can drag an image into, at which point the process loop will take over, bring me back the dominant colours (have you spotted the problem yet?) from the image and display them to the user along with the dropped image.
 
@@ -29,7 +31,7 @@ I'm going to build a site with a dropzone I can drag an image into, at which poi
 
 This part is pretty easy, we just need to hook into a drop event and retrieve the file dropped.
 
-  > **Side note:** For the code examples I'm going to be showing stripped down versions of the HTML without most of the structural elements or styling information. If you're interesting in seeing this you can have a look at the github repository for this project [Image-Colours](https://github.com/Zyzle/image-colours/tree/v1.0.0)
+> **Side note:** For the code examples I'm going to be showing stripped down versions of the HTML without most of the structural elements or styling information. If you're interesting in seeing this you can have a look at the github repository for this project [Image-Colours](https://github.com/Zyzle/image-colours/tree/v1.0.0)
 
 ```html
 <img id="image-display" src="" />
@@ -77,7 +79,7 @@ Not much to see here, when a file is dropped onto our dropzone on the page we ge
 
 ## Accessing the image bitmap
 
-So here's the plan. We have our image loaded now, we should iterate over it one pixel at a time, get that pixel's colour and take note, then add a +1 to a count for this particular colour every time another pixel with that colour is found. 
+So here's the plan. We have our image loaded now, we should iterate over it one pixel at a time, get that pixel's colour and take note, then add a +1 to a count for this particular colour every time another pixel with that colour is found.
 
 The file object doesn't give me a way of accessing the image pixels directly, but I can create a bitmap from this file and render it to a canvas which I can then pull the raw image data from;
 
@@ -86,17 +88,17 @@ createImageBitmap(file)
 	.then(ibm => {
 		const canvas  = new OffscreenCanvas(ibm.width, ibm.height);
 		const ctx = canvas.getContext('2d');
-		ctx.drawImage(ibm, 0, 0);
+	ctx.drawImage(ibm, 0, 0);
 
-		const imageData = ctx.getImageData(0, 0, ibm.width, ibm.height).data;
+	const imageData = ctx.getImageData(0, 0, ibm.width, ibm.height).data;
 
-		// remaining code goes here
-	});
+	// remaining code goes here
+});
 ```
 
 This process returns a Promise so we do all the fun stuff in the resolution. I don't want to display the canvas on the page so using `OffscreenCanvas` is a good solution as it exists only in memory and doesn't require a target HTML element. Handily having the ImageBitmap object gives us the needed width and height properties so we know what size to make the canvas.
 
-  > The [`OffscreenCanvas`](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas) won't in itself provide any major performance benefits over it's regular counterpart, however it does give one major benefit, that the code can be moved into a web worker, this will allow expensive operations to be run in the background and not block the main thread. We wont be using this just yet but it's a nice feature
+> The [`OffscreenCanvas`](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas) won't in itself provide any major performance benefits over it's regular counterpart, however it does give one major benefit, that the code can be moved into a web worker, this will allow expensive operations to be run in the background and not block the main thread. We wont be using this just yet but it's a nice feature
 
 We're working in a 2d context here rather than a 3d one so the first step is to retrieve that, and then we render our image into it, we use the whole image here so no need to specify the last 2 arguments of `drawImage`. In the final step here, we retrieve the image data back from the canvas starting at coordinates (0, 0) end ending at the width and height of the image so we get every pixel. The returned [`ImageData`](https://developer.mozilla.org/en-US/docs/Web/API/ImageData) object contains an Unsigned 8 clamped array that contains the channel data for every pixel in the image in RGBA format, that is every 4 integers represents the channel information for one pixel in the image (Red, Green, Blue, Alpha) limited to the maximum value for an unsigned 8 int (255).
 
@@ -119,18 +121,18 @@ const pixelColors = [];
 
 for (i = 0; i < imageData.length; i += 4) {
 	pixelColors.push([
-		// 1
+    // 1
 		'#',
-		//2
+    //2
 		(imageData[i]).toString(16).padStart(2, '0'),
 		(imageData[i+1]).toString(16).padStart(2, '0'),
 		(imageData[i+2]).toString(16).padStart(2, '0'),
-	// 3
+      // 3
 	].join(''));
 }
 ```
 
-So we create a new array that will hold one string of the HEX colour for every pixel in the image.  We then iterate over the `imageData` array jumping 4 at a time so we get the index of the red channel for every pixel in each iteration. 
+So we create a new array that will hold one string of the HEX colour for every pixel in the image. We then iterate over the `imageData` array jumping 4 at a time so we get the index of the red channel for every pixel in each iteration.
 
 On each of these iterations then we do a push to our `pixelColours` array with the following:
 
@@ -142,7 +144,7 @@ Let's try running what we have so far and try giving it a simple test image.
 
 ![The image we'll be using for testing](test.png)
 
-This is a pretty basic 100x100px image with some nice distinct colour blocks on a white background. 
+This is a pretty basic 100x100px image with some nice distinct colour blocks on a white background.
 
 Let's run this in and take a look at a random section of the array
 
@@ -155,15 +157,15 @@ This looks good so far, we appear to be generating the array correctly, now let'
 ```js
 // 1
 const colorCount = pixelColors.reduce((prev, curr) => {
-		prev[curr] = prev[curr] ? ++prev[curr] : 1;
-		return prev;
-	}, {});
+	prev[curr] = prev[curr] ? ++prev[curr] : 1;
+	return prev;
+}, {});
 
 // 2
 const sorted = Object.entries(colorCount)
 	.sort((a, b) => {
-		return b[1] - a[1];
-	});
+	return b[1] - a[1];
+});
 
 const top = sorted.slice(0, 8);
 ```
@@ -190,7 +192,7 @@ for (i = 0; i < top.length; i++){
 }
 ```
 
-Ok, what we're doing now is pulling out or `swatches` div we created earlier in the HTML and clearing it of any current nodes (using `.textContent` can be slightly quicker as it skips the node parsing that setting `innerHTML` would trigger). 
+Ok, what we're doing now is pulling out or `swatches` div we created earlier in the HTML and clearing it of any current nodes (using `.textContent` can be slightly quicker as it skips the node parsing that setting `innerHTML` would trigger).
 
 For each of our colours, we create a new `span` element and create a text node with our colour in it. We append this text node to the span and then set the span's background colour to our found pixel colour. Finally, we add this to the swatches div and we're done.
 
@@ -215,7 +217,7 @@ const top = sorted.slice(0, 8);
 
 {{ figure(path="swatches.png", isColocated=true, caption="looks right?", alt="some more colour swatches") }}
 
-So this looks ok but we've found the problem I hinted at earlier; There are so many colours in this image and we're not doing anything to group them so what we end up doing is missing out on what we as humans would consider predominant colours. 
+So this looks ok but we've found the problem I hinted at earlier; There are so many colours in this image and we're not doing anything to group them so what we end up doing is missing out on what we as humans would consider predominant colours.
 
 Let's use a simpler image to demonstrate this.
 

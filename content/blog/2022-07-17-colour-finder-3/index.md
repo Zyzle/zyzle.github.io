@@ -1,6 +1,6 @@
 +++
 title = "Finding Colours - Part 3: Inefficiencies Begone!"
-data = 2022-07-17
+date = 2022-07-17
 description = "Part 3 of our series on finding dominant colours in images, removing inefficiencies in our existing code"
 draft = true
 
@@ -11,7 +11,7 @@ tags = ["web-dev", "fun", "optimization"]
 author = "Colin McCulloch"
 +++
 
-We left off [part 2](@/blog/2022-07-16-colour-finder-2/index.md) with code that worked and gave good results but was disasterously inefficient, taking minutes to finish the algorithms run on higher resolution images. In this post we're going to try and fix some of those issues.
+We left off [part 2](@/blog/2022-07-16-colour-finder-2/index.md) with code that worked and gave good results but was disastrously inefficient, taking minutes to finish the algorithms run on higher resolution images. In this post, we're going to try and fix some of those issues.
 
 <!-- more -->
 
@@ -49,18 +49,18 @@ for (i = 0; i < imageData.length; i += 4) {
 		imageData[i + 2],
 	].join(",");
 
-	colorData.push(colStr);
+  colorData.push(colStr);
 }
 
 colorData = [...new Set(colorData)];
 
 colorData = colorData.map((v) => {
-	const rgb = v.split(",");
-	return {
-		r: parseInt(rgb[0]),
-		g: parseInt(rgb[1]),
-		b: parseInt(rgb[2]),
-	};
+  const rgb = v.split(",");
+  return {
+    r: parseInt(rgb[0]),
+    g: parseInt(rgb[1]),
+    b: parseInt(rgb[2]),
+  };
 });
 console.log(`Build Colour Data: ${Date.now() - bcd}ms`);
 ```
