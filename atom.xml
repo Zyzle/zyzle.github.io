@@ -10,7 +10,7 @@
 		<title>Finding Colours - Part 2: Maths is hard</title>
 		<published>2022-07-16T00:00:00+00:00</published>
 		<updated>2022-07-16T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/blog/colour-finder-2/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/blog/colour-finder-2/" type="text/html"/>
 		<id>https://zyzle.dev/blog/colour-finder-2/</id>
 		<content type="html">&lt;p&gt;Ok in &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;blog&#x2F;colour-finder-1&#x2F;&quot;&gt;part 1&lt;&#x2F;a&gt; we looked at finding dominant colours in an image, we got as far as showing the top 8 colours by pixel count, and showed that this isn&#x27;t necessarily the best solution for real-world images as there are micro variations of colour within the image that aren&#x27;t always immediately obvious to the naked eye.&lt;&#x2F;p&gt;
 &lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;
@@ -268,16 +268,19 @@
 		<title>Finding Colours - Part 1: This should be easy...right?</title>
 		<published>2022-07-04T00:00:00+00:00</published>
 		<updated>2022-07-04T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/blog/colour-finder-1/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/blog/colour-finder-1/" type="text/html"/>
 		<id>https://zyzle.dev/blog/colour-finder-1/</id>
-		<content type="html">&lt;p&gt;During the interview for my current job, I was given a small pair-programming coding challenge to do. Like all good coding challenges it was probably beyond what could reasonably have been finished in an hour but it was fun and I got the job so my attempt couldn&#x27;t have been too bad. Not finishing the challenge did annoy me though so here&#x27;s my attempt at a more polished version of the challenge &lt;&#x2F;p&gt;
+		<content type="html">&lt;p&gt;During the interview for my current job, I was given a small pair-programming coding challenge to do. Like all good coding challenges it was probably beyond what could reasonably have been finished in an hour but it was fun and I got the job so my attempt couldn&#x27;t have been too bad. Not finishing the challenge did annoy me though so here&#x27;s my attempt at a more polished version of the challenge&lt;&#x2F;p&gt;
 &lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Update:&lt;&#x2F;strong&gt; Yes I know I&#x27;m mixing &amp;quot;colour&amp;quot; and &amp;quot;color&amp;quot; in this post, too much code writing over the years has warped my brain with American spellings :P I&#x27;ll try and keep it to &amp;quot;colour&amp;quot; in copy and &amp;quot;color&amp;quot; in code from now on.&lt;&#x2F;p&gt;
 &lt;&#x2F;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Update 2:&lt;&#x2F;strong&gt; Somehow it escaped my notice that OffscreenCanvas in the way I&#x27;m using it here isn&#x27;t compatible with either Firefox or Safari browsers! The correction can be found &lt;a href=&quot;https:&#x2F;&#x2F;gist.github.com&#x2F;Zyzle&#x2F;1cf16675d7224ef90b0ef1639c7783a9&quot;&gt;in this Gist&lt;&#x2F;a&gt;, serves me right for not checking the compatibility table at the bottom of each MDN page :D&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
 &lt;p&gt;Anyone waiting for part 4 of the &amp;quot;Let&#x27;s write a blog&amp;quot; series, worry not, it will come eventually I just got distracted playing with this :P&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;the-challenge&quot;&gt;The Challenge&lt;&#x2F;h2&gt;
-&lt;p&gt;The challenge itself was worded something along the lines of &amp;quot;Load an image and find the top n colours used in it&amp;quot; (side note there are problems with this but we&#x27;ll get to that in part 2). I&#x27;m going to extend this slightly with some requirements of my own because there are a few things I don&#x27;t know how to do but want to learn. &lt;&#x2F;p&gt;
+&lt;p&gt;The challenge itself was worded something along the lines of &amp;quot;Load an image and find the top n colours used in it&amp;quot; (side note there are problems with this but we&#x27;ll get to that in part 2). I&#x27;m going to extend this slightly with some requirements of my own because there are a few things I don&#x27;t know how to do but want to learn.&lt;&#x2F;p&gt;
 &lt;p&gt;I&#x27;m going to build a site with a dropzone I can drag an image into, at which point the process loop will take over, bring me back the dominant colours (have you spotted the problem yet?) from the image and display them to the user along with the dropped image.&lt;&#x2F;p&gt;
 &lt;h2 id=&quot;challenge-1-the-dropzone&quot;&gt;Challenge 1: The dropzone&lt;&#x2F;h2&gt;
 &lt;p&gt;This part is pretty easy, we just need to hook into a drop event and retrieve the file dropped.&lt;&#x2F;p&gt;
@@ -329,18 +332,18 @@
 &lt;li&gt;Which, finally we can create a URL for, and pass this to our &lt;code&gt;img&lt;&#x2F;code&gt; element displaying the image to the user&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
 &lt;h2 id=&quot;accessing-the-image-bitmap&quot;&gt;Accessing the image bitmap&lt;&#x2F;h2&gt;
-&lt;p&gt;So here&#x27;s the plan. We have our image loaded now, we should iterate over it one pixel at a time, get that pixel&#x27;s colour and take note, then add a +1 to a count for this particular colour every time another pixel with that colour is found. &lt;&#x2F;p&gt;
+&lt;p&gt;So here&#x27;s the plan. We have our image loaded now, we should iterate over it one pixel at a time, get that pixel&#x27;s colour and take note, then add a +1 to a count for this particular colour every time another pixel with that colour is found.&lt;&#x2F;p&gt;
 &lt;p&gt;The file object doesn&#x27;t give me a way of accessing the image pixels directly, but I can create a bitmap from this file and render it to a canvas which I can then pull the raw image data from;&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;createImageBitmap&lt;&#x2F;span&gt;&lt;span&gt;(file)
 &lt;&#x2F;span&gt;&lt;span&gt;	.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;then&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;ibm &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
 &lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;canvas  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= new &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;OffscreenCanvas&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ibm&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;width&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ibm&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;height&lt;&#x2F;span&gt;&lt;span&gt;);
 &lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ctx &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;canvas&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;getContext&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;2d&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;);
-&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ctx&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;drawImage&lt;&#x2F;span&gt;&lt;span&gt;(ibm, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ctx&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;drawImage&lt;&#x2F;span&gt;&lt;span&gt;(ibm, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;);
 &lt;&#x2F;span&gt;&lt;span&gt;
-&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;imageData &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ctx&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;getImageData&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ibm&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;width&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ibm&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;height&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;data&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;imageData &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ctx&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;getImageData&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ibm&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;width&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;ibm&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;height&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;data&lt;&#x2F;span&gt;&lt;span&gt;;
 &lt;&#x2F;span&gt;&lt;span&gt;
-&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; remaining code goes here
-&lt;&#x2F;span&gt;&lt;span&gt;	});
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; remaining code goes here
+&lt;&#x2F;span&gt;&lt;span&gt;});
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
 &lt;p&gt;This process returns a Promise so we do all the fun stuff in the resolution. I don&#x27;t want to display the canvas on the page so using &lt;code&gt;OffscreenCanvas&lt;&#x2F;code&gt; is a good solution as it exists only in memory and doesn&#x27;t require a target HTML element. Handily having the ImageBitmap object gives us the needed width and height properties so we know what size to make the canvas.&lt;&#x2F;p&gt;
 &lt;blockquote&gt;
@@ -360,17 +363,17 @@
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;(i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;; i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;&amp;lt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;imageData&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;length&lt;&#x2F;span&gt;&lt;span&gt;; i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span&gt;) {
 &lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;pixelColors&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;push&lt;&#x2F;span&gt;&lt;span&gt;([
-&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 1
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 1
 &lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;#&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;,
-&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F;2
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F;2
 &lt;&#x2F;span&gt;&lt;span&gt;		(imageData[i]).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;toString&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;16&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;padStart&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;0&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;),
 &lt;&#x2F;span&gt;&lt;span&gt;		(imageData[i&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;]).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;toString&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;16&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;padStart&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;0&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;),
 &lt;&#x2F;span&gt;&lt;span&gt;		(imageData[i&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;]).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;toString&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;16&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;padStart&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;0&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;),
-&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 3
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 3
 &lt;&#x2F;span&gt;&lt;span&gt;	].&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;join&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;#39;&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;));
 &lt;&#x2F;span&gt;&lt;span&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;So we create a new array that will hold one string of the HEX colour for every pixel in the image.  We then iterate over the &lt;code&gt;imageData&lt;&#x2F;code&gt; array jumping 4 at a time so we get the index of the red channel for every pixel in each iteration. &lt;&#x2F;p&gt;
+&lt;p&gt;So we create a new array that will hold one string of the HEX colour for every pixel in the image. We then iterate over the &lt;code&gt;imageData&lt;&#x2F;code&gt; array jumping 4 at a time so we get the index of the red channel for every pixel in each iteration.&lt;&#x2F;p&gt;
 &lt;p&gt;On each of these iterations then we do a push to our &lt;code&gt;pixelColours&lt;&#x2F;code&gt; array with the following:&lt;&#x2F;p&gt;
 &lt;ol&gt;
 &lt;li&gt;the &lt;code&gt;#&lt;&#x2F;code&gt; character to denote the string we&#x27;ll be creating as a HEX value&lt;&#x2F;li&gt;
@@ -378,8 +381,8 @@
 &lt;li&gt;Finally, we just join these individual entries into a single string&lt;&#x2F;li&gt;
 &lt;&#x2F;ol&gt;
 &lt;p&gt;Let&#x27;s try running what we have so far and try giving it a simple test image.&lt;&#x2F;p&gt;
-&lt;p&gt;&lt;img src=&quot;test.png&quot; alt=&quot;The image we&#x27;ll be using for testing&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
-&lt;p&gt;This is a pretty basic 100x100px image with some nice distinct colour blocks on a white background. &lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;blog&#x2F;colour-finder-1&#x2F;test.png&quot; alt=&quot;The image we&#x27;ll be using for testing&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;This is a pretty basic 100x100px image with some nice distinct colour blocks on a white background.&lt;&#x2F;p&gt;
 &lt;p&gt;Let&#x27;s run this in and take a look at a random section of the array&lt;&#x2F;p&gt;
 &lt;figure&gt;
     
@@ -393,15 +396,15 @@
 &lt;h2 id=&quot;counting-up-and-displaying&quot;&gt;Counting up and displaying&lt;&#x2F;h2&gt;
 &lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 1
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;colorCount &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;pixelColors&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;reduce&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;prev&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;curr&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
-&lt;&#x2F;span&gt;&lt;span&gt;		prev[curr] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;prev[curr] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;? ++&lt;&#x2F;span&gt;&lt;span&gt;prev[curr] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
-&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;prev;
-&lt;&#x2F;span&gt;&lt;span&gt;	}, {});
+&lt;&#x2F;span&gt;&lt;span&gt;	prev[curr] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;prev[curr] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;? ++&lt;&#x2F;span&gt;&lt;span&gt;prev[curr] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;prev;
+&lt;&#x2F;span&gt;&lt;span&gt;}, {});
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#676f7d;&quot;&gt;&#x2F;&#x2F; 2
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;sorted &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;Object&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;entries&lt;&#x2F;span&gt;&lt;span&gt;(colorCount)
 &lt;&#x2F;span&gt;&lt;span&gt;	.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;sort&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;a&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt;b&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{
-&lt;&#x2F;span&gt;&lt;span&gt;		&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;b[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;- &lt;&#x2F;span&gt;&lt;span&gt;a[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;];
-&lt;&#x2F;span&gt;&lt;span&gt;	});
+&lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;b[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;- &lt;&#x2F;span&gt;&lt;span&gt;a[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;];
+&lt;&#x2F;span&gt;&lt;span&gt;});
 &lt;&#x2F;span&gt;&lt;span&gt;
 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;const &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;top &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;sorted&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;slice&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;8&lt;&#x2F;span&gt;&lt;span&gt;);
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
@@ -424,7 +427,7 @@
 &lt;&#x2F;span&gt;&lt;span&gt;	&lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;swatches&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;appendChild&lt;&#x2F;span&gt;&lt;span&gt;(swatch);
 &lt;&#x2F;span&gt;&lt;span&gt;}
 &lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
-&lt;p&gt;Ok, what we&#x27;re doing now is pulling out or &lt;code&gt;swatches&lt;&#x2F;code&gt; div we created earlier in the HTML and clearing it of any current nodes (using &lt;code&gt;.textContent&lt;&#x2F;code&gt; can be slightly quicker as it skips the node parsing that setting &lt;code&gt;innerHTML&lt;&#x2F;code&gt; would trigger). &lt;&#x2F;p&gt;
+&lt;p&gt;Ok, what we&#x27;re doing now is pulling out or &lt;code&gt;swatches&lt;&#x2F;code&gt; div we created earlier in the HTML and clearing it of any current nodes (using &lt;code&gt;.textContent&lt;&#x2F;code&gt; can be slightly quicker as it skips the node parsing that setting &lt;code&gt;innerHTML&lt;&#x2F;code&gt; would trigger).&lt;&#x2F;p&gt;
 &lt;p&gt;For each of our colours, we create a new &lt;code&gt;span&lt;&#x2F;code&gt; element and create a text node with our colour in it. We append this text node to the span and then set the span&#x27;s background colour to our found pixel colour. Finally, we add this to the swatches div and we&#x27;re done.&lt;&#x2F;p&gt;
 &lt;p&gt;So let&#x27;s give it a try, I&#x27;ll use the image above and drop it into our dropzone, let&#x27;s see how this looks.&lt;&#x2F;p&gt;
 &lt;figure&gt;
@@ -457,7 +460,7 @@
     &lt;img src=&quot;https:&amp;#x2F;&amp;#x2F;zyzle.dev&amp;#x2F;processed_images&amp;#x2F;80fab9d819e3ea7400.webp&quot; alt=&quot;some more colour swatches&quot; &#x2F;&gt;
     &lt;figcaption&gt;looks right?&lt;&#x2F;figcaption&gt;
 &lt;&#x2F;figure&gt;
-&lt;p&gt;So this looks ok but we&#x27;ve found the problem I hinted at earlier; There are so many colours in this image and we&#x27;re not doing anything to group them so what we end up doing is missing out on what we as humans would consider predominant colours. &lt;&#x2F;p&gt;
+&lt;p&gt;So this looks ok but we&#x27;ve found the problem I hinted at earlier; There are so many colours in this image and we&#x27;re not doing anything to group them so what we end up doing is missing out on what we as humans would consider predominant colours.&lt;&#x2F;p&gt;
 &lt;p&gt;Let&#x27;s use a simpler image to demonstrate this.&lt;&#x2F;p&gt;
 &lt;figure&gt;
     
@@ -475,7 +478,7 @@
 		<title>Commenter</title>
 		<published>2022-06-07T00:00:00+00:00</published>
 		<updated>2022-06-07T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/projects/commenter/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/projects/commenter/" type="text/html"/>
 		<id>https://zyzle.dev/projects/commenter/</id>
 		<content type="html">&lt;p&gt;Commenter is a webcomponents based comment system that allows you to use GitHub&#x27;s issues as your comments backend. This project works in conjunction with &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Zyzle&#x2F;lynx.rs&quot;&gt;lynx.rs&lt;&#x2F;a&gt; to authenticate with Github&#x27;s oauth.&lt;&#x2F;p&gt;
 </content>
@@ -484,7 +487,7 @@
 		<title>Generate UUID v4</title>
 		<published>2022-06-04T00:00:00+00:00</published>
 		<updated>2022-06-04T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/snippets/generate-uuid/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/snippets/generate-uuid/" type="text/html"/>
 		<id>https://zyzle.dev/snippets/generate-uuid/</id>
 		<content type="html">&lt;p&gt;Version 4 UUIDs take the form &lt;code&gt;xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx&lt;&#x2F;code&gt; where &lt;code&gt;x&lt;&#x2F;code&gt; is any hex digit and &lt;code&gt;y&lt;&#x2F;code&gt; is in &lt;code&gt;[8, 9, a, b]&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;Assuming these are generated with sufficient entropy, 1B uuids every second for 100 years would be ~50% chance of collision.&lt;&#x2F;p&gt;
@@ -499,7 +502,7 @@
 		<title>Lynx.rs</title>
 		<published>2022-05-25T00:00:00+00:00</published>
 		<updated>2022-05-25T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/projects/lynx-rs/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/projects/lynx-rs/" type="text/html"/>
 		<id>https://zyzle.dev/projects/lynx-rs/</id>
 		<content type="html">&lt;p&gt;In Greek, Norse, and North American mythologies lynx were known as mysterious creatures and keepers of secrets. This one provides a simple API endpoint to allow you to fulfil the GitHub OAuth flow without exposing your client secret to a JS front-end.&lt;&#x2F;p&gt;
 </content>
@@ -508,7 +511,7 @@
 		<title>Let&#x27;s write a blog - Part 3: Jekyll</title>
 		<published>2022-05-21T00:00:00+00:00</published>
 		<updated>2022-05-21T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/blog/jekyll/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/blog/jekyll/" type="text/html"/>
 		<id>https://zyzle.dev/blog/jekyll/</id>
 		<content type="html">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;jekyllrb.com&#x2F;&quot;&gt;Jekyll&lt;&#x2F;a&gt; is the oldest of the static site generators we&#x27;ll be looking at its 1.0 version appearing in 2013. It was originally designed to be centred around blogging but has grown into a more fully featured static site generator.&lt;&#x2F;p&gt;
 &lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;
@@ -719,7 +722,7 @@
 		<title>Let&#x27;s write a blog - Part 2: Zola</title>
 		<published>2022-04-16T00:00:00+00:00</published>
 		<updated>2022-04-16T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/blog/zola/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/blog/zola/" type="text/html"/>
 		<id>https://zyzle.dev/blog/zola/</id>
 		<content type="html">&lt;p&gt;Zola (formally Gutenberg) is an SSG written in Rust. Zola has its own templating engine, &lt;a href=&quot;https:&#x2F;&#x2F;tera.netlify.app&#x2F;&quot;&gt;Tera&lt;&#x2F;a&gt; created by the same author and follows a similar design in its templating to Jinja 2. Distributed as a single binary Zola has a much smaller footprint than the other SSGs we&#x27;ll be looking at, it also promises to be fast (comparable to Hugo) and runs from a simple augmented markdown including shortcodes and custom internal linking.&lt;&#x2F;p&gt;
 &lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;&lt;h2 id=&quot;installation&quot;&gt;Installation&lt;&#x2F;h2&gt;
@@ -956,7 +959,7 @@
 		<title>Let&#x27;s write a blog - Part 1: Intro</title>
 		<published>2022-04-09T00:00:00+00:00</published>
 		<updated>2022-04-09T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/blog/intro/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/blog/intro/" type="text/html"/>
 		<id>https://zyzle.dev/blog/intro/</id>
 		<content type="html">&lt;p&gt;I&#x27;ve been wanting to get back into blogging for some time but have no idea what to write about to start me off, so why not write about choosing a blog tool and its setup. We&#x27;re going to go through some of the tools I&#x27;ve considered and the reasons behind my final choice as well as the process of creating a template and deploying the blog.&lt;&#x2F;p&gt;
 &lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;&lt;h2 id=&quot;why-static-site&quot;&gt;Why static site?&lt;&#x2F;h2&gt;
@@ -1050,7 +1053,7 @@
 		<title>CSS material box shadow</title>
 		<published>2022-04-01T00:00:00+00:00</published>
 		<updated>2022-04-01T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/snippets/css-material-shadow/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/snippets/css-material-shadow/" type="text/html"/>
 		<id>https://zyzle.dev/snippets/css-material-shadow/</id>
 		<content type="html">&lt;pre data-lang=&quot;css&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-css &quot;&gt;&lt;code class=&quot;language-css&quot; data-lang=&quot;css&quot;&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;.shadow &lt;&#x2F;span&gt;&lt;span&gt;{
 &lt;&#x2F;span&gt;&lt;span&gt;  box-shadow: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0 4&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;px &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;5&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;px &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;rgba&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;14&lt;&#x2F;span&gt;&lt;span&gt;),
@@ -1064,7 +1067,7 @@
 		<title>File extension regex (js example)</title>
 		<published>2022-04-01T00:00:00+00:00</published>
 		<updated>2022-04-01T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/snippets/file-extension-regex/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/snippets/file-extension-regex/" type="text/html"/>
 		<id>https://zyzle.dev/snippets/file-extension-regex/</id>
 		<content type="html">&lt;pre data-lang=&quot;js&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-js &quot;&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;var &lt;&#x2F;span&gt;&lt;span&gt;re &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&#x2F;(?:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;\.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;^&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;.]&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;))&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;?$&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&#x2F;&lt;&#x2F;span&gt;&lt;span&gt;;
 &lt;&#x2F;span&gt;&lt;span&gt;
@@ -1091,7 +1094,7 @@
 		<title>Override equals and hashCode correctly</title>
 		<published>2022-03-31T00:00:00+00:00</published>
 		<updated>2022-03-31T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/snippets/equals-hashcode/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/snippets/equals-hashcode/" type="text/html"/>
 		<id>https://zyzle.dev/snippets/equals-hashcode/</id>
 		<content type="html">&lt;pre data-lang=&quot;java&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-java &quot;&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;public &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;class &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;Stock &lt;&#x2F;span&gt;&lt;span&gt;{
 &lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;private &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;int &lt;&#x2F;span&gt;&lt;span&gt;tickSize;
@@ -1154,7 +1157,7 @@
 		<title>Recursive find and remove</title>
 		<published>2022-03-31T00:00:00+00:00</published>
 		<updated>2022-03-31T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/snippets/find-remove/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/snippets/find-remove/" type="text/html"/>
 		<id>https://zyzle.dev/snippets/find-remove/</id>
 		<content type="html">&lt;p&gt;For files:&lt;&#x2F;p&gt;
 &lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span&gt;find .&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; -name &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e5c07b;&quot;&gt;&amp;quot;*.bak&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; -type&lt;&#x2F;span&gt;&lt;span&gt; f&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#d19a66;&quot;&gt; -exec&lt;&#x2F;span&gt;&lt;span&gt; rm {} &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;\;
@@ -1168,7 +1171,7 @@
 		<title>Fisher-Yates Shuffle</title>
 		<published>2022-03-31T00:00:00+00:00</published>
 		<updated>2022-03-31T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/snippets/fisher-yates/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/snippets/fisher-yates/" type="text/html"/>
 		<id>https://zyzle.dev/snippets/fisher-yates/</id>
 		<content type="html">&lt;pre data-lang=&quot;typescript&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-typescript &quot;&gt;&lt;code class=&quot;language-typescript&quot; data-lang=&quot;typescript&quot;&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;shuffle&lt;&#x2F;span&gt;&lt;span&gt;(cards: any[]) {
 &lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;m &lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#61afef;&quot;&gt;cards&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;length&lt;&#x2F;span&gt;&lt;span&gt;;
@@ -1193,7 +1196,7 @@
 		<title>Markdown Tester Page</title>
 		<published>2022-03-26T00:00:00+00:00</published>
 		<updated>2022-03-26T00:00:00+00:00</updated>
-		<link href="https://zyzle.dev/blog/markdown-test/" type="text/html"/>
+		<link rel="alternate" href="https://zyzle.dev/blog/markdown-test/" type="text/html"/>
 		<id>https://zyzle.dev/blog/markdown-test/</id>
 		<content type="html">&lt;p&gt;This page is going to function as a test bed for the sites new styling, it&#x27;s going to contain as many different markdown elements as possible in order to see whether or not we support them&lt;&#x2F;p&gt;
 &lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;&lt;h1 id=&quot;headings&quot;&gt;Headings&lt;&#x2F;h1&gt;
@@ -1237,7 +1240,7 @@
 &lt;p&gt;Some text with &lt;em&gt;italic&lt;&#x2F;em&gt;, &lt;strong&gt;bold&lt;&#x2F;strong&gt;, &lt;em&gt;&lt;strong&gt;bold italic&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt;, &lt;code&gt;monospaced&lt;&#x2F;code&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&quot;&gt;a link&lt;&#x2F;a&gt;, &lt;del&gt;strike&lt;&#x2F;del&gt;&lt;&#x2F;p&gt;
 &lt;h1 id=&quot;image&quot;&gt;Image&lt;&#x2F;h1&gt;
 &lt;p&gt;a basic image&lt;&#x2F;p&gt;
-&lt;p&gt;&lt;img src=&quot;bg2.jpg&quot; alt=&quot;a caption for image&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;blog&#x2F;markdown-test&#x2F;bg2.jpg&quot; alt=&quot;a caption for image&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
 &lt;p&gt;one using our &lt;code&gt;figure&lt;&#x2F;code&gt; custom shortcode&lt;&#x2F;p&gt;
 &lt;figure&gt;
     
