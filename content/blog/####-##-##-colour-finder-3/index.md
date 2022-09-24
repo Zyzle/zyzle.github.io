@@ -19,7 +19,7 @@ We left off [part 2](@/blog/2022-07-16-colour-finder-2/index.md) with code that 
 
 So to start with this, we'll need some numbers. I have some idea of where the problems in the code lie but I want to back this up with some numbers before I start making changes.
 
-To test the theory we can do basic timing checks on parts of the code by wrapping sections with start and finish `Date.now()`s like so:
+To test the theory we can do basic timing checks on parts of the code by wrapping sections with start and finish `console.time` and `console.endTime` like so:
 
 ```js
 const cnc = Date.now();
