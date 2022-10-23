@@ -9,6 +9,7 @@ tags = ["blog", "jekyll"]
 [extra]
 author = "Colin McCulloch"
 ghissue = 6
+type = "article"
 +++
 
 [Jekyll](https://jekyllrb.com/) is the oldest of the static site generators we'll be looking at its 1.0 version appearing in 2013. It was originally designed to be centred around blogging but has grown into a more fully featured static site generator.

@@ -10,6 +10,7 @@ tags = ["web-dev", "fun", "problems", "maths"]
 author = "Colin McCulloch"
 usesKtex = true
 ghissue = 9
+type = "article"
 +++
 
 Ok in [part 1](@/blog/2022-07-04-colour-finder-1/index.md) we looked at finding dominant colours in an image, we got as far as showing the top 8 colours by pixel count, and showed that this isn't necessarily the best solution for real-world images as there are micro variations of colour within the image that aren't always immediately obvious to the naked eye.

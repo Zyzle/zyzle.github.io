@@ -10,6 +10,7 @@ tags = ["blog", "hugo"]
 [extra]
 author = "Colin McCulloch"
 ghissue = 8
+type = "article"
 +++
 
 [Hugo](https://gohugo.io/) bills itself as "The world's fastest framework for building websites" it's gained a lot of popularity in recent years, written in Go and using the `html/template` and `text/template` modules as the basis for its templating although no previous knowledge of Go is required to get up and running with it
