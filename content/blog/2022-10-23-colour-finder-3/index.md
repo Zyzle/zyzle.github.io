@@ -9,6 +9,7 @@ tags = ["web-dev", "fun", "optimization", "webassembly", "rust"]
 [extra]
 author = "Colin McCulloch"
 type = "article"
+ghissue = 10
 +++
 
 We left off [part 2](@/blog/2022-07-16-colour-finder-2/index.md) with code that worked and gave good results but was disastrously inefficient, taking minutes to finish the algorithms run on higher-resolution images. In this post, we're going to try and move some of the more computationally heavy code into WebAssembly to try and fix this issue.
