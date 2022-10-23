@@ -1,0 +1,370 @@
+<!doctype html><html lang=en><head><meta content="IE=edge" http-equiv=X-UA-Compatible><meta content="text/html; charset=utf-8" http-equiv=content-type><meta content="width=device-width,initial-scale=1.0,minimum-scale=1" name=viewport><meta content="Part 3 of our series on finding dominant colours in images, looking here at using WebAssembly to manage the computationally heavy parts of the process" name=description><meta content=summary name=twitter:card><meta content=@ZyzleDotDev name=twitter:site><meta content=@ZyzleDotDev name=twitter:creator><meta content=https://zyzle.dev/blog/colour-finder-3/ property=og:url><meta content="Finding Colours - Part 3: WebAssembly to the rescue | Blog | Zyzle.dev" property=og:title><meta content="Part 3 of our series on finding dominant colours in images, looking here at using WebAssembly to manage the computationally heavy parts of the process" property=og:description><meta property=og:image><meta content=article property=og:type><title>Finding Colours - Part 3: WebAssembly to the rescue | Blog | Zyzle.dev</title><link href=https://zyzle.dev/atom.xml rel=alternate title=RSS type=application/atom+xml><style>@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Nunito:ital,wght@0,400;0,700;1,400;1,700&family=Pacifico&display=swap');</style><link href=https://zyzle.dev/styles.css rel=stylesheet><link href=/apple-touch-icon.png rel=apple-touch-icon sizes=180x180><link href=/favicon-32x32.png rel=icon sizes=32x32 type=image/png><link href=/favicon-16x16.png rel=icon sizes=16x16 type=image/png><link href=/site.webmanifest rel=manifest><script src="https://www.googletagmanager.com/gtag/js?id=G-Q90233GSB3" async></script><script>window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-Q90233GSB3');</script><script type=application/ld+json>
+{
+	"@context": "https://schema.org",
+	"@type": "BlogPosting",
+	"Headline": "Finding Colours - Part 3: WebAssembly to the rescue",
+	"datePublished": "2022-10-23",
+	"author": [{
+		"@type": "Person",
+		"name": "Colin McCulloch",
+		"url": "https://zyzle.dev/about"
+	}],
+    "wordcount": "4349",
+    "keywords": "web-dev,fun,optimization,webassembly,rust,",
+    "license": "https://creativecommons.org/licenses/by-sa/4.0/"
+}
+</script><body><header class=page-header><div class=hwrapper><h1><a class=header-link href=https://zyzle.dev/>Zyzle.dev</a></h1><span class=header-buttons> <a href=https://ko-fi.com/zyzle><img alt="support me on Ko-fi" height=40px src=/ko-fi.svg width=40px></a> <a href=/tags/><img alt="site tag list" height=40px src=/tag.svg width=40px></a> <a href=https://zyzle.dev/search/><img alt="search zyzle.dev" height=40px src=/search.svg width=40px></a> </span></div><div id=progress-bar></div></header><div class=wrapper><main class=content id=docmain><nav><a href=https://zyzle.dev/blog/>« back to blogs</a></nav><article class=post><header class=post-header><h1>Finding Colours - Part 3: WebAssembly to the rescue</h1><div class=post-info><time datetime=2022-10-23>2022-10-23</time><div class=tags><a href=https://zyzle.dev/tags/web-dev/>web-dev</a><a href=https://zyzle.dev/tags/fun/>fun</a><a href=https://zyzle.dev/tags/optimization/>optimization</a><a href=https://zyzle.dev/tags/webassembly/>webassembly</a><a href=https://zyzle.dev/tags/rust/>rust</a></div></div></header><p>We left off <a href=https://zyzle.dev/blog/colour-finder-2/>part 2</a> with code that worked and gave good results but was disastrously inefficient, taking minutes to finish the algorithms run on higher-resolution images. In this post, we're going to try and move some of the more computationally heavy code into WebAssembly to try and fix this issue.</p><span id=continue-reading></span><p>This was originally going to be 2 posts, one for optimizing the JS and a second for the WebAssembly application building. Given it's been 3 months since I last posted, probably best not to try and delay it any longer. So buckle up, this is going to be a long one.<h2 id=measuring-the-problems>Measuring the problems</h2><p>So to start with this, we'll need some numbers. I have some idea of where the problems in the code lie but I want to back this up with some numbers before I start making changes.<p>To test the theory we can do basic timing checks on parts of the code by wrapping sections with start and finish <a href=https://developer.mozilla.org/en-US/docs/Web/API/console/time><code>console.time</code></a> and <a href=https://developer.mozilla.org/en-US/docs/Web/API/console/timeEnd><code>console.timeEnd</code></a> like so:<pre class=language-js data-lang=js style=background-color:#282c34;color:#abb2bf;><code class=language-js data-lang=js><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>time</span><span>(</span><span style=color:#e5c07b;>'Calc new clusters'</span><span>);
+</span><span>newClusters </span><span style=color:#e06c75;>= </span><span style=color:#98c379;>calcNewClusters</span><span>(kClusters, colorData);
+</span><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>timeEnd</span><span>(</span><span style=color:#e5c07b;>'Calc new clusters'</span><span>);
+</span></code></pre><figure><img alt="a yellow iris flower test image" src=https://zyzle.dev/processed_images/eade19c0e8a47e4700.webp><figcaption>This test image is 700x466 ~82Kb, Yellow Iris from a local park</figcaption></figure><p>I picked out 3 areas of the code to start with; the creation of the image data from the bitmap, the calculation of new clusters seen above, and the calculation of the distance shift. The results of a run of this are shown below:<pre style=background-color:#282c34;color:#abb2bf;><code><span>Build color data: 297.05908203125 ms
+</span><span>Calc new clusters: 9948.283935546875 ms
+</span><span>Calc distance shift: 0.06103515625 ms
+</span><span>Calc new clusters: 8286.53271484375 ms
+</span><span>Calc distance shift: 0.02099609375 ms
+</span><span>Calc new clusters: 8091.48095703125 ms
+</span><span>Calc distance shift: 0.009033203125 ms
+</span><span>Calc new clusters: 7912.260986328125 ms
+</span><span>Calc distance shift: 0.010009765625 ms
+</span><span>Time taken: 34540ms
+</span></code></pre><p>I wasn't surprised that the distance shift calculation was quick, as this isn't particularly difficult for the system to run. I was more surprised at how quick the <code>colorData</code> was to create:<pre class=language-js data-lang=js style=background-color:#282c34;color:#abb2bf;><code class=language-js data-lang=js><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>time</span><span>(</span><span style=color:#e5c07b;>'Build color data'</span><span>);
+</span><span>
+</span><span style=color:#98c379;>createImageBitmap</span><span>(file).</span><span style=color:#98c379;>then</span><span>((</span><span style=font-style:italic;color:#d19a66;>ibm</span><span>) </span><span style=color:#56b6c2;>=> </span><span>{
+</span><span>  </span><span style=color:#676f7d;>// ...snipped
+</span><span>
+</span><span>  colorData </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>colorData</span><span>.</span><span style=color:#98c379;>map</span><span>((</span><span style=font-style:italic;color:#d19a66;>v</span><span>) </span><span style=color:#56b6c2;>=> </span><span>{
+</span><span>    </span><span style=color:#56b6c2;>const </span><span style=color:#61afef;>rgb </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>v</span><span>.</span><span style=color:#98c379;>split</span><span>(</span><span style=color:#e5c07b;>","</span><span>);
+</span><span>    </span><span style=color:#e06c75;>return </span><span>{
+</span><span>      r: </span><span style=color:#98c379;>parseInt</span><span>(rgb[</span><span style=color:#c678dd;>0</span><span>]),
+</span><span>      g: </span><span style=color:#98c379;>parseInt</span><span>(rgb[</span><span style=color:#c678dd;>1</span><span>]),
+</span><span>      b: </span><span style=color:#98c379;>parseInt</span><span>(rgb[</span><span style=color:#c678dd;>2</span><span>]),
+</span><span>    };
+</span><span>  });
+</span><span>
+</span><span>  </span><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>timeEnd</span><span>(</span><span style=color:#e5c07b;>'Build color data'</span><span>);
+</span></code></pre><p>I was expecting this to be more take a lot longer than the &LT300ms time being shown, we may come back to this later as it could probably be optimized further, but for the moment there is one stand-out section of the code that needs optimizing, the new clusters calculations.<p>Averaging at eight seconds per iteration the problem is somewhere inside the <code>calcNewClusters</code> function so let's add some logging to the function and measure where the potential bottlenecks might be.<pre class=language-js data-lang=js style=background-color:#282c34;color:#abb2bf;><code class=language-js data-lang=js><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>time</span><span>(</span><span style=color:#e5c07b;>'reducer'</span><span>);
+</span><span style=color:#56b6c2;>const </span><span style=color:#61afef;>clusteredData </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>colorData</span><span>.</span><span style=color:#98c379;>reduce</span><span>(
+</span><span>  (</span><span style=font-style:italic;color:#d19a66;>prev</span><span>, </span><span style=font-style:italic;color:#d19a66;>curr</span><span>) </span><span style=color:#56b6c2;>=> </span><span>{
+</span><span>    </span><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>time</span><span>(</span><span style=color:#e5c07b;>'iteration'</span><span>);
+</span><span>    </span><span style=color:#56b6c2;>const </span><span style=color:#61afef;>distances </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>kClusters</span><span>.</span><span style=color:#98c379;>map</span><span>((</span><span style=font-style:italic;color:#d19a66;>k</span><span>) </span><span style=color:#56b6c2;>=> </span><span style=color:#98c379;>calcEuclideanDist</span><span>(k, curr));
+</span><span>    </span><span style=color:#56b6c2;>const </span><span style=color:#61afef;>minDistance </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>distances</span><span>.</span><span style=color:#98c379;>reduce</span><span>(
+</span><span>      (</span><span style=font-style:italic;color:#d19a66;>a</span><span>, </span><span style=font-style:italic;color:#d19a66;>b</span><span>) </span><span style=color:#56b6c2;>=> Math</span><span>.</span><span style=color:#98c379;>min</span><span>(a, b),
+</span><span>      </span><span style=color:#56b6c2;>Infinity
+</span><span>    );
+</span><span>    </span><span style=color:#56b6c2;>const </span><span style=color:#61afef;>selectedK </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>distances</span><span>.</span><span style=color:#98c379;>findIndex</span><span>((</span><span style=font-style:italic;color:#d19a66;>e</span><span>) </span><span style=color:#56b6c2;>=> </span><span>e </span><span style=color:#e06c75;>=== </span><span>minDistance);
+</span><span>    prev[selectedK] </span><span style=color:#e06c75;>= </span><span>[</span><span style=color:#e06c75;>...</span><span>prev[selectedK], curr];
+</span><span>    </span><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>timeEnd</span><span>(</span><span style=color:#e5c07b;>'iteration'</span><span>);
+</span><span>    </span><span style=color:#e06c75;>return </span><span>prev;
+</span><span>  },
+</span><span>  </span><span style=color:#61afef;>Array</span><span>.</span><span style=color:#98c379;>from</span><span>({ length: </span><span style=color:#c678dd;>8 </span><span>}, () </span><span style=color:#56b6c2;>=> </span><span>[])
+</span><span>);
+</span><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>timeEnd</span><span>(</span><span style=color:#e5c07b;>'reducer'</span><span>);
+</span></code></pre><p>An average run-through with the image looks something like this:<pre style=background-color:#282c34;color:#abb2bf;><code><span>iteration: 0.202880859375 ms
+</span><span>iteration: 0.218994140625 ms
+</span><span>iteration: 0.277099609375 ms
+</span><span>iteration: 0.27294921875 ms
+</span><span>iteration: 0.219970703125 ms
+</span><span>// ...
+</span><span>iteration: 0.218017578125 ms
+</span><span>iteration: 0.2060546875 ms
+</span><span>iteration: 0.205078125 ms
+</span><span>iteration: 0.2138671875 ms
+</span><span>reducer: 11819.55908203125 ms
+</span></code></pre><p>The above shows the problem with the approach we've taken, there's nothing particularly taxing in each of the iterations we're running through, it's just we do so many of them that the code takes so long to complete. There are a few things we could do to try and optimize this but at the end of the day we still need to make a large number of calls to these calculations that will only get worse if we ever try this with larger images, so what are the alternatives?<h2 id=webassembly-to-the-rescue>WebAssembly to the rescue</h2><blockquote><p>WebAssembly (abbreviated Wasm) is a binary instruction format for a stack-based virtual machine. Wasm is designed as a portable compilation target for programming languages, enabling deployment on the web for client and server applications.</blockquote><p>In a nutshell, WebAssembly is a low-level assembly language (encoded into a load-efficient binary format) that runs on a virtual stack machine and promises to give native speeds as well as executed in a memory-safe sandboxed environment. WebAssembly has compile targets from several languages at this point; Go, C, C++, I personally Rust makes the most sense to use at this point for a few reasons.<ul><li>Memory safety: This is the big win of Rust over C++ we get language-based guarantees against one of the most often hit class of bugs that creep into C++ projects.<li>Small binary size, with no runtime required Rust wasm modules are much much smaller than the Go equivalent which requires a stripped down version of the Go runtime to be compiled in.</ul><p>I've been looking for more reasons to use the Rust programming language and right now it seems like one of the best options available for creating Wasm modules.<h3 id=what-should-our-module-do>What should our module do?</h3><p>The First step then is to decide which part of our code we should replace. The obvious choice is the <code>calcNewClusters</code> function which as we saw above is the main time sink for our program. Replacing just this function though would require a lot of passing back and forward between Wasm and our JS code, instead, I'll look to replace the entire do/while loop with a single call to Wasm which will return the completed array of strings we'll use to generate the colour swatches from;<p>This:<pre class=language-js data-lang=js style=background-color:#282c34;color:#abb2bf;><code class=language-js data-lang=js><span style=color:#e06c75;>do </span><span>{
+</span><span>  distanceShift </span><span style=color:#e06c75;>= </span><span style=color:#c678dd;>0</span><span>;
+</span><span>  </span><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>time</span><span>(</span><span style=color:#e5c07b;>'Calc new clusters'</span><span>);
+</span><span>  newClusters </span><span style=color:#e06c75;>= </span><span style=color:#98c379;>calcNewClusters</span><span>(kClusters, colorData);
+</span><span>  </span><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>timeEnd</span><span>(</span><span style=color:#e5c07b;>'Calc new clusters'</span><span>);
+</span><span>
+</span><span>  </span><span style=color:#61afef;>newClusters</span><span>.</span><span style=color:#98c379;>forEach</span><span>((</span><span style=font-style:italic;color:#d19a66;>v</span><span>, </span><span style=font-style:italic;color:#d19a66;>i</span><span>) </span><span style=color:#56b6c2;>=> </span><span>{
+</span><span>    distanceShift </span><span style=color:#e06c75;>+= </span><span style=color:#98c379;>calcEuclideanDist</span><span>(v, kClusters[i]);
+</span><span>  });
+</span><span>  
+</span><span>  distanceShift </span><span style=color:#e06c75;>= </span><span>distanceShift </span><span style=color:#e06c75;>/ </span><span style=color:#61afef;>newClusters</span><span>.</span><span style=color:#56b6c2;>length</span><span>;
+</span><span>  
+</span><span>  kClusters </span><span style=color:#e06c75;>= </span><span>newClusters;
+</span><span>  iterations </span><span style=color:#e06c75;>+= </span><span style=color:#c678dd;>1</span><span>;
+</span><span>} </span><span style=color:#e06c75;>while </span><span>(distanceShift </span><span style=color:#e06c75;>>= </span><span style=color:#c678dd;>5 </span><span style=color:#e06c75;>&& </span><span>iterations </span><span style=color:#e06c75;>< </span><span style=color:#c678dd;>10</span><span>);
+</span></code></pre><p>replaced with this:<pre class=language-js data-lang=js style=background-color:#282c34;color:#abb2bf;><code class=language-js data-lang=js><span style=color:#56b6c2;>const </span><span style=color:#61afef;>result </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>wasm</span><span>.</span><span style=color:#98c379;>find_colors</span><span>(colorData, kClusters);
+</span></code></pre><h2 id=rust-webassembly>Rust WebAssembly</h2><p>I'm going to use the <a href=https://github.com/rustwasm/wasm-pack>wasm-pack template repository</a>. I'm not going to go over this too in-depth other than to say it's a rust template project that uses <a href=https://github.com/rustwasm/wasm-pack>wasm-pack</a> which is a build tool for rust that runs cargo with options for outputting to WebAssembly.<p>Let's start going through our <code>lib.rs</code> module file that contains what will become our Wasm module, starting with our crate imports:<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span style=color:#e06c75;>use </span><span>serde_derive::{Deserialize, Serialize};
+</span><span style=color:#e06c75;>use </span><span>utils::set_panic_hook;
+</span><span style=color:#e06c75;>use </span><span>wasm_bindgen::prelude::</span><span style=color:#e06c75;>*</span><span>;
+</span><span style=color:#e06c75;>use </span><span>web_sys::console;
+</span></code></pre><ul><li><code>serde_derive</code> gives us the <code>Serialize</code> and <code>Deserialize</code> traits, these are used to serialize our structs into JS objects (we also have the <code>serde_wasm_bindgen</code> crate but this doesn't require its own import)<li><code>utils</code> this is a local module created for us that contains the <code>set_panic_hook</code> function we'll talk more about later<li><code>wasm_bindgen::prelude</code> this gives us the <code>JsValue</code> type we'll be using for importing and exporting values to JS<li><code>web_sys</code> this crate gives us access to the JS host console we'll use this to log out our timings as we do in our JS implementation</ul><p>We need a way to represent our colours internally in the Wasm so let's create a struct to do this, we're going to define our red, green, and blue components as signed integers and add the Serde traits, I won't go over exactly what traits are here for now just think of them as the equivalent of interfaces in other languages and the <code>derive</code> keyword as a way of giving a basic automatic implementation of them:<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span>#[derive(Deserialize, Serialize)]
+</span><span style=color:#56b6c2;>struct </span><span>Color {
+</span><span>    r: </span><span style=color:#56b6c2;>i32</span><span>,
+</span><span>    g: </span><span style=color:#56b6c2;>i32</span><span>,
+</span><span>    b: </span><span style=color:#56b6c2;>i32</span><span>,
+</span><span>}
+</span></code></pre><p>Next, we'll add the function to calculate euclidean distance, it'll take in two of our <code>Color</code>s and return a float for the distance. You'll notice this function looks almost identical to its JS equivalent the only difference being the types needed on the function parameters and the square root and power functions coming from their associated number types rather than a common Math module:<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span style=color:#56b6c2;>fn </span><span style=color:#98c379;>calc_euclidean_dist</span><span>(</span><span style=font-style:italic;color:#d19a66;>p</span><span>: </span><span style=color:#e06c75;>&</span><span>Color, </span><span style=font-style:italic;color:#d19a66;>q</span><span>: </span><span style=color:#e06c75;>&</span><span>Color) -> </span><span style=color:#56b6c2;>f32 </span><span>{
+</span><span>    </span><span style=color:#56b6c2;>f32</span><span>::sqrt((
+</span><span>      </span><span style=color:#56b6c2;>i32</span><span>::pow(p.r </span><span style=color:#e06c75;>-</span><span> q.r, </span><span style=color:#c678dd;>2</span><span>) </span><span style=color:#e06c75;>+ 
+</span><span>      </span><span style=color:#56b6c2;>i32</span><span>::pow(p.g </span><span style=color:#e06c75;>-</span><span> q.g, </span><span style=color:#c678dd;>2</span><span>) </span><span style=color:#e06c75;>+ 
+</span><span>      </span><span style=color:#56b6c2;>i32</span><span>::pow(p.b </span><span style=color:#e06c75;>-</span><span> q.b, </span><span style=color:#c678dd;>2</span><span>)
+</span><span>    ) </span><span style=color:#e06c75;>as </span><span style=color:#56b6c2;>f32</span><span>)
+</span><span>}
+</span></code></pre><p>One thing to note here is the parameter types here are annotated with a <code>&</code>, this indicates that we're <em>borrowing</em> (passing by reference) rather than taking ownership of these <code>Color</code> objects. <a href=https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html>Ownership</a> is a big topic in Rust, more than I can go into here but we can sum it up as, by enforcing strict rules at compile time about when data is created and destroyed, we can guarantee memory safety throughout the code.<p>Also, note the lack of a <code>return</code> statement here in this function despite there being a noted return type of <code>f32</code> (32-bit floating point number), Rust implicitly returns statements that don't end with a semi-colon.<p>So far so simple, let's go up (down?) one level to the Rust version of the <code>calcNewClusters</code> function starting with the function signature:<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span style=color:#56b6c2;>fn </span><span style=color:#98c379;>calc_new_clusters</span><span>(</span><span style=font-style:italic;color:#d19a66;>k_clusters</span><span>: </span><span style=color:#e06c75;>&</span><span style=color:#56b6c2;>Vec</span><span>&LTColor>, </span><span style=font-style:italic;color:#d19a66;>color_data</span><span>: </span><span style=color:#e06c75;>&</span><span style=color:#56b6c2;>Vec</span><span>&LTColor>) -> </span><span style=color:#56b6c2;>Vec</span><span>&LTColor> {
+</span></code></pre><p>Ok, new concept here the <code>Vec</code>. Vectors in Rust are a growable array type, we use vectors rather than arrays here because we won't know the size of the collection at compile time. Once again we're borrowing the vectors for our k-clusters and colour data, we'll also return a new vector containing the new clusters discovered by our algorithm, just as we did with the JS version.<p>The first line of this function is worth talking about on its own, as there are a couple of new concepts here:<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span style=color:#56b6c2;>let </span><span style=color:#e06c75;>mut</span><span> new_clusters </span><span style=color:#e06c75;>= </span><span>vec![vec![]; k_clusters.</span><span style=color:#98c379;>len</span><span>()];
+</span></code></pre><p>Rust uses the <code>let</code> keyword to create new variables in the current scope in this case <code>new_clusters</code>. Variables in Rust we've looked at until now have all been immutable, as this is the default, we use the <code>mut</code> keyword here to define the variable as mutable. This default mutability also has implications for passed-in parameters, and how this works given Rust's borrow checker, as we haven't needed to mutate any function params up until now we won't be looking at that for the moment.<p>The second new concept is that of the <em>macro</em>. Function-like macros such as this can be identified by the <code>!</code> at the end of their name and can be thought of as "code that writes other code", in this case, a shortcut for creating new vectors with a specific set of parameters. This reads as, a vector with an initial capacity of the length of our k_clusters parameter, and will be filled with an empty vector initially.<p>We create our <code>new_clusters</code> vector up-front because we're going to use this instead of the <code>clusteredData</code> temporary collection we used on the JS side, we'll look at why later bit for now. Let's look at the generation of this 2D vector:<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span style=color:#676f7d;>// 1
+</span><span style=color:#e06c75;>for</span><span> color </span><span style=color:#e06c75;>in</span><span> color_data {
+</span><span>    </span><span style=color:#676f7d;>// 2
+</span><span>    </span><span style=color:#56b6c2;>let</span><span> distances </span><span style=color:#e06c75;>=</span><span> k_clusters
+</span><span>        .</span><span style=color:#98c379;>iter</span><span>()
+</span><span>        .</span><span style=color:#98c379;>map</span><span>(|</span><span style=font-style:italic;color:#d19a66;>k</span><span>| </span><span style=color:#98c379;>calc_euclidean_dist</span><span>(k, color))
+</span><span>        .collect::<</span><span style=color:#56b6c2;>Vec</span><span><</span><span style=color:#56b6c2;>f32</span><span>>>();
+</span><span>
+</span><span>    </span><span style=color:#676f7d;>// 3
+</span><span>    </span><span style=color:#56b6c2;>let</span><span> min_distance </span><span style=color:#e06c75;>=</span><span> distances.</span><span style=color:#98c379;>iter</span><span>().</span><span style=color:#98c379;>fold</span><span>(</span><span style=color:#56b6c2;>f32</span><span>::</span><span style=color:#56b6c2;>INFINITY</span><span>, |</span><span style=font-style:italic;color:#d19a66;>a</span><span>, </span><span style=color:#e06c75;>&</span><span style=font-style:italic;color:#d19a66;>b</span><span>| a.</span><span style=color:#98c379;>min</span><span>(b));
+</span><span>
+</span><span>    </span><span style=color:#676f7d;>// 4
+</span><span>    </span><span style=color:#56b6c2;>let</span><span> selected_k </span><span style=color:#e06c75;>=</span><span> distances.</span><span style=color:#98c379;>iter</span><span>().</span><span style=color:#98c379;>position</span><span>(|</span><span style=color:#e06c75;>&</span><span style=font-style:italic;color:#d19a66;>r</span><span>| r </span><span style=color:#e06c75;>==</span><span> min_distance).</span><span style=color:#98c379;>unwrap</span><span>();
+</span><span>
+</span><span>    </span><span style=color:#676f7d;>// 5
+</span><span>    new_clusters[selected_k].</span><span style=color:#98c379;>push</span><span>(color);
+</span><span>}
+</span></code></pre><p>Let's go through this then; in 1, the <code>for</code>/<code>in</code> syntax here lets us borrow each item from the <code>color_data</code> vector and perform operations using them similar to the JS for/in.<p>There's a lot going on in this next line (2). We start with our <code>k_clusters</code> vector and call <code>.iter()</code> to give us an iterator that yields every item in the vector in order. There's new syntax in the next call to <code>.map()</code>, the double-pipe syntax signifies a closure that takes each element of the iterator and transforms it in some way, map finally returns a new iterator based on this transformation. Here we're using our <code>calc_euclidean_dist</code> function, passing it in our current element from the iterator, and the current <code>Color</code> from our <code>for</code> loop.<p>The final statement here transforms our iterator back into a collection, <code>.collect::&LTVec&LTf32>>()</code> we use what's called the turbofish syntax here to help the compiler inference algorithm know what the final type of this <code>collect</code> will be. Thus we end up with a vector of <code>f32</code>s that represents this colour's distance to each of the <em>k</em>-clusters, phew.<p>The next 2 lines (3, 4) have direct equivalents in our previous JS example:<pre class=language-js data-lang=js style=background-color:#282c34;color:#abb2bf;><code class=language-js data-lang=js><span style=color:#56b6c2;>const </span><span style=color:#61afef;>minDistance </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>distances</span><span>.</span><span style=color:#98c379;>reduce</span><span>(
+</span><span>  (</span><span style=font-style:italic;color:#d19a66;>a</span><span>, </span><span style=font-style:italic;color:#d19a66;>b</span><span>) </span><span style=color:#56b6c2;>=> Math</span><span>.</span><span style=color:#98c379;>min</span><span>(a, b),
+</span><span>  </span><span style=color:#56b6c2;>Infinity
+</span><span>);
+</span><span style=color:#56b6c2;>const </span><span style=color:#61afef;>selectedK </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>distances</span><span>.</span><span style=color:#98c379;>findIndex</span><span>((</span><span style=font-style:italic;color:#d19a66;>e</span><span>) </span><span style=color:#56b6c2;>=> </span><span>e </span><span style=color:#e06c75;>=== </span><span>minDistance);
+</span></code></pre><p>There is one thing we should touch on before moving on, a the end of line 4 <code>unwrap()</code>. The previous call <code>.position(...)</code> has the return type <code>Option&LTusize></code> that is it may return an index as <code>Some(usize)</code> or <code>None</code> if this item is not found in the iterator. <code>unwrap</code> takes the <code>Some</code> and gives us the <code>usize</code> index, it should be noted that this can potentially panic (error out) if <code>position()</code> returns <code>None</code> however we're safe to use it in this instance as there will always be a minimum index.<p>Line 5 here we push our colour into our <code>new_clusters</code> vector under the selected cluster from our pre-defined <em>k</em>-clusters.<p>The final part of this function is again a one-for-one equivalent of the JS code, I'll just show the code listing here as there isn't anything new to talk about:<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span>new_clusters
+</span><span>  .</span><span style=color:#98c379;>iter</span><span>()
+</span><span>  .</span><span style=color:#98c379;>map</span><span>(|</span><span style=font-style:italic;color:#d19a66;>c_list</span><span>| {
+</span><span>      </span><span style=color:#56b6c2;>let </span><span style=color:#e06c75;>mut</span><span> r </span><span style=color:#e06c75;>= </span><span style=color:#c678dd;>0</span><span>;
+</span><span>      </span><span style=color:#56b6c2;>let </span><span style=color:#e06c75;>mut</span><span> b </span><span style=color:#e06c75;>= </span><span style=color:#c678dd;>0</span><span>;
+</span><span>      </span><span style=color:#56b6c2;>let </span><span style=color:#e06c75;>mut</span><span> g </span><span style=color:#e06c75;>= </span><span style=color:#c678dd;>0</span><span>;
+</span><span>
+</span><span>      </span><span style=color:#56b6c2;>c_list</span><span>.</span><span style=color:#98c379;>iter</span><span>().</span><span style=color:#98c379;>for_each</span><span>(|</span><span style=font-style:italic;color:#d19a66;>color</span><span>| {
+</span><span>          r </span><span style=color:#e06c75;>+=</span><span> color.r;
+</span><span>          b </span><span style=color:#e06c75;>+=</span><span> color.b;
+</span><span>          g </span><span style=color:#e06c75;>+=</span><span> color.g;
+</span><span>      });
+</span><span>
+</span><span>      Color {
+</span><span>          r: (r </span><span style=color:#e06c75;>/ </span><span style=color:#56b6c2;>c_list</span><span>.</span><span style=color:#98c379;>len</span><span>() </span><span style=color:#e06c75;>as </span><span style=color:#56b6c2;>i32</span><span>),
+</span><span>          g: (g </span><span style=color:#e06c75;>/ </span><span style=color:#56b6c2;>c_list</span><span>.</span><span style=color:#98c379;>len</span><span>() </span><span style=color:#e06c75;>as </span><span style=color:#56b6c2;>i32</span><span>),
+</span><span>          b: (b </span><span style=color:#e06c75;>/ </span><span style=color:#56b6c2;>c_list</span><span>.</span><span style=color:#98c379;>len</span><span>() </span><span style=color:#e06c75;>as </span><span style=color:#56b6c2;>i32</span><span>),
+</span><span>      }
+</span><span>  })
+</span><span>  .</span><span style=color:#98c379;>collect</span><span>()
+</span></code></pre><h3 id=our-entry-point>Our entry-point</h3><p>So now we have the 2 basic external functions of the code, let's look at what will be the entry point of our Wasm module <code>find_colors</code>, I'm not going to go through this line by line, but I will talk about the numbered the lines here in varying levels of detail and call out anything we've not seen already:<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span style=color:#676f7d;>// 1
+</span><span>#[wasm_bindgen]
+</span><span style=color:#676f7d;>// 2
+</span><span style=color:#e06c75;>pub </span><span style=color:#56b6c2;>fn </span><span style=color:#98c379;>find_colors</span><span>(</span><span style=font-style:italic;color:#d19a66;>color_data</span><span>: JsValue, </span><span style=font-style:italic;color:#d19a66;>k_clusters</span><span>: JsValue) -> JsValue {
+</span><span>    </span><span style=color:#676f7d;>// 3
+</span><span>    </span><span style=color:#98c379;>set_panic_hook</span><span>();
+</span><span>
+</span><span>    </span><span style=color:#676f7d;>// 4
+</span><span>    </span><span style=color:#56b6c2;>let</span><span> colors: </span><span style=color:#56b6c2;>Vec</span><span>&LTColor> </span><span style=color:#e06c75;>= </span><span>serde_wasm_bindgen::from_value(color_data).</span><span style=color:#98c379;>unwrap</span><span>();
+</span><span>    </span><span style=color:#56b6c2;>let </span><span style=color:#e06c75;>mut</span><span> clusters: </span><span style=color:#56b6c2;>Vec</span><span>&LTColor> </span><span style=color:#e06c75;>= </span><span>serde_wasm_bindgen::from_value(k_clusters).</span><span style=color:#98c379;>unwrap</span><span>();
+</span><span>
+</span><span>    </span><span style=color:#56b6c2;>let </span><span style=color:#e06c75;>mut</span><span> iterations </span><span style=color:#e06c75;>= </span><span style=color:#c678dd;>0</span><span>;
+</span><span>    </span><span style=color:#676f7d;>// 5
+</span><span>    </span><span style=color:#56b6c2;>let </span><span style=color:#e06c75;>mut</span><span> distance_shift </span><span style=color:#e06c75;>= </span><span style=color:#c678dd;>0_</span><span style=color:#56b6c2;>f32</span><span>;
+</span><span>
+</span><span>    </span><span style=color:#676f7d;>// 6
+</span><span>    </span><span style=color:#e06c75;>loop </span><span>{
+</span><span>        </span><span style=color:#676f7d;>// 7
+</span><span>        console::time_with_label(</span><span style=color:#e5c07b;>"Calc new clusters"</span><span>);
+</span><span>        </span><span style=color:#56b6c2;>let</span><span> new_clusters </span><span style=color:#e06c75;>= </span><span style=color:#98c379;>calc_new_clusters</span><span>(</span><span style=color:#e06c75;>&</span><span>clusters, </span><span style=color:#e06c75;>&</span><span>colors);
+</span><span>        console::time_end_with_label(</span><span style=color:#e5c07b;>"Calc new clusters"</span><span>);
+</span><span>
+</span><span>        console::time_with_label(</span><span style=color:#e5c07b;>"Calc distance shift"</span><span>);
+</span><span>        </span><span style=color:#676f7d;>// 8
+</span><span>        </span><span style=color:#e06c75;>for</span><span> i </span><span style=color:#e06c75;>in </span><span style=color:#c678dd;>0</span><span style=color:#e06c75;>..</span><span>new_clusters.</span><span style=color:#98c379;>len</span><span>() {
+</span><span>            distance_shift </span><span style=color:#e06c75;>+= </span><span style=color:#98c379;>calc_euclidean_dist</span><span>(</span><span style=color:#e06c75;>&</span><span>new_clusters[i], </span><span style=color:#e06c75;>&</span><span>clusters[i])
+</span><span>        }
+</span><span>        console::time_end_with_label(</span><span style=color:#e5c07b;>"Calc distance shift"</span><span>);
+</span><span>
+</span><span>        distance_shift </span><span style=color:#e06c75;>/=</span><span> new_clusters.</span><span style=color:#98c379;>len</span><span>() </span><span style=color:#e06c75;>as </span><span style=color:#56b6c2;>f32</span><span>;
+</span><span>
+</span><span>        clusters </span><span style=color:#e06c75;>=</span><span> new_clusters;
+</span><span>
+</span><span>        </span><span style=color:#676f7d;>// 9
+</span><span>        </span><span style=color:#e06c75;>if</span><span> distance_shift </span><span style=color:#e06c75;><= </span><span style=color:#c678dd;>5_</span><span style=color:#56b6c2;>f32 </span><span style=color:#e06c75;>||</span><span> iterations </span><span style=color:#e06c75;>>= </span><span style=color:#c678dd;>10 </span><span>{
+</span><span>            </span><span style=color:#e06c75;>break</span><span>;
+</span><span>        }
+</span><span>
+</span><span>        iterations </span><span style=color:#e06c75;>+= </span><span style=color:#c678dd;>1</span><span>;
+</span><span>        distance_shift </span><span style=color:#e06c75;>= </span><span style=color:#c678dd;>0_</span><span style=color:#56b6c2;>f32</span><span>;
+</span><span>    }
+</span><span>
+</span><span>    </span><span style=color:#676f7d;>// 10
+</span><span>    JsValue::from(
+</span><span>        clusters
+</span><span>            .</span><span style=color:#98c379;>iter</span><span>()
+</span><span>            .</span><span style=color:#98c379;>map</span><span>(|</span><span style=font-style:italic;color:#d19a66;>c</span><span>| format!(</span><span style=color:#e5c07b;>"#</span><span style=color:#56b6c2;>{:02x}{:02x}{:02x}</span><span style=color:#e5c07b;>"</span><span>, c.r, c.g, c.b))
+</span><span>            .</span><span style=color:#98c379;>map</span><span>(|</span><span style=font-style:italic;color:#d19a66;>s</span><span>| JsValue::from(</span><span style=color:#e06c75;>&</span><span>s[</span><span style=color:#e06c75;>..</span><span>]))
+</span><span>            .collect::&LTjs_sys::Array>(),
+</span><span>    )
+</span><span>}
+</span></code></pre><p>The first line then (1), is known as an "attribute" in Rust, this one <code>wasm_bindgen</code> annotates this function as something that should be exposed publicly to JS. The function signature then (2) starts with the <code>pub</code> keyword, letting rust know that this function is public rather than the default private and available outside of this module. We also have a type declaration for our parameters <code>JsValue</code> (remember our <code>wasm_bindgen::prelude</code> import? It comes from there). This represents an object type that can be imported from or exported to JS. Our function also has a return type of <code>JsValue</code> that we'll use to return our gathered colour swatches to JS.<p><code>set_panic_hook</code> call (3), is an auto-generated method we get for free with the wasm-pack template, invoking this method adds a hook to Rust's panic system that logs these errors into the JS console rather than just killing the app. This does add quite a large overhead in code size to the final <code>.wasm</code> bundle but is handy for debugging during development.<p>The first two assignments in this function then (4) these take our passed in <code>JsValue</code>s and use the <code>serde_wasm_bindgen</code> crate to transform them into <code>Color</code> vectors. There is a built-in function within the <code>wasm_bindgen</code> crate to do this however the function is currently deprecated in favour of the Serde solution. We assign <code>clusters</code> as mutable here since we'll be updating this with every iteration using it to store the found clusters. Both of these statements also end with <code>unwrap()</code> as the deserialization between JS and our Rust vector may fail.<p><code>distance_shift</code> we mark as an <code>f32</code> (32-bit floating point number) with the <code>_f32</code> suffix, we could also have written this like the example below and let the compile infer the type but I wanted to show this syntax:<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span style=color:#56b6c2;>let </span><span style=color:#e06c75;>mut</span><span> distance_shift </span><span style=color:#e06c75;>= </span><span style=color:#c678dd;>0.0</span><span>;
+</span></code></pre><p>Rust has no <code>do</code>/<code>while</code> syntax so we're going to use the infinite <code>loop</code> statement with a conditional break to exit when our distance shift or iteration limit is reached (9):<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span style=color:#e06c75;>loop </span><span>{
+</span><span>    </span><span style=color:#676f7d;>//...
+</span><span>    </span><span style=color:#e06c75;>if</span><span> distance_shift </span><span style=color:#e06c75;><= </span><span style=color:#c678dd;>5_</span><span style=color:#56b6c2;>f32 </span><span style=color:#e06c75;>||</span><span> iterations </span><span style=color:#e06c75;>>= </span><span style=color:#c678dd;>10 </span><span>{
+</span><span>        </span><span style=color:#e06c75;>break</span><span>;
+</span><span>    }
+</span><span>}
+</span></code></pre><p>7 is simply calling the <code>web_sys</code> crate's console function that gives us JS <code>time</code> and <code>timeEnd</code> we'll use to time function execution the same way we did in JS land.<p>We've seen <code>for</code> loops before but I wanted to call out the range syntax here <code>0..new_clusters.len()</code> this gives us a range of <code>usize</code>s between 0 and the length of <code>new_clusters</code> (non-inclusive) that we'll use in favour of the <code>forEach</code> from JS:<pre class=language-js data-lang=js style=background-color:#282c34;color:#abb2bf;><code class=language-js data-lang=js><span style=color:#61afef;>newClusters</span><span>.</span><span style=color:#98c379;>forEach</span><span>((</span><span style=font-style:italic;color:#d19a66;>v</span><span>, </span><span style=font-style:italic;color:#d19a66;>i</span><span>) </span><span style=color:#56b6c2;>=> </span><span>{
+</span><span>  distanceShift </span><span style=color:#e06c75;>+= </span><span style=color:#98c379;>calcEuclideanDist</span><span>(v, kClusters[i]);
+</span><span>});
+</span></code></pre><p>Last up our return:<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span>JsValue::from(
+</span><span>    clusters
+</span><span>        .</span><span style=color:#98c379;>iter</span><span>()
+</span><span>        .</span><span style=color:#98c379;>map</span><span>(|</span><span style=font-style:italic;color:#d19a66;>c</span><span>| format!(</span><span style=color:#e5c07b;>"#</span><span style=color:#56b6c2;>{:02x}{:02x}{:02x}</span><span style=color:#e5c07b;>"</span><span>, c.r, c.g, c.b))
+</span><span>        .</span><span style=color:#98c379;>map</span><span>(|</span><span style=font-style:italic;color:#d19a66;>s</span><span>| JsValue::from(s))
+</span><span>        .collect::&LTjs_sys::Array>(),
+</span><span>)
+</span></code></pre><p>We've seen <code>iter</code> and <code>collect</code> before let's take a look at these <code>map</code>s though, the first one uses the <code>format</code> macro to create a Rust <code>String</code> that represents the hex value of this colour, we then create a JsValue from this string in the second. Finally, this gets collected into a JS array type and wrapped in a <code>JsValue</code> that we can return to the Javascript side.<p>And that's it. I won't post the entire code listing for this module again as it's a bit long but you can find it in the project's <a href=https://github.com/Zyzle/image-colours/blob/v3.0.0/colors-wasm/src/lib.rs>GitHub Repository</a>.<h3 id=compiling-rust-to-wasm>Compiling Rust to Wasm</h3><p>So we have our Rust module code, we need to compile this into something that we can import into our JavaScript module. To do this we use the <code>wasm-pack</code> tool.<pre class=language-bash data-lang=bash style=background-color:#282c34;color:#abb2bf;><code class=language-bash data-lang=bash><span>$ wasm-pack build
+</span><span>[INFO]: 🎯  Checking for the Wasm target...
+</span><span>[INFO]: 🌀  Compiling to Wasm...
+</span><span style=color:#676f7d;># ...Snipping compile modules
+</span><span>   Compiling colors-wasm v3.0.0 (/Users/colinmcculloch/devel/image-colours/colors-wasm)
+</span><span>    Finished release </span><span style=color:#e06c75;>[</span><span>optimized</span><span style=color:#e06c75;>]</span><span> target(s) in 31.28s
+</span><span>[INFO]: ⬇️  Installing wasm-bindgen...
+</span><span>[INFO]: ✨   Done in 32.68s
+</span><span>[INFO]: 📦   Your wasm pkg is ready to publish at ./pkg.
+</span></code></pre><p>I snipped a lot of the compile messages here but the process took a total of about 30s, as we can see it created our package in a <code>pkg</code> directory. Let's have a look at the contents of that:<pre style=background-color:#282c34;color:#abb2bf;><code><span>pkg/
+</span><span>├─ colors_wasm_bg.js
+</span><span>├─ colors_wasm_bg.wasm
+</span><span>├─ colors_wasm_bg.wasm.d.ts
+</span><span>├─ colors_wasm.d.ts
+</span><span>├─ colors_wasm.js
+</span><span>├─ LICENCE
+</span><span>├─ package.json
+</span><span>└─ README.md
+</span></code></pre><p>So we have our binary here <code>colors_wasm_bg.wasm</code> as well as some JS glue code in <code>colors_wasm_bg.js</code> and the file we will use as our JS import <code>colors_wasm.js</code>. We also get an auto-generated <code>package.json</code> that would allow us to push this package to a repository such as NPM.<h2 id=importing-wasm-to-js>Importing Wasm to JS</h2><p>So in the code seen above, we've added timing logs the same way we did to the JS side, this should give us a direct comparison of times taken for various sections of the code to execute and see how much of a speedup this module has given us.<p>I'm going to make some quick changes to the existing code, mostly moving the JS out into its own module file <code>index.js</code>. This just makes it easier to import our wasm code with the line:<pre class=language-js data-lang=js style=background-color:#282c34;color:#abb2bf;><code class=language-js data-lang=js><span style=color:#e06c75;>import </span><span style=color:#56b6c2;>* </span><span style=color:#e06c75;>as </span><span>wasm </span><span style=color:#e06c75;>from </span><span style=color:#e5c07b;>'colors-wasm'</span><span>;
+</span></code></pre><p>We load this file from a <code>bootstrap.js</code>:<pre class=language-js data-lang=js style=background-color:#282c34;color:#abb2bf;><code class=language-js data-lang=js><span style=color:#676f7d;>// A dependency graph that contains any wasm must all be imported
+</span><span style=color:#676f7d;>// asynchronously. This `bootstrap.js` file does the single async import, so
+</span><span style=color:#676f7d;>// that no one else needs to worry about it again.
+</span><span style=color:#e06c75;>import</span><span>(</span><span style=color:#e5c07b;>"./index.js"</span><span>)
+</span><span>  .</span><span style=color:#98c379;>catch</span><span>(</span><span style=font-style:italic;color:#d19a66;>e </span><span style=color:#56b6c2;>=> </span><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>error</span><span>(</span><span style=color:#e5c07b;>"Error importing `index.js`:"</span><span>, e));
+</span></code></pre><p>I haven't pushed the wasm module to any code repository yet so I'll just bring it in as a relative import in the <code>package.json</code>:<pre class=language-json data-lang=json style=background-color:#282c34;color:#abb2bf;><code class=language-json data-lang=json><span style=color:#e5c07b;>"dependencies"</span><span>: {
+</span><span>  </span><span style=color:#e5c07b;>"colors-wasm"</span><span>: </span><span style=color:#e5c07b;>"file:../colors-wasm/pkg"
+</span><span>}
+</span></code></pre><p>The code change to use this module is as simple as the one line I posted above (with a few small alterations to the colour swatches display):<pre class=language-js data-lang=js style=background-color:#282c34;color:#abb2bf;><code class=language-js data-lang=js><span style=color:#56b6c2;>const </span><span style=color:#61afef;>result </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>wasm</span><span>.</span><span style=color:#98c379;>find_colors</span><span>(colorData, kClusters);
+</span><span>
+</span><span style=color:#56b6c2;>const </span><span style=color:#61afef;>swatches </span><span style=color:#e06c75;>= </span><span style=color:#56b6c2;>document</span><span>.</span><span style=color:#98c379;>getElementById</span><span>(</span><span style=color:#e5c07b;>"swatches"</span><span>);
+</span><span style=color:#61afef;>swatches</span><span>.textContent </span><span style=color:#e06c75;>= </span><span style=color:#e5c07b;>""</span><span>;
+</span><span>
+</span><span style=color:#e06c75;>for </span><span>(</span><span style=color:#56b6c2;>let </span><span>i </span><span style=color:#e06c75;>= </span><span style=color:#c678dd;>0</span><span>; i </span><span style=color:#e06c75;>< </span><span style=color:#61afef;>result</span><span>.</span><span style=color:#56b6c2;>length</span><span>; i</span><span style=color:#e06c75;>++</span><span>) {
+</span><span>  </span><span style=color:#56b6c2;>let </span><span>swatch </span><span style=color:#e06c75;>= </span><span style=color:#56b6c2;>document</span><span>.</span><span style=color:#98c379;>createElement</span><span>(</span><span style=color:#e5c07b;>"span"</span><span>);
+</span><span>
+</span><span>  </span><span style=color:#56b6c2;>const </span><span style=color:#61afef;>color </span><span style=color:#e06c75;>= </span><span style=color:#56b6c2;>document</span><span>.</span><span style=color:#98c379;>createTextNode</span><span>(result[i]);
+</span><span>  </span><span style=color:#61afef;>swatch</span><span>.</span><span style=color:#98c379;>appendChild</span><span>(color);
+</span><span>  </span><span style=color:#61afef;>swatch</span><span>.</span><span style=color:#61afef;>classList</span><span>.</span><span style=color:#98c379;>add</span><span>(</span><span style=color:#e5c07b;>"p-2"</span><span>);
+</span><span>  </span><span style=color:#61afef;>swatch</span><span>.</span><span style=color:#61afef;>classList</span><span>.</span><span style=color:#98c379;>add</span><span>(</span><span style=color:#e5c07b;>"mb-2"</span><span>);
+</span><span>  </span><span style=color:#61afef;>swatch</span><span>.</span><span style=color:#56b6c2;>style</span><span>.</span><span style=color:#56b6c2;>backgroundColor </span><span style=color:#e06c75;>= </span><span>result[i];
+</span><span>
+</span><span>  </span><span style=color:#61afef;>swatches</span><span>.</span><span style=color:#98c379;>appendChild</span><span>(swatch);
+</span><span>}
+</span></code></pre><p><code>result</code> in this case is the array of strings we pass back from the Wasm module, so we've no need to translate these from raw colour numbers the way we did before.<h2 id=measuring-the-results>Measuring the results</h2><p>Ok now we're ready for the face-off with our old JS implementation, remember we're working with the image above a 700x466 jpeg ~82kb. An average run on my machine might look something like this:<pre style=background-color:#282c34;color:#abb2bf;><code><span>Build color data: 386.304931640625 ms
+</span><span>Calc new clusters: 7964.244140625 ms
+</span><span>Calc new clusters: 7465.383056640625 ms
+</span><span>Calc new clusters: 7418.43798828125 ms
+</span><span>Time taken: 23257ms
+</span></code></pre><p>Now let's try this same image in the Wasm version of the code:<pre style=background-color:#282c34;color:#abb2bf;><code><span>Build color data: 559.1220703125 ms
+</span><span>Calc new clusters: 15.107177734375 ms
+</span><span>Calc new clusters: 15.216796875 ms
+</span><span>Calc new clusters: 15.80810546875 ms
+</span><span>Time taken: 759ms
+</span></code></pre><p>Wow! I actually had to go back and double-check this but everything seems correct, so that's a 30x speedup for the total calculation! This is so fast in fact that we can run much larger images through it and still beat the performance of the JS code.<p>The full version image below I used for testing is an unedited jpeg 5472x3648 pixels at around 12.7Mb<figure><img alt="fly macro shot" src=https://zyzle.dev/processed_images/297358c6360cd6a200.webp><figcaption>24-MP unedited file</figcaption></figure><p>Let's take a look at the Wasm timings:<pre style=background-color:#282c34;color:#abb2bf;><code><span>Build color data: 11723.6728515625 ms
+</span><span>Calc new clusters: 68.955810546875 ms
+</span><span>Calc new clusters: 70.76611328125 ms
+</span><span>Calc new clusters: 77.3671875 ms
+</span><span>Calc new clusters: 71.468017578125 ms
+</span><span>Time taken: 12474ms
+</span></code></pre><p>Now let's try the same thing in the JS code...<pre style=background-color:#282c34;color:#abb2bf;><code><span>Build color data: 11990.40966796875 ms
+</span><span>Calc new clusters: 261128.44995117188 ms
+</span><span>Calc new clusters: 212716.10498046875 ms
+</span><span>Calc new clusters: 192389.60888671875 ms
+</span><span>Calc new clusters: 183841.77514648438 ms
+</span><span>Calc new clusters: 177428.12915039062 ms
+</span><span>Time taken: 1039513ms
+</span></code></pre><p>I almost didn't let this finish because it was taking so long, but as you can see from these numbers we've massively improved the performance here (17min down to 12s) but...<h2 id=a-new-bottleneck-appears>A new bottleneck appears!</h2><p>We used over 90% of the processing time in the Wasm example above to generate the colour data, so can we also move this into Wasm and increase the performance even more? Let's add some more timing measurements to the build colour data step:<pre style=background-color:#282c34;color:#abb2bf;><code><span>finding canvas element: 47.003173828125 ms
+</span><span>drawing image: 3.24609375 ms
+</span><span>grabbing image data: 777.634033203125 ms
+</span><span>making color dataset: 13180.24072265625 ms
+</span></code></pre><p>So the problem here looks like the creation of the unique colours dataset:<pre class=language-js data-lang=js style=background-color:#282c34;color:#abb2bf;><code class=language-js data-lang=js><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>time</span><span>(</span><span style=color:#e5c07b;>'grabbing image data'</span><span>);
+</span><span style=color:#56b6c2;>const </span><span style=color:#61afef;>imageData </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>ctx</span><span>.</span><span style=color:#98c379;>getImageData</span><span>(</span><span style=color:#c678dd;>0</span><span>, </span><span style=color:#c678dd;>0</span><span>, </span><span style=color:#61afef;>ibm</span><span>.</span><span style=color:#56b6c2;>width</span><span>, </span><span style=color:#61afef;>ibm</span><span>.</span><span style=color:#56b6c2;>height</span><span>).</span><span style=color:#56b6c2;>data</span><span>;
+</span><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>timeEnd</span><span>(</span><span style=color:#e5c07b;>'grabbing image data'</span><span>);
+</span><span>
+</span><span style=color:#56b6c2;>let </span><span>colorData </span><span style=color:#e06c75;>= </span><span>[];
+</span><span>
+</span><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>time</span><span>(</span><span style=color:#e5c07b;>'making color dataset'</span><span>);
+</span><span style=color:#e06c75;>for </span><span>(</span><span style=color:#56b6c2;>let </span><span>i </span><span style=color:#e06c75;>= </span><span style=color:#c678dd;>0</span><span>; i </span><span style=color:#e06c75;>< </span><span style=color:#61afef;>imageData</span><span>.</span><span style=color:#56b6c2;>length</span><span>; i </span><span style=color:#e06c75;>+= </span><span style=color:#c678dd;>4</span><span>) {
+</span><span>  </span><span style=color:#56b6c2;>const </span><span style=color:#61afef;>colStr </span><span style=color:#e06c75;>= </span><span>[
+</span><span>    imageData[i],
+</span><span>    imageData[i </span><span style=color:#e06c75;>+ </span><span style=color:#c678dd;>1</span><span>],
+</span><span>    imageData[i </span><span style=color:#e06c75;>+ </span><span style=color:#c678dd;>2</span><span>],
+</span><span>  ].</span><span style=color:#98c379;>join</span><span>(</span><span style=color:#e5c07b;>","</span><span>);
+</span><span>
+</span><span>  </span><span style=color:#61afef;>colorData</span><span>.</span><span style=color:#98c379;>push</span><span>(colStr);
+</span><span>}
+</span><span>
+</span><span>colorData </span><span style=color:#e06c75;>= </span><span>[</span><span style=color:#e06c75;>...new </span><span style=color:#61afef;>Set</span><span>(colorData)];
+</span><span>
+</span><span>colorData </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>colorData</span><span>.</span><span style=color:#98c379;>map</span><span>((</span><span style=font-style:italic;color:#d19a66;>v</span><span>) </span><span style=color:#56b6c2;>=> </span><span>{
+</span><span>  </span><span style=color:#56b6c2;>const </span><span style=color:#61afef;>rgb </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>v</span><span>.</span><span style=color:#98c379;>split</span><span>(</span><span style=color:#e5c07b;>","</span><span>);
+</span><span>  </span><span style=color:#e06c75;>return </span><span>{
+</span><span>    r: </span><span style=color:#98c379;>parseInt</span><span>(rgb[</span><span style=color:#c678dd;>0</span><span>]),
+</span><span>    g: </span><span style=color:#98c379;>parseInt</span><span>(rgb[</span><span style=color:#c678dd;>1</span><span>]),
+</span><span>    b: </span><span style=color:#98c379;>parseInt</span><span>(rgb[</span><span style=color:#c678dd;>2</span><span>]),
+</span><span>  };
+</span><span>});
+</span><span>
+</span><span style=color:#61afef;>console</span><span>.</span><span style=color:#98c379;>timeEnd</span><span>(</span><span style=color:#e5c07b;>"making color dataset"</span><span>);
+</span></code></pre><p>Let's try moving this into wasm too and see if we can improve performance in this section of code. I'll change the parameters of our <code>find_colors</code> function to take in the 2D context and the image dimensions:<pre class=language-js data-lang=js style=background-color:#282c34;color:#abb2bf;><code class=language-js data-lang=js><span style=color:#56b6c2;>const </span><span style=color:#61afef;>result </span><span style=color:#e06c75;>= </span><span style=color:#61afef;>wasm</span><span>.</span><span style=color:#98c379;>find_colors</span><span>(ctx, </span><span style=color:#61afef;>ibm</span><span>.</span><span style=color:#56b6c2;>width</span><span>, </span><span style=color:#61afef;>ibm</span><span>.</span><span style=color:#56b6c2;>height</span><span>);
+</span></code></pre><p>We'll mirror this in the wasm code as follows:<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span style=color:#e06c75;>pub </span><span style=color:#56b6c2;>fn </span><span style=color:#98c379;>find_colors</span><span>(</span><span style=font-style:italic;color:#d19a66;>ctx</span><span>: </span><span style=color:#e06c75;>&</span><span>CanvasRenderingContext2d, </span><span style=font-style:italic;color:#d19a66;>width</span><span>: </span><span style=color:#56b6c2;>u32</span><span>, </span><span style=font-style:italic;color:#d19a66;>height</span><span>: </span><span style=color:#56b6c2;>u32</span><span>) -> JsValue {
+</span></code></pre><p><code>CanvasRenderingContext2d</code> is an additional import from the web-sys crate that will give us access to the canvas context and we can use this to access the image data directly from wasm the way we were previously in the JS, we'll replace these two lines:<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span style=color:#56b6c2;>let</span><span> colors: </span><span style=color:#56b6c2;>Vec</span><span>&LTColor> </span><span style=color:#e06c75;>= </span><span>serde_wasm_bindgen::from_value(color_data).</span><span style=color:#98c379;>unwrap</span><span>();
+</span><span style=color:#56b6c2;>let </span><span style=color:#e06c75;>mut</span><span> clusters: </span><span style=color:#56b6c2;>Vec</span><span>&LTColor> </span><span style=color:#e06c75;>= </span><span>serde_wasm_bindgen::from_value(k_clusters).</span><span style=color:#98c379;>unwrap</span><span>();
+</span></code></pre><p>With the following:<pre class=language-rust data-lang=rust style=background-color:#282c34;color:#abb2bf;><code class=language-rust data-lang=rust><span>console::time_with_label(</span><span style=color:#e5c07b;>"grabbing image data"</span><span>);
+</span><span style=color:#56b6c2;>let</span><span> image_data </span><span style=color:#e06c75;>=</span><span> ctx.</span><span style=color:#98c379;>get_image_data</span><span>(</span><span style=color:#c678dd;>0.0</span><span>, </span><span style=color:#c678dd;>0.0</span><span>, width </span><span style=color:#e06c75;>as </span><span style=color:#56b6c2;>f64</span><span>, height </span><span style=color:#e06c75;>as </span><span style=color:#56b6c2;>f64</span><span>).</span><span style=color:#98c379;>unwrap</span><span>();
+</span><span>
+</span><span style=color:#56b6c2;>let</span><span> color_data </span><span style=color:#e06c75;>=</span><span> image_data.</span><span style=color:#98c379;>data</span><span>();
+</span><span>console::time_end_with_label(</span><span style=color:#e5c07b;>"grabbing image data"</span><span>);
+</span><span>
+</span><span style=color:#56b6c2;>let </span><span style=color:#e06c75;>mut</span><span> pixels: </span><span style=color:#56b6c2;>Vec</span><span>&LTColor> </span><span style=color:#e06c75;>= </span><span>vec![];
+</span><span>
+</span><span>console::time_with_label(</span><span style=color:#e5c07b;>"dataset iterator"</span><span>);
+</span><span style=color:#e06c75;>for</span><span> i </span><span style=color:#e06c75;>in </span><span>(</span><span style=color:#c678dd;>0</span><span style=color:#e06c75;>..</span><span>color_data.</span><span style=color:#98c379;>len</span><span>()).</span><span style=color:#98c379;>step_by</span><span>(</span><span style=color:#c678dd;>4</span><span>) {
+</span><span>    pixels.</span><span style=color:#98c379;>push</span><span>(Color {
+</span><span>        r: color_data[i] </span><span style=color:#e06c75;>as </span><span style=color:#56b6c2;>i32</span><span>,
+</span><span>        g: color_data[i </span><span style=color:#e06c75;>+ </span><span style=color:#c678dd;>1</span><span>] </span><span style=color:#e06c75;>as </span><span style=color:#56b6c2;>i32</span><span>,
+</span><span>        b: color_data[i </span><span style=color:#e06c75;>+ </span><span style=color:#c678dd;>2</span><span>] </span><span style=color:#e06c75;>as </span><span style=color:#56b6c2;>i32</span><span>,
+</span><span>    });
+</span><span>};
+</span><span>console::time_end_with_label(</span><span style=color:#e5c07b;>"dataset iterator"</span><span>);
+</span><span>
+</span><span>console::time_with_label(</span><span style=color:#e5c07b;>"unique"</span><span>);
+</span><span style=color:#56b6c2;>let</span><span> colors: </span><span style=color:#56b6c2;>Vec</span><span>&LTColor> </span><span style=color:#e06c75;>=</span><span> pixels.</span><span style=color:#98c379;>into_iter</span><span>().</span><span style=color:#98c379;>unique</span><span>().</span><span style=color:#98c379;>collect</span><span>();
+</span><span>console::time_end_with_label(</span><span style=color:#e5c07b;>"unique"</span><span>);
+</span><span>
+</span><span style=color:#56b6c2;>let</span><span> rng </span><span style=color:#e06c75;>= &mut </span><span>rand::thread_rng();
+</span><span>
+</span><span>console::time_with_label(</span><span style=color:#e5c07b;>"pick 8"</span><span>);
+</span><span style=color:#56b6c2;>let </span><span style=color:#e06c75;>mut</span><span> clusters </span><span style=color:#e06c75;>=</span><span> colors.</span><span style=color:#98c379;>clone</span><span>().</span><span style=color:#98c379;>into_iter</span><span>().</span><span style=color:#98c379;>choose_multiple</span><span>(rng, </span><span style=color:#c678dd;>8</span><span>);
+</span><span>console::time_end_with_label(</span><span style=color:#e5c07b;>"pick 8"</span><span>);
+</span></code></pre><p>I won't go over this in too much detail as there's nothing new other than to say we can remove the <code>serde_wasm_bindgen</code> crate and add in 3 new ones <code>itertools</code>, <code>rand</code>, and <code>getrandom</code> (oddly enough this saves us about ~40kb in the compiled wasm). Again we're using the large digital camera image of the fly above, so let's see how it performs:<pre style=background-color:#282c34;color:#abb2bf;><code><span>finding canvas element: 20.951904296875 ms
+</span><span>drawing image: 3.18408203125 ms
+</span><span>grabbing image data: 887.265380859375 ms
+</span><span>dataset iterator: 853.27099609375 ms
+</span><span>unique: 6548.4228515625 ms
+</span><span>pick 8: 154.05078125 ms
+</span><span>Calc new clusters: 71.097900390625 ms
+</span><span>Calc new clusters: 73.0341796875 ms
+</span><span>Calc new clusters: 70.22412109375 ms
+</span><span>Time taken: 9207ms
+</span></code></pre><p>So that saved us a few seconds but didn't give the massive speedup I might have hoped for. I could try and optimize or replace this call to <code>.unique()</code> which removes all duplicate <code>Color</code>s from the list created to represent every pixel of our image, but we've gone from a version of this code that took over 17 minutes to one that can process the image in under 10 seconds, so I'm happy with that.<p>This post is over 3000 words at this point so thanks for reading this far, I'm actually surprised at just how much of a speedup I was able to achieve with WebAssembly, hopefully you got something out of reading this too :)</p><br><br><aside><h3>Thanks for reading</h3><p>If you enjoyed this article you can <a href=https://ko-fi.com/zyzle>support me on Kofi</a>. Reading this using <a href=https://brave.com/>Brave</a> will help support me as a creator while also protecting your privacy or you can tip me BAT directly from the rewards button in the address bar, thanks :)</aside><h2>Comments</h2><zyzle-commenter client-id=b60275ae52523320945b gh-repo=zyzle.github.io issue-number=10 lynx-app=cool-darkness-2023.fly.dev owner=Zyzle></zyzle-commenter></article><hr class=hr-footer><footer class=site-footer><nav><ul class=footer-list><li><a href=https://zyzle.dev/>Home</a><li><a href=https://zyzle.dev/blog/>Blog</a><li><a href=https://zyzle.dev/projects/>Projects</a><li><a href=https://zyzle.dev/snippets/>Snippets</a><li><a href=https://zyzle.dev/about/>About</a></ul></nav><div class=copyright><div><img alt="creative commons" height=30px src=/cc.svg width=30px><img alt=attribution height=30px src=/by.svg width=30px><img alt="share alike" height=30px src=/sa.svg width=30px></div><p>Licensed under <a href=https://creativecommons.org/licenses/by-sa/4.0/>Creative Commons Attribution-ShareAlike 4.0</a></div></footer></main></div><script>(() => {
+                const bar = document.querySelector('#progress-bar');
+                const post = document.querySelector('#docmain');
+                const html = document.documentElement;
+                const height = post.scrollHeight;
+
+                window.addEventListener('scroll', () => {
+                    bar.style.width = (html.scrollTop / (height - html.clientHeight)) * 100 + '%';
+                });
+            })();</script><script async data-dnt=false data-host=https://microanalytics.io defer id=ZwSg9rf6GA src=https://microanalytics.io/js/script.js></script><script src=/runtime.2c67ee1ba12e0065.js type=module></script><script src=/polyfills.550f56bf1e9d0256.js type=module></script><script src=/main.8994f91682d0bf68.js type=module></script>
