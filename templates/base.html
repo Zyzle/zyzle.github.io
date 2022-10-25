@@ -34,11 +34,13 @@
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q90233GSB3"></script>
         <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-Q90233GSB3');
+            function startAnalytics() {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+    
+                gtag('config', 'G-Q90233GSB3');
+            }
         </script>
         {% block head_extra %}{% endblock head_extra %}
     </head>
@@ -47,9 +49,9 @@
             <div class="hwrapper">
                 <h1><a class="header-link" href="{{ get_url(path="@/_index.md")}}">{{ config.title }}</a></h1>
                 <span class="header-buttons">
-                    <a href="https://ko-fi.com/zyzle"><img src="/ko-fi.svg" alt="support me on Ko-fi" width="40px" height="40px" /></a>
-                    <a href="/tags/"><img src="/tag.svg" alt="site tag list" width="40px" height="40px" /></a>
-                    <a href={{ get_url(path="@/search.md") }}><img src="/search.svg" alt="search zyzle.dev" width="40px" height="40px" /></a>
+                    <a href="https://ko-fi.com/zyzle" title="Support me on ko-fi"><img src="/ko-fi.svg" alt="support me on Ko-fi" width="40px" height="40px" /></a>
+                    <a href="/tags/" title="Site tags"><img src="/tag.svg" alt="site tag list" width="40px" height="40px" /></a>
+                    <a href={{ get_url(path="@/search.md") }} title="Search"><img src="/search.svg" alt="search zyzle.dev" width="40px" height="40px" /></a>
                 </span>
             </div>
             <div id="progress-bar"></div>
@@ -60,7 +62,37 @@
             </main>
         </div>
 
+        <div id="cookieBanner" class="cookie-banner">
+            <h3>Cookies</h3>
+            <p>This site uses some essential cookies to make it work</p>
+            <p>I'd also like to use analytics cookies to gain some insites on how people are using the site</p>
+            <div class="cookie-controls">
+                <a href={{ get_url(path="@/cookies.md") }}>Cookie info</a>
+                <span>
+                    <button class="cookie-button-accept" onclick="acceptAnalytics();">Accept Analytics Cookies</button>
+                    <button class="cookie-button-reject" onclick="rejectAnalytics();">Reject Analytics Cookies</button>
+                </span>
+            </div>
+        </div>
+
         <script type="text/javascript">
+
+            function acceptAnalytics() {
+                document.cookie = "analytics=true; SameSite=Lax; Secure";
+                hideCookieBanner();
+                startAnalytics();
+            }
+
+            function rejectAnalytics() {
+                document.cookie = "analytics=false; SameSite=Lax; Secure";
+                hideCookieBanner();
+            }
+
+            function hideCookieBanner() {
+                const cb = document.getElementById('cookieBanner');
+                cb.hidden = true;
+            }
+
             (() => {
                 const bar = document.querySelector('#progress-bar');
                 const post = document.querySelector('#docmain');
@@ -70,6 +102,18 @@
                 window.addEventListener('scroll', () => {
                     bar.style.width = (html.scrollTop / (height - html.clientHeight)) * 100 + '%';
                 });
+            })();
+
+            (() => {
+                for (const cookie of document.cookie.split(';')) {
+                    if (cookie.trim().startsWith('analytics=')) {
+                        hideCookieBanner();
+
+                        if (cookie.split('=')[1].startsWith('true')) {
+                            startAnalytics();
+                        }
+                    }
+                }
             })();
         </script>
         <script data-host="https://microanalytics.io" data-dnt="false" src="https://microanalytics.io/js/script.js"

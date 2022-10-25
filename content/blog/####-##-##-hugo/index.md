@@ -24,7 +24,7 @@ $ brew install hugo
 ```
 
 - version 0.99.1, size 54Mb
-- also available Homebrew for linux, MacPorts, Chocolatey and scoop for windows
+- also available Homebrew for Linux, MacPorts, Chocolatey and scoop for windows
 - requires Go runtime
 
 ## Site setup

@@ -10,6 +10,7 @@ tags = ["web-dev", "fun", "optimization", "webassembly", "rust"]
 author = "Colin McCulloch"
 type = "article"
 ghissue = 10
+image = "flower.jpg"
 +++
 
 We left off [part 2](@/blog/2022-07-16-colour-finder-2/index.md) with code that worked and gave good results but was disastrously inefficient, taking minutes to finish the algorithms run on higher-resolution images. In this post, we're going to try and move some of the more computationally heavy code into WebAssembly to try and fix this issue.
@@ -17,6 +18,8 @@ We left off [part 2](@/blog/2022-07-16-colour-finder-2/index.md) with code that 
 <!-- more -->
 
 This was originally going to be 2 posts, one for optimizing the JS and a second for the WebAssembly application building. Given it's been 3 months since I last posted, probably best not to try and delay it any longer. So buckle up, this is going to be a long one.
+
+> **Note:** After going back and giving this a read over I realise now the majority of this post is introducing basic concepts in Rust, if you want to skip this and go [straight to the results](#measuring-the-results), feel free.
 
 ## Measuring the problems
 

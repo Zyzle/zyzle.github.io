@@ -10,6 +10,7 @@ tags = ["web-dev", "fun", "problems"]
 author = "Colin McCulloch"
 ghissue = 8
 type = "article"
+image = "scanned-image.png"
 +++
 
 During the interview for my current job, I was given a small pair-programming coding challenge to do. Like all good coding challenges it was probably beyond what could reasonably have been finished in an hour but it was fun and I got the job so my attempt couldn't have been too bad. Not finishing the challenge did annoy me though so here's my attempt at a more polished version of the challenge

@@ -5,9 +5,7 @@
 
 {% block meta_description %}{{ page.description }}{% endblock meta_description %}
 {% block og_description %}{{ page.description }}{% endblock og_description %}
-{% if page.exta.image %}
-{% block og_image %}{{current_url}}/{{ page.extra.image }}{% endblock og_image %}
-{% endif %}
+{% block og_image %}{{current_url}}{{ page.extra.image }}{% endblock og_image %}
 {% block og_type %}{{ page.extra.type }}{% endblock og_type %}
 
 {% block head_extra %}
