@@ -21,6 +21,8 @@ This was originally going to be 2 posts, one for optimizing the JS and a second 
 
 > **Note:** After going back and giving this a read over I realise now the majority of this post is introducing basic concepts in Rust, if you want to skip this and go [straight to the results](#measuring-the-results), feel free.
 
+> **Update:** I've deployed a quick and dirty demo project that will let you see the functions run against each other: [image-colours](https://zyzle.dev/image-colours). This may look like it's not doing anything as it can take a significant time to finish the JS side of things, you'll be able to track the process in the browser console though.
+
 ## Measuring the problems
 
 So to start with this, we'll need some numbers. I have some idea of where the problems in the code lie but I want to back this up with some numbers before I start making changes.
