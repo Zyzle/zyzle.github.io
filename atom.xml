@@ -18,6 +18,9 @@
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Note:&lt;&#x2F;strong&gt; After going back and giving this a read over I realise now the majority of this post is introducing basic concepts in Rust, if you want to skip this and go &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;blog&#x2F;colour-finder-3&#x2F;#measuring-the-results&quot;&gt;straight to the results&lt;&#x2F;a&gt;, feel free.&lt;&#x2F;p&gt;
 &lt;&#x2F;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Update:&lt;&#x2F;strong&gt; I&#x27;ve deployed a quick and dirty demo project that will let you see the functions run against each other: &lt;a href=&quot;https:&#x2F;&#x2F;zyzle.dev&#x2F;image-colours&quot;&gt;image-colours&lt;&#x2F;a&gt;. This may look like it&#x27;s not doing anything as it can take a significant time to finish the JS side of things, you&#x27;ll be able to track the process in the browser console though.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
 &lt;h2 id=&quot;measuring-the-problems&quot;&gt;Measuring the problems&lt;&#x2F;h2&gt;
 &lt;p&gt;So to start with this, we&#x27;ll need some numbers. I have some idea of where the problems in the code lie but I want to back this up with some numbers before I start making changes.&lt;&#x2F;p&gt;
 &lt;p&gt;To test the theory we can do basic timing checks on parts of the code by wrapping sections with start and finish &lt;a href=&quot;https:&#x2F;&#x2F;developer.mozilla.org&#x2F;en-US&#x2F;docs&#x2F;Web&#x2F;API&#x2F;console&#x2F;time&quot;&gt;&lt;code&gt;console.time&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;developer.mozilla.org&#x2F;en-US&#x2F;docs&#x2F;Web&#x2F;API&#x2F;console&#x2F;timeEnd&quot;&gt;&lt;code&gt;console.timeEnd&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; like so:&lt;&#x2F;p&gt;
