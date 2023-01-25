@@ -9,7 +9,7 @@ tags = ["web-dev", "fun", "optimization", "webassembly", "rust"]
 [extra]
 author = "Colin McCulloch"
 type = "article"
-ghissue = 10
+ghDisc = 17
 image = "flower.jpg"
 +++
 

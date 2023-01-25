@@ -9,7 +9,7 @@ tags = ["web-dev", "fun", "problems", "maths"]
 [extra]
 author = "Colin McCulloch"
 usesKtex = true
-ghissue = 9
+ghDisc = 16
 type = "article"
 image = "panda.jpeg"
 +++

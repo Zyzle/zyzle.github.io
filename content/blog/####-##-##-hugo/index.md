@@ -9,7 +9,7 @@ tags = ["blog", "hugo"]
 
 [extra]
 author = "Colin McCulloch"
-ghissue = 8
+ghDisc = false
 type = "article"
 +++
 

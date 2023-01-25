@@ -9,7 +9,7 @@ tags = ["coding", "node", "github", "semver"]
 
 [extra]
 author = "Colin McCulloch"
-ghissue = false
+ghDisc = false
 type = "article"
 +++
 

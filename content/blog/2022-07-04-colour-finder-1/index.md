@@ -8,7 +8,7 @@ tags = ["web-dev", "fun", "problems"]
 
 [extra]
 author = "Colin McCulloch"
-ghissue = 8
+ghDisc = 15
 type = "article"
 image = "scanned-image.png"
 +++
