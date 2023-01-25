@@ -4,8 +4,23 @@
 	<link href="https://zyzle.dev/atom.xml" rel="self" type="application/atom+xml"/>
   <link href="https://zyzle.dev"/>
 	<generator uri="https://www.getzola.org/">Zola</generator>
-	<updated>2022-10-23T00:00:00+00:00</updated>
+	<updated>2023-01-25T00:00:00+00:00</updated>
 	<id>https://zyzle.dev/atom.xml</id>
+	<entry xml:lang="en">
+		<title>I&#x27;m still here!</title>
+		<published>2023-01-25T00:00:00+00:00</published>
+		<updated>2023-01-25T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://zyzle.dev/blog/im-still-here/" type="text/html"/>
+		<id>https://zyzle.dev/blog/im-still-here/</id>
+		<content type="html">&lt;p&gt;Yes, once again I&#x27;ve fallen out of the habit of keeping things up to date here. I don&#x27;t make New Year&#x27;s resolutions but if I did it would be to try and keep this up to date a little more frequently. Mostly because I want to spend more time on hobby stuff this year (everyone loves a bit of CV-driven development).&lt;&#x2F;p&gt;
+&lt;span id=&quot;continue-reading&quot;&gt;&lt;&#x2F;span&gt;
+&lt;p&gt;If you&#x27;re familiar with the site you might have noticed the comment component at the bottom of each page has changed. I&#x27;ve had some fun working on my component &lt;code&gt;zyzle-commenter&lt;&#x2F;code&gt;, but I recently found a tool that works in almost the same way (actually better) and has a lot more of the features I had planned on trying to build. So not wanting to re-invent the wheel I&#x27;ve moved the blog&#x27;s comments over to &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;giscus&#x2F;giscus&quot;&gt;giscus&lt;&#x2F;a&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m a little sad to be putting aside commenter and lynx for now but maybe I&#x27;ll pick them back up in future &lt;&#x2F;p&gt;
+&lt;h2 id=&quot;for-now-though&quot;&gt;For now though&lt;&#x2F;h2&gt;
+&lt;p&gt;I have a couple of plans for what I want to do with the blog itself, was never completely happy with the template so definitely want to spend some time improving that, there&#x27;s also the question of whether or not I want to stick with this static site generator engine or move to something more complex&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve also got a couple of ideas on future topics to keep an eye out for that. Hope I can have something interesting for you on here soon.&lt;&#x2F;p&gt;
+</content>
+	</entry>
 	<entry xml:lang="en">
 		<title>Finding Colours - Part 3: WebAssembly to the rescue</title>
 		<published>2022-10-23T00:00:00+00:00</published>
